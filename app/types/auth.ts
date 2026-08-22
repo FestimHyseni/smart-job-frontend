@@ -30,3 +30,13 @@ export interface ApiError {
   message: string
   errors: Record<string, string[]> | null
 }
+
+export class ApiRequestError extends Error {
+  errors: Record<string, string[]> | null
+
+  constructor(message: string, errors: Record<string, string[]> | null = null) {
+    super(message)
+    this.name = 'ApiRequestError'
+    this.errors = errors
+  }
+}

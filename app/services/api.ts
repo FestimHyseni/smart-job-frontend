@@ -1,4 +1,4 @@
-import type { ApiError, ApiSuccess } from '~/types/auth'
+import { ApiRequestError, type ApiError, type ApiSuccess } from '~/types/auth'
 
 export function useApi() {
   const config = useRuntimeConfig()
@@ -19,7 +19,10 @@ export function useApi() {
       return response.data
     } catch (error) {
       const apiError = (error as { data?: ApiError }).data
-      throw new Error(apiError?.message || 'Something went wrong. Please try again.')
+      throw new ApiRequestError(
+        apiError?.message || 'Something went wrong. Please try again.',
+        apiError?.errors ?? null,
+      )
     }
   }
 
