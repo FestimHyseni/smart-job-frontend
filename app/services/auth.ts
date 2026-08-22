@@ -1,4 +1,5 @@
 import type { AuthResult, LoginPayload, RegisterPayload } from '~/types/auth'
+import { useApi } from './api'
 
 export function useAuthService() {
   const { request } = useApi()

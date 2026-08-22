@@ -1,4 +1,5 @@
 import { ApiRequestError, type LoginPayload, type RegisterPayload } from '~/types/auth'
+import { useAuthService } from '~/services/auth'
 
 export function useAuth() {
   const authStore = useAuthStore()
