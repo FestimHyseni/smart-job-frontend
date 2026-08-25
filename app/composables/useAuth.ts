@@ -51,5 +51,13 @@ export function useAuth() {
     }
   }
 
-  return { login, register, loading, error, fieldErrors }
+  async function logout() {
+    try {
+      await authService.logout()
+    } finally {
+      authStore.clearSession()
+    }
+  }
+
+  return { login, register, logout, loading, error, fieldErrors }
 }

@@ -18,5 +18,11 @@ export function useAuthService() {
     })
   }
 
-  return { login, register }
+  function logout() {
+    return request<null>('/auth/logout', {
+      method: 'POST',
+    })
+  }
+
+  return { login, register, logout }
 }
