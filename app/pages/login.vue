@@ -9,7 +9,7 @@ const form = reactive({
 async function onSubmit() {
   try {
     await login(form)
-    await navigateTo('/')
+    await navigateTo('/jobs')
   } catch {
     // error state is already handled by useAuth
   }
