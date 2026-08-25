@@ -11,3 +11,19 @@ export interface User {
   created_at: string
   updated_at: string
 }
+
+export interface CreateUserPayload {
+  name: string
+  email: string
+  password: string
+  role: UserRole
+  phone?: string
+}
+
+export interface UpdateUserPayload {
+  name?: string
+  email?: string
+  password?: string
+  role?: UserRole
+  phone?: string | null
+}
