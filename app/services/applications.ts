@@ -4,8 +4,10 @@ import { useApi } from './api'
 export function useApplicationsService() {
   const { request } = useApi()
 
-  function list() {
-    return request<Application[]>('/applications')
+  function list(filters: { candidate_id?: number; job_id?: number; status?: ApplicationStatus; per_page?: number } = {}) {
+    return request<Application[]>('/applications', {
+      params: filters,
+    })
   }
 
   function apply(payload: { job_id: number; candidate_id: number; resume_id: number; cover_letter?: string }) {
