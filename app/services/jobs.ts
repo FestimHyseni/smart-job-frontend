@@ -1,4 +1,4 @@
-import type { Job, JobFilters } from '~/types/job'
+import type { Job, JobFilters, JobPayload } from '~/types/job'
 import { useApi } from './api'
 
 export function useJobsService() {
@@ -14,5 +14,12 @@ export function useJobsService() {
     return request<Job>(`/jobs/${id}`)
   }
 
-  return { list, show }
+  function create(payload: JobPayload) {
+    return request<Job>('/jobs', {
+      method: 'POST',
+      body: payload,
+    })
+  }
+
+  return { list, show, create }
 }

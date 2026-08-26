@@ -60,3 +60,19 @@ export interface JobFilters {
   employment_type?: EmploymentType
   experience_level?: ExperienceLevel
 }
+
+export interface JobPayload {
+  company_id: number
+  category_id: number
+  title: string
+  description: string
+  requirements: string
+  location_id: number
+  employment_type: EmploymentType
+  experience_level: ExperienceLevel
+  salary_min?: number | null
+  salary_max?: number | null
+  salary_currency: string
+  status?: JobStatus
+  deadline: string
+}

@@ -1,5 +1,5 @@
 import { ApiRequestError } from '~/types/auth'
-import type { Job, JobFilters } from '~/types/job'
+import type { Job, JobFilters, JobPayload } from '~/types/job'
 import { useJobsService } from '~/services/jobs'
 
 export function useJobs() {
@@ -8,6 +8,7 @@ export function useJobs() {
   const jobs = ref<Job[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const fieldErrors = ref<Record<string, string[]>>({})
 
   async function fetchJobs(filters: JobFilters = {}) {
     loading.value = true
@@ -34,5 +35,24 @@ export function useJobs() {
     }
   }
 
-  return { jobs, loading, error, fetchJobs, fetchJob }
+  async function createJob(payload: JobPayload) {
+    loading.value = true
+    error.value = null
+    fieldErrors.value = {}
+    try {
+      return await jobsService.create(payload)
+    } catch (err) {
+      if (err instanceof ApiRequestError) {
+        error.value = err.message
+        fieldErrors.value = err.errors ?? {}
+      } else {
+        error.value = 'Something went wrong. Please try again.'
+      }
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return { jobs, loading, error, fieldErrors, fetchJobs, fetchJob, createJob }
 }
