@@ -21,5 +21,12 @@ export function useJobsService() {
     })
   }
 
-  return { list, show, create }
+  function update(id: number, payload: Partial<JobPayload>) {
+    return request<Job>(`/jobs/${id}`, {
+      method: 'PUT',
+      body: payload,
+    })
+  }
+
+  return { list, show, create, update }
 }

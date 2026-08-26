@@ -1,5 +1,4 @@
-import type { Application } from '~/types/application'
-import type { Resume } from '~/types/application'
+import type { Application, ApplicationStatus, Resume } from '~/types/application'
 import { useApi } from './api'
 
 export function useApplicationsService() {
@@ -27,5 +26,12 @@ export function useApplicationsService() {
     })
   }
 
-  return { list, apply, uploadResume }
+  function updateStatus(id: number, status: ApplicationStatus) {
+    return request<Application>(`/applications/${id}`, {
+      method: 'PUT',
+      body: { status },
+    })
+  }
+
+  return { list, apply, uploadResume, updateStatus }
 }

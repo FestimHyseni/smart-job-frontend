@@ -54,5 +54,24 @@ export function useJobs() {
     }
   }
 
-  return { jobs, loading, error, fieldErrors, fetchJobs, fetchJob, createJob }
+  async function updateJob(id: number, payload: Partial<JobPayload>) {
+    loading.value = true
+    error.value = null
+    fieldErrors.value = {}
+    try {
+      return await jobsService.update(id, payload)
+    } catch (err) {
+      if (err instanceof ApiRequestError) {
+        error.value = err.message
+        fieldErrors.value = err.errors ?? {}
+      } else {
+        error.value = 'Something went wrong. Please try again.'
+      }
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return { jobs, loading, error, fieldErrors, fetchJobs, fetchJob, createJob, updateJob }
 }

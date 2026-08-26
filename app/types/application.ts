@@ -1,3 +1,6 @@
+import type { Job } from './job'
+import type { User } from './user'
+
 export interface Resume {
   id: number
   user_id: number
@@ -12,7 +15,9 @@ export type ApplicationStatus = 'pending' | 'reviewed' | 'shortlisted' | 'interv
 export interface Application {
   id: number
   job_id: number
+  job: Job | null
   candidate_id: number
+  candidate: User | null
   resume_id: number
   resume: Resume | null
   cover_letter: string | null
