@@ -1,4 +1,5 @@
 import type { JobCategory, Location } from '~/types/job'
+import type { Skill } from '~/types/profileExtras'
 import { useApi } from './api'
 
 export function useCatalogService() {
@@ -12,5 +13,9 @@ export function useCatalogService() {
     return request<Location[]>('/locations')
   }
 
-  return { listCategories, listLocations }
+  function listSkills() {
+    return request<Skill[]>('/skills')
+  }
+
+  return { listCategories, listLocations, listSkills }
 }

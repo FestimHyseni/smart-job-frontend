@@ -1,4 +1,5 @@
 import type { AuthResult, LoginPayload, RegisterPayload } from '~/types/auth'
+import type { User } from '~/types/user'
 import { useApi } from './api'
 
 export function useAuthService() {
@@ -24,5 +25,15 @@ export function useAuthService() {
     })
   }
 
-  return { login, register, logout }
+  function updateAvatar(file: File) {
+    const formData = new FormData()
+    formData.append('avatar', file)
+
+    return request<User>('/auth/avatar', {
+      method: 'POST',
+      body: formData,
+    })
+  }
+
+  return { login, register, logout, updateAvatar }
 }

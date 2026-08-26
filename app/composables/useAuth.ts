@@ -59,5 +59,20 @@ export function useAuth() {
     }
   }
 
-  return { login, register, logout, loading, error, fieldErrors }
+  async function updateAvatar(file: File) {
+    loading.value = true
+    error.value = null
+    try {
+      const user = await authService.updateAvatar(file)
+      if (authStore.token) authStore.setSession(user, authStore.token)
+      return user
+    } catch (err) {
+      handleError(err)
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return { login, register, logout, updateAvatar, loading, error, fieldErrors }
 }
