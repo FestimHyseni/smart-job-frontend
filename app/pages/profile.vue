@@ -189,109 +189,124 @@ function formatDate(date: string | null) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 px-4 py-10">
-    <div class="mx-auto flex max-w-3xl flex-col gap-6">
-      <!-- Header card: avatar + completion -->
-      <div class="rounded-lg bg-white p-6 shadow">
-        <div class="flex items-center gap-5">
-          <div class="relative">
+  <div class="min-h-screen bg-gray-50 pb-16">
+    <div class="mx-auto flex max-w-3xl flex-col gap-5 px-4 pt-8">
+      <!-- Header card: cover + avatar + completion -->
+      <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
+        <div class="h-20 bg-gradient-to-r from-blue-600 to-blue-400" />
+        <div class="flex flex-col gap-4 px-6 pb-6 sm:flex-row sm:items-end">
+          <div class="relative -mt-10 shrink-0">
             <img
               v-if="authStore.user?.avatar_url"
               :src="resolveUrl(authStore.user.avatar_url)"
               alt="Avatar"
-              class="h-20 w-20 rounded-full object-cover ring-2 ring-blue-500"
+              class="h-24 w-24 rounded-full border-4 border-white object-cover shadow"
             >
-            <div v-else class="flex h-20 w-20 items-center justify-center rounded-full bg-gray-200 text-2xl text-gray-500">
+            <div v-else class="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gray-200 text-3xl font-semibold text-gray-500 shadow">
               {{ authStore.user?.name?.[0] }}
             </div>
             <button
               type="button"
-              class="absolute bottom-0 right-0 rounded-full bg-blue-600 p-1.5 text-white shadow hover:bg-blue-700"
+              class="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm text-white shadow ring-2 ring-white hover:bg-blue-700 disabled:opacity-60"
               :disabled="avatarUploading"
+              title="Ndrysho foton"
               @click="avatarInput?.click()"
             >
               📷
             </button>
             <input ref="avatarInput" type="file" accept="image/*" class="hidden" @change="onAvatarChange">
           </div>
-          <div class="flex-1">
+
+          <div class="flex-1 pt-2">
             <h1 class="text-xl font-semibold text-gray-900">{{ authStore.user?.name }}</h1>
-            <p class="text-sm text-gray-600">{{ authStore.user?.email }}</p>
-            <p v-if="authStore.user?.phone" class="text-sm text-gray-600">{{ authStore.user.phone }}</p>
-            <div class="mt-2 flex items-center gap-2">
-              <div class="h-2 w-40 overflow-hidden rounded-full bg-gray-200">
-                <div class="h-full bg-green-500" :style="{ width: `${profileCompletion}%` }" />
-              </div>
-              <span class="text-xs font-medium text-green-600">{{ profileCompletion }}% i plotësuar</span>
+            <p class="text-sm text-gray-500">{{ authStore.user?.email }}</p>
+            <p v-if="authStore.user?.phone" class="text-sm text-gray-500">{{ authStore.user.phone }}</p>
+          </div>
+
+          <div class="w-full pt-2 sm:w-48">
+            <div class="mb-1 flex items-center justify-between text-xs">
+              <span class="font-medium text-gray-500">Profili i plotësuar</span>
+              <span class="font-semibold text-green-600">{{ profileCompletion }}%</span>
+            </div>
+            <div class="h-2 overflow-hidden rounded-full bg-gray-100">
+              <div class="h-full rounded-full bg-green-500 transition-all" :style="{ width: `${profileCompletion}%` }" />
             </div>
           </div>
         </div>
       </div>
 
       <!-- Main profile form -->
-      <div class="rounded-lg bg-white p-6 shadow">
-        <h2 class="mb-4 text-lg font-semibold text-gray-900">Të dhënat e profilit</h2>
-        <form class="flex flex-col gap-4" @submit.prevent="onSubmit">
-          <BaseInput v-model="form.headline" label="Headline" placeholder="Senior Backend Developer" :error="fieldErrors.headline?.[0]" />
-          <BaseTextarea v-model="form.bio" label="Përmbledhje e shkurtër" placeholder="Tell employers about yourself" :error="fieldErrors.bio?.[0]" />
-
-          <BaseSelect
-            v-model="form.location_id"
-            label="Location"
-            :options="locations.map((l) => ({ value: l.id, label: `${l.city}, ${l.country}` }))"
-            :error="fieldErrors.location_id?.[0]"
-          />
-
-          <BaseInput v-model="form.years_experience" label="Years of experience" type="number" :error="fieldErrors.years_experience?.[0]" />
-
-          <div class="grid grid-cols-2 gap-3">
-            <BaseInput v-model="form.expected_salary" label="Expected salary" type="number" :error="fieldErrors.expected_salary?.[0]" />
-            <BaseInput v-model="form.salary_currency" label="Currency" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
+      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+        <form @submit.prevent="onSubmit">
+          <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
+            <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">👤 Të dhënat e profilit</h2>
+            <div class="flex items-center gap-3">
+              <span v-if="saved" class="text-sm font-medium text-green-600">✓ U ruajt</span>
+              <BaseButton type="submit" :loading="loading" :full-width="false" class="px-5">Ruaj profilin</BaseButton>
+            </div>
           </div>
 
-          <BaseInput v-model="form.linkedin_url" label="LinkedIn URL (optional)" placeholder="https://linkedin.com/in/..." :error="fieldErrors.linkedin_url?.[0]" />
-          <BaseInput v-model="form.github_url" label="GitHub URL (optional)" placeholder="https://github.com/..." :error="fieldErrors.github_url?.[0]" />
-          <BaseInput v-model="form.portfolio_url" label="Portfolio URL (optional)" placeholder="https://..." :error="fieldErrors.portfolio_url?.[0]" />
+          <div class="flex flex-col gap-4">
+            <BaseInput v-model="form.headline" label="Headline" placeholder="Senior Backend Developer" :error="fieldErrors.headline?.[0]" />
+            <BaseTextarea v-model="form.bio" label="Përmbledhje e shkurtër" placeholder="Tell employers about yourself" :error="fieldErrors.bio?.[0]" />
 
-          <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
-          <p v-if="saved" class="text-sm text-green-600">Profile saved.</p>
+            <BaseSelect
+              v-model="form.location_id"
+              label="Location"
+              :options="locations.map((l) => ({ value: l.id, label: `${l.city}, ${l.country}` }))"
+              :error="fieldErrors.location_id?.[0]"
+            />
 
-          <BaseButton type="submit" :loading="loading">Save profile</BaseButton>
+            <BaseInput v-model="form.years_experience" label="Years of experience" type="number" :error="fieldErrors.years_experience?.[0]" />
+
+            <div class="grid grid-cols-2 gap-3">
+              <BaseInput v-model="form.expected_salary" label="Expected salary" type="number" :error="fieldErrors.expected_salary?.[0]" />
+              <BaseInput v-model="form.salary_currency" label="Currency" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
+            </div>
+
+            <BaseInput v-model="form.linkedin_url" label="LinkedIn URL (optional)" placeholder="https://linkedin.com/in/..." :error="fieldErrors.linkedin_url?.[0]" />
+            <BaseInput v-model="form.github_url" label="GitHub URL (optional)" placeholder="https://github.com/..." :error="fieldErrors.github_url?.[0]" />
+            <BaseInput v-model="form.portfolio_url" label="Portfolio URL (optional)" placeholder="https://..." :error="fieldErrors.portfolio_url?.[0]" />
+
+            <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+          </div>
         </form>
       </div>
 
       <!-- Documents / CV -->
-      <div class="rounded-lg bg-white p-6 shadow">
+      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
         <div class="mb-4 flex items-center justify-between">
-          <h2 class="text-lg font-semibold text-gray-900">Dokumentet e mia</h2>
-          <label class="cursor-pointer rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-orange-600">
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">📄 Dokumentet e mia</h2>
+          <label class="cursor-pointer rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-orange-600">
             + Shto
             <input type="file" accept=".pdf,.doc,.docx" class="hidden" @change="onResumeUpload">
           </label>
         </div>
-        <p v-if="!resumes.items.value.length" class="text-sm text-gray-500">Ende s'ke ngarkuar asnjë dokument.</p>
+        <p v-if="!resumes.items.value.length" class="text-sm text-gray-400">Ende s'ke ngarkuar asnjë dokument.</p>
         <ul class="flex flex-col gap-2">
           <li
             v-for="resume in resumes.items.value"
             :key="resume.id"
-            class="flex items-center justify-between rounded-md border border-gray-200 px-3 py-2 text-sm"
+            class="flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 px-3 py-2 text-sm transition hover:bg-gray-100"
           >
-            <a :href="resolveUrl(resume.file_url) ?? '#'" target="_blank" class="text-blue-600 hover:underline">{{ resume.file_name }}</a>
-            <button type="button" class="text-red-500 hover:text-red-700" @click="resumes.remove(resume.id)">🗑</button>
+            <a :href="resolveUrl(resume.file_url) ?? '#'" target="_blank" class="flex items-center gap-2 text-blue-600 hover:underline">
+              📎 {{ resume.file_name }}
+            </a>
+            <button type="button" class="text-gray-400 hover:text-red-600" @click="resumes.remove(resume.id)">🗑</button>
           </li>
         </ul>
       </div>
 
       <!-- Experience -->
-      <div class="rounded-lg bg-white p-6 shadow">
+      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
         <div class="mb-4 flex items-center justify-between">
-          <h2 class="text-lg font-semibold text-gray-900">Përvoja e punës</h2>
-          <button type="button" class="rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-orange-600" @click="showExperienceForm = !showExperienceForm">
-            + Shto
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">💼 Përvoja e punës</h2>
+          <button type="button" class="rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-orange-600" @click="showExperienceForm = !showExperienceForm">
+            {{ showExperienceForm ? 'Mbyll' : '+ Shto' }}
           </button>
         </div>
 
-        <form v-if="showExperienceForm" class="mb-4 flex flex-col gap-3 rounded-md border border-gray-200 p-4" @submit.prevent="onAddExperience">
+        <form v-if="showExperienceForm" class="mb-5 flex flex-col gap-3 rounded-lg bg-gray-50 p-4" @submit.prevent="onAddExperience">
           <BaseInput v-model="experienceForm.position" label="Pozita" placeholder="Frontend Developer" />
           <BaseInput v-model="experienceForm.company_name" label="Kompania" placeholder="Acme Inc." />
           <BaseTextarea v-model="experienceForm.description" label="Përshkrimi (opsional)" />
@@ -303,31 +318,32 @@ function formatDate(date: string | null) {
             <input v-model="experienceForm.is_current" type="checkbox">
             Aktualisht punoj këtu
           </label>
-          <BaseButton type="submit">Ruaj</BaseButton>
+          <BaseButton type="submit" :full-width="false" class="self-start px-5">Ruaj</BaseButton>
         </form>
 
+        <p v-if="!experiences.items.value.length && !showExperienceForm" class="text-sm text-gray-400">Ende s'ke shtuar përvojë pune.</p>
         <ul class="flex flex-col gap-3">
-          <li v-for="exp in experiences.items.value" :key="exp.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0">
+          <li v-for="exp in experiences.items.value" :key="exp.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0">
             <div>
               <p class="font-medium text-gray-900">{{ exp.position }}</p>
               <p class="text-sm text-gray-600">{{ exp.company_name }}</p>
               <p class="text-xs text-gray-400">{{ formatDate(exp.start_date) }} — {{ exp.is_current ? 'Aktualisht' : formatDate(exp.end_date) }}</p>
             </div>
-            <button type="button" class="text-red-500 hover:text-red-700" @click="experiences.remove(exp.id)">🗑</button>
+            <button type="button" class="text-gray-400 hover:text-red-600" @click="experiences.remove(exp.id)">🗑</button>
           </li>
         </ul>
       </div>
 
       <!-- Education -->
-      <div class="rounded-lg bg-white p-6 shadow">
+      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
         <div class="mb-4 flex items-center justify-between">
-          <h2 class="text-lg font-semibold text-gray-900">Edukimi</h2>
-          <button type="button" class="rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-orange-600" @click="showEducationForm = !showEducationForm">
-            + Shto
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">🎓 Edukimi</h2>
+          <button type="button" class="rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-orange-600" @click="showEducationForm = !showEducationForm">
+            {{ showEducationForm ? 'Mbyll' : '+ Shto' }}
           </button>
         </div>
 
-        <form v-if="showEducationForm" class="mb-4 flex flex-col gap-3 rounded-md border border-gray-200 p-4" @submit.prevent="onAddEducation">
+        <form v-if="showEducationForm" class="mb-5 flex flex-col gap-3 rounded-lg bg-gray-50 p-4" @submit.prevent="onAddEducation">
           <BaseInput v-model="educationForm.degree" label="Diploma / Programi" placeholder="Computer Science" />
           <BaseInput v-model="educationForm.institution" label="Institucioni" placeholder="University for Business and Technology" />
           <BaseInput v-model="educationForm.field" label="Fusha" placeholder="Software Engineering" />
@@ -336,37 +352,39 @@ function formatDate(date: string | null) {
             <BaseInput v-model="educationForm.end_date" label="Mbarimi (opsional)" type="date" />
           </div>
           <BaseTextarea v-model="educationForm.description" label="Përshkrimi (opsional)" />
-          <BaseButton type="submit">Ruaj</BaseButton>
+          <BaseButton type="submit" :full-width="false" class="self-start px-5">Ruaj</BaseButton>
         </form>
 
+        <p v-if="!educations.items.value.length && !showEducationForm" class="text-sm text-gray-400">Ende s'ke shtuar edukim.</p>
         <ul class="flex flex-col gap-3">
-          <li v-for="edu in educations.items.value" :key="edu.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0">
+          <li v-for="edu in educations.items.value" :key="edu.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0">
             <div>
               <p class="font-medium text-gray-900">{{ edu.degree }}</p>
               <p class="text-sm text-gray-600">{{ edu.institution }}</p>
               <p class="text-xs text-gray-400">{{ formatDate(edu.start_date) }} — {{ formatDate(edu.end_date) || 'Prezent' }}</p>
             </div>
-            <button type="button" class="text-red-500 hover:text-red-700" @click="educations.remove(edu.id)">🗑</button>
+            <button type="button" class="text-gray-400 hover:text-red-600" @click="educations.remove(edu.id)">🗑</button>
           </li>
         </ul>
       </div>
 
       <!-- Skills -->
-      <div class="rounded-lg bg-white p-6 shadow">
-        <h2 class="mb-4 text-lg font-semibold text-gray-900">Aftësitë</h2>
+      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+        <h2 class="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900">🛠️ Aftësitë</h2>
 
-        <div class="mb-4 flex flex-wrap gap-2">
+        <p v-if="!candidateSkills.items.value.length" class="mb-4 text-sm text-gray-400">Ende s'ke shtuar aftësi.</p>
+        <div v-else class="mb-5 flex flex-wrap gap-2">
           <span
             v-for="cs in candidateSkills.items.value"
             :key="cs.id"
-            class="flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm text-blue-700"
+            class="flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700"
           >
             {{ cs.skill?.name }}
-            <button type="button" class="text-blue-400 hover:text-blue-700" @click="candidateSkills.remove(cs.id)">×</button>
+            <button type="button" class="text-blue-400 hover:text-red-600" @click="candidateSkills.remove(cs.id)">×</button>
           </span>
         </div>
 
-        <div class="flex items-end gap-2">
+        <div class="flex flex-wrap items-end gap-2 rounded-lg bg-gray-50 p-4">
           <BaseSelect v-model="newSkillId" label="Shto aftësi" placeholder="Zgjedh aftësinë" :options="skillsCatalog.map((s) => ({ value: s.id, label: s.name }))" />
           <BaseSelect v-model="newSkillLevel" label="Niveli" :options="[
             { value: 'beginner', label: 'Beginner' },
@@ -374,20 +392,20 @@ function formatDate(date: string | null) {
             { value: 'advanced', label: 'Advanced' },
             { value: 'expert', label: 'Expert' },
           ]" />
-          <BaseButton type="button" @click="onAddSkill">+ Shto</BaseButton>
+          <BaseButton type="button" :full-width="false" class="px-5" @click="onAddSkill">+ Shto</BaseButton>
         </div>
       </div>
 
       <!-- Languages -->
-      <div class="rounded-lg bg-white p-6 shadow">
+      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
         <div class="mb-4 flex items-center justify-between">
-          <h2 class="text-lg font-semibold text-gray-900">Gjuhët e huaja</h2>
-          <button type="button" class="rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-orange-600" @click="showLanguageForm = !showLanguageForm">
-            + Shto
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">🌐 Gjuhët e huaja</h2>
+          <button type="button" class="rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-orange-600" @click="showLanguageForm = !showLanguageForm">
+            {{ showLanguageForm ? 'Mbyll' : '+ Shto' }}
           </button>
         </div>
 
-        <form v-if="showLanguageForm" class="mb-4 flex flex-col gap-3 rounded-md border border-gray-200 p-4" @submit.prevent="onAddLanguage">
+        <form v-if="showLanguageForm" class="mb-5 flex flex-col gap-3 rounded-lg bg-gray-50 p-4" @submit.prevent="onAddLanguage">
           <BaseInput v-model="languageForm.name" label="Gjuha" placeholder="Anglisht" />
           <div class="grid grid-cols-2 gap-3">
             <BaseSelect v-model="languageForm.speaking" label="Të folurit" :options="proficiencyOptions" />
@@ -395,11 +413,12 @@ function formatDate(date: string | null) {
             <BaseSelect v-model="languageForm.listening" label="Të dëgjuarit" :options="proficiencyOptions" />
             <BaseSelect v-model="languageForm.understanding" label="Të kuptuarit" :options="proficiencyOptions" />
           </div>
-          <BaseButton type="submit">Ruaj</BaseButton>
+          <BaseButton type="submit" :full-width="false" class="self-start px-5">Ruaj</BaseButton>
         </form>
 
+        <p v-if="!candidateLanguages.items.value.length && !showLanguageForm" class="text-sm text-gray-400">Ende s'ke shtuar gjuhë.</p>
         <ul class="flex flex-col gap-3">
-          <li v-for="lang in candidateLanguages.items.value" :key="lang.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0">
+          <li v-for="lang in candidateLanguages.items.value" :key="lang.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0">
             <div>
               <p class="font-medium text-gray-900">{{ lang.name }}</p>
               <p class="text-xs text-gray-500">
@@ -407,7 +426,7 @@ function formatDate(date: string | null) {
                 Të dëgjuarit: {{ lang.listening.toUpperCase() }} · Të kuptuarit: {{ lang.understanding.toUpperCase() }}
               </p>
             </div>
-            <button type="button" class="text-red-500 hover:text-red-700" @click="candidateLanguages.remove(lang.id)">🗑</button>
+            <button type="button" class="text-gray-400 hover:text-red-600" @click="candidateLanguages.remove(lang.id)">🗑</button>
           </li>
         </ul>
       </div>
