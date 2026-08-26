@@ -7,6 +7,7 @@ const jobId = Number(route.params.id)
 const { loading, error, fetchJob } = useJobs()
 const authStore = useAuthStore()
 const { loading: applying, error: applyError, hasAppliedTo, applyToJob } = useApply()
+const savedJobs = useSavedJobs()
 
 const job = ref<Job | null>(null)
 const alreadyApplied = ref(false)
@@ -32,6 +33,7 @@ onMounted(async () => {
   }
   if (canApply.value) {
     alreadyApplied.value = await hasAppliedTo(jobId)
+    await savedJobs.fetchMine()
   }
 })
 
@@ -66,9 +68,23 @@ async function onApply() {
             <h1 class="text-2xl font-semibold text-gray-900">{{ job.title }}</h1>
             <p class="text-gray-600">{{ job.company?.name }}</p>
           </div>
-          <span class="whitespace-nowrap rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
-            {{ employmentLabels[job.employment_type] || job.employment_type }}
-          </span>
+          <div class="flex items-center gap-2">
+            <span class="whitespace-nowrap rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+              {{ employmentLabels[job.employment_type] || job.employment_type }}
+            </span>
+            <button
+              v-if="canApply"
+              type="button"
+              class="flex items-center gap-1 whitespace-nowrap rounded-full border px-3 py-1.5 text-sm font-medium transition"
+              :class="savedJobs.isSaved(job.id)
+                ? 'border-green-600 bg-green-600 text-white shadow-sm hover:bg-green-700'
+                : 'border-gray-300 bg-gray-100 text-gray-600 hover:border-gray-400'"
+              :title="savedJobs.isSaved(job.id) ? 'Hiq nga të ruajturat' : 'Ruaj këtë job'"
+              @click="savedJobs.toggle(job.id)"
+            >
+              {{ savedJobs.isSaved(job.id) ? '✅ Ruajtur' : '🔖 Ruaj' }}
+            </button>
+          </div>
         </div>
 
         <div class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">

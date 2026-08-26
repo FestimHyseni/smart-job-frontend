@@ -4,6 +4,10 @@ import { useCatalogService } from '~/services/catalog'
 
 const { jobs, loading, error, fetchJobs } = useJobs()
 const catalogService = useCatalogService()
+const authStore = useAuthStore()
+const savedJobs = useSavedJobs()
+
+const canSave = computed(() => authStore.user?.role === 'candidate')
 
 const categories = ref<JobCategory[]>([])
 const locations = ref<Location[]>([])
@@ -32,6 +36,7 @@ onMounted(async () => {
   categories.value = categoriesResult
   locations.value = locationsResult
   await fetchJobs()
+  if (canSave.value) await savedJobs.fetchMine()
 })
 </script>
 
@@ -76,7 +81,14 @@ onMounted(async () => {
       <p v-else-if="!jobs.length" class="text-sm text-gray-600">No jobs found.</p>
 
       <div v-else class="flex flex-col gap-4">
-        <JobCard v-for="job in jobs" :key="job.id" :job="job" />
+        <JobCard
+          v-for="job in jobs"
+          :key="job.id"
+          :job="job"
+          :show-save="canSave"
+          :saved="savedJobs.isSaved(job.id)"
+          @toggle-save="savedJobs.toggle"
+        />
       </div>
     </div>
   </div>
