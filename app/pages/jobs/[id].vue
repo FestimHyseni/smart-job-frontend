@@ -5,7 +5,14 @@ const route = useRoute()
 const jobId = Number(route.params.id)
 
 const { loading, error, fetchJob } = useJobs()
+const authStore = useAuthStore()
+const { loading: applying, error: applyError, hasAppliedTo, applyToJob } = useApply()
+
 const job = ref<Job | null>(null)
+const alreadyApplied = ref(false)
+const applySuccess = ref(false)
+const resumeFile = ref<File | null>(null)
+const coverLetter = ref('')
 
 const employmentLabels: Record<string, string> = {
   full_time: 'Full-time',
@@ -15,13 +22,32 @@ const employmentLabels: Record<string, string> = {
   remote: 'Remote',
 }
 
+const canApply = computed(() => authStore.user?.role === 'candidate')
+
 onMounted(async () => {
   try {
     job.value = await fetchJob(jobId)
   } catch {
     // error state is already handled by useJobs
   }
+  if (canApply.value) {
+    alreadyApplied.value = await hasAppliedTo(jobId)
+  }
 })
+
+function onResumeChange(event: Event) {
+  resumeFile.value = (event.target as HTMLInputElement).files?.[0] ?? null
+}
+
+async function onApply() {
+  if (!resumeFile.value) return
+  try {
+    await applyToJob(jobId, resumeFile.value, coverLetter.value)
+    applySuccess.value = true
+  } catch {
+    // error state is already handled by useApply
+  }
+}
 </script>
 
 <template>
@@ -75,6 +101,34 @@ onMounted(async () => {
               {{ skill.name }}
             </span>
           </div>
+        </div>
+
+        <div v-if="canApply" class="mt-8 border-t border-gray-200 pt-6">
+          <p v-if="applySuccess" class="text-sm font-medium text-green-600">
+            Your application has been submitted!
+          </p>
+          <p v-else-if="alreadyApplied" class="text-sm font-medium text-gray-600">
+            You have already applied to this job.
+          </p>
+          <form v-else class="flex flex-col gap-3" @submit.prevent="onApply">
+            <h2 class="text-lg font-medium text-gray-900">Apply for this job</h2>
+
+            <div class="flex flex-col gap-1">
+              <label class="text-sm font-medium text-gray-700">Resume (PDF or Word)</label>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                class="text-sm"
+                @change="onResumeChange"
+              >
+            </div>
+
+            <BaseTextarea v-model="coverLetter" label="Cover letter (optional)" placeholder="Why are you a good fit?" />
+
+            <p v-if="applyError" class="text-sm text-red-600">{{ applyError }}</p>
+
+            <BaseButton type="submit" :loading="applying" :disabled="!resumeFile">Submit application</BaseButton>
+          </form>
         </div>
       </div>
     </div>
