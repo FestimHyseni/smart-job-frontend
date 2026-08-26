@@ -111,8 +111,13 @@ async function onAvatarChange(event: Event) {
 async function onResumeUpload(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
-  await resumes.upload(file)
-  ;(event.target as HTMLInputElement).value = ''
+  try {
+    await resumes.upload(file)
+  } catch {
+    // error state is already handled by useResumes
+  } finally {
+    ;(event.target as HTMLInputElement).value = ''
+  }
 }
 
 // Experience
@@ -282,6 +287,7 @@ function formatDate(date: string | null) {
             <input type="file" accept=".pdf,.doc,.docx" class="hidden" @change="onResumeUpload">
           </label>
         </div>
+        <p v-if="resumes.error.value" class="mb-3 text-sm text-red-600">{{ resumes.error.value }}</p>
         <p v-if="!resumes.items.value.length" class="text-sm text-gray-400">Ende s'ke ngarkuar asnjë dokument.</p>
         <ul class="flex flex-col gap-2">
           <li

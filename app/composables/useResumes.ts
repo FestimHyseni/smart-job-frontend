@@ -26,9 +26,19 @@ export function useResumes() {
   }
 
   async function upload(file: File) {
-    const created = await applicationsService.uploadResume(authStore.user!.id, file)
-    items.value.unshift(created)
-    return created
+    error.value = null
+    try {
+      const created = await applicationsService.uploadResume(authStore.user!.id, file)
+      items.value.unshift(created)
+      return created
+    } catch (err) {
+      if (err instanceof ApiRequestError) {
+        error.value = err.errors?.file?.[0] ?? err.message
+      } else {
+        error.value = 'Something went wrong. Please try again.'
+      }
+      throw err
+    }
   }
 
   async function remove(id: number) {
