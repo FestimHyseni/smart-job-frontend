@@ -66,7 +66,13 @@ async function onApply() {
         <div class="flex items-start justify-between gap-4">
           <div>
             <h1 class="text-2xl font-semibold text-gray-900">{{ job.title }}</h1>
-            <p class="text-gray-600">{{ job.company?.name }}</p>
+            <NuxtLink
+              v-if="job.company_id"
+              :to="`/companies/${job.company_id}`"
+              class="text-gray-600 hover:text-blue-600 hover:underline"
+            >
+              {{ job.company?.name }}
+            </NuxtLink>
           </div>
           <div class="flex items-center gap-2">
             <span class="whitespace-nowrap rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">

@@ -32,6 +32,12 @@ function onToggleSave(event: Event) {
   event.stopPropagation()
   emit('toggleSave', props.job.id)
 }
+
+function onCompanyClick(event: Event) {
+  event.preventDefault()
+  event.stopPropagation()
+  if (props.job.company_id) navigateTo(`/companies/${props.job.company_id}`)
+}
 </script>
 
 <template>
@@ -42,7 +48,9 @@ function onToggleSave(event: Event) {
     <div class="flex items-start justify-between gap-4">
       <div>
         <h2 class="text-lg font-semibold text-gray-900">{{ job.title }}</h2>
-        <p class="text-sm text-gray-600">{{ job.company?.name }}</p>
+        <p class="text-sm text-gray-600 hover:text-blue-600 hover:underline" @click="onCompanyClick">
+          {{ job.company?.name }}
+        </p>
       </div>
       <div class="flex items-center gap-2">
         <span class="whitespace-nowrap rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">

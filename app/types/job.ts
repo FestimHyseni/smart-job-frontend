@@ -59,6 +59,7 @@ export interface JobFilters {
   location_id?: number
   employment_type?: EmploymentType
   experience_level?: ExperienceLevel
+  company_id?: number
 }
 
 export interface JobPayload {

@@ -1,4 +1,4 @@
-import type { JobCategory, Location } from '~/types/job'
+import type { Company, JobCategory, Location } from '~/types/job'
 import type { Skill } from '~/types/profileExtras'
 import { useApi } from './api'
 
@@ -17,5 +17,9 @@ export function useCatalogService() {
     return request<Skill[]>('/skills')
   }
 
-  return { listCategories, listLocations, listSkills }
+  function showCompany(id: number) {
+    return request<Company>(`/companies/${id}`)
+  }
+
+  return { listCategories, listLocations, listSkills, showCompany }
 }

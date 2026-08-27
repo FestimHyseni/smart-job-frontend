@@ -53,6 +53,9 @@ onMounted(fetchMyJobs)
             <NuxtLink :to="`/employer/jobs/${job.id}/applicants`" class="font-medium text-blue-600 hover:underline">
               Shiko aplikantët →
             </NuxtLink>
+            <NuxtLink :to="`/employer/jobs/${job.id}/edit`" class="font-medium text-gray-600 hover:underline">
+              Edito
+            </NuxtLink>
             <button
               v-if="job.status === 'draft' || job.status === 'closed'"
               type="button"
