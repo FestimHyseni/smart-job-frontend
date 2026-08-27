@@ -1,15 +1,22 @@
 import { ApiRequestError } from '~/types/auth'
 import { useApplicationsService } from '~/services/applications'
+import { useResumesService } from '~/services/profileExtras'
 
 export function useApply() {
   const applicationsService = useApplicationsService()
+  const resumesService = useResumesService()
   const authStore = useAuthStore()
 
   const loading = ref(false)
   const error = ref<string | null>(null)
 
   function handleError(err: unknown) {
-    error.value = err instanceof ApiRequestError ? err.message : 'Something went wrong. Please try again.'
+    if (err instanceof ApiRequestError) {
+      const firstFieldError = err.errors ? Object.values(err.errors)[0]?.[0] : undefined
+      error.value = firstFieldError ?? err.message
+    } else {
+      error.value = 'Something went wrong. Please try again.'
+    }
   }
 
   async function hasAppliedTo(jobId: number): Promise<boolean> {
@@ -28,7 +35,9 @@ export function useApply() {
     error.value = null
     try {
       const userId = authStore.user!.id
-      const resume = await applicationsService.uploadResume(userId, resumeFile)
+      const myResumes = await resumesService.list()
+      const existing = myResumes.find((r) => r.user_id === userId && r.file_name === resumeFile.name)
+      const resume = existing ?? await applicationsService.uploadResume(userId, resumeFile)
       return await applicationsService.apply({
         job_id: jobId,
         candidate_id: userId,
