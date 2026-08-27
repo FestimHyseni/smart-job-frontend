@@ -9,6 +9,18 @@ const jobId = Number(route.params.id)
 
 const { applications, loading, error, fetchApplicationsFor, updateApplicationStatus } = useEmployerJobs()
 const { resolveUrl } = useBackendOrigin()
+const { findOrStartConversationWith } = useMessaging()
+const messaging = ref<number | null>(null)
+
+async function onMessage(candidateId: number) {
+  messaging.value = candidateId
+  try {
+    const conversation = await findOrStartConversationWith(candidateId)
+    await navigateTo(`/messages/${conversation.id}`)
+  } finally {
+    messaging.value = null
+  }
+}
 
 const statusOptions: { value: ApplicationStatus; label: string }[] = [
   { value: 'pending', label: 'Pending' },
@@ -54,6 +66,14 @@ onMounted(() => fetchApplicationsFor(jobId))
               >
                 📎 {{ application.resume.file_name }}
               </a>
+              <button
+                type="button"
+                class="mt-1 block text-sm font-medium text-blue-600 hover:underline disabled:opacity-50"
+                :disabled="messaging === application.candidate_id"
+                @click="onMessage(application.candidate_id)"
+              >
+                💬 Mesazho
+              </button>
             </div>
             <select
               class="rounded-md border border-gray-300 px-2 py-1 text-sm outline-none focus:ring-2 focus:ring-blue-500"

@@ -32,6 +32,13 @@ async function onLogout() {
           <NuxtLink v-if="authStore.user?.role === 'employer'" to="/employer/jobs" class="text-gray-600 hover:text-gray-900">
             My jobs
           </NuxtLink>
+          <NuxtLink
+            v-if="authStore.user?.role === 'candidate' || authStore.user?.role === 'employer'"
+            to="/messages"
+            class="text-gray-600 hover:text-gray-900"
+          >
+            Messages
+          </NuxtLink>
           <NuxtLink v-if="authStore.user?.role === 'admin'" to="/admin/users" class="text-gray-600 hover:text-gray-900">
             Users
           </NuxtLink>
