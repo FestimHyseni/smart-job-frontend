@@ -66,14 +66,6 @@ onMounted(() => fetchApplicationsFor(jobId))
               >
                 📎 {{ application.resume.file_name }}
               </a>
-              <button
-                type="button"
-                class="mt-1 block text-sm font-medium text-blue-600 hover:underline disabled:opacity-50"
-                :disabled="messaging === application.candidate_id"
-                @click="onMessage(application.candidate_id)"
-              >
-                💬 Mesazho
-              </button>
             </div>
             <select
               class="rounded-md border border-gray-300 px-2 py-1 text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -85,6 +77,18 @@ onMounted(() => fetchApplicationsFor(jobId))
           </div>
 
           <p v-if="application.cover_letter" class="mt-3 whitespace-pre-line text-sm text-gray-600">{{ application.cover_letter }}</p>
+
+          <div class="mt-4 border-t border-gray-100 pt-3">
+            <button
+              type="button"
+              class="flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 transition hover:bg-blue-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+              :disabled="messaging === application.candidate_id"
+              @click="onMessage(application.candidate_id)"
+            >
+              <span v-if="messaging === application.candidate_id">Duke hapur...</span>
+              <span v-else>💬 Kontakto kandidatin</span>
+            </button>
+          </div>
         </li>
       </ul>
     </div>
