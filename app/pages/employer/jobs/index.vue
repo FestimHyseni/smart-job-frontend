@@ -1,7 +1,12 @@
 <script setup lang="ts">
 definePageMeta({ middleware: 'auth' })
 
-const { jobs, loading, error, fetchMyJobs, togglePublish } = useEmployerJobs()
+const { jobs, loading, error, fetchMyJobs, togglePublish, deleteJob } = useEmployerJobs()
+
+async function onDelete(jobId: number) {
+  if (!confirm('A je i sigurt që do ta fshish këtë job? Ky veprim s\'mund të kthehet.')) return
+  await deleteJob(jobId)
+}
 
 const statusLabels: Record<string, string> = {
   draft: 'Draft',
@@ -71,6 +76,13 @@ onMounted(fetchMyJobs)
               @click="togglePublish(job)"
             >
               Mbyll shpalljen
+            </button>
+            <button
+              type="button"
+              class="ml-auto font-medium text-gray-400 hover:text-red-600"
+              @click="onDelete(job.id)"
+            >
+              🗑 Fshi
             </button>
           </div>
         </li>

@@ -49,6 +49,11 @@ export function useEmployerJobs() {
     return updated
   }
 
+  async function deleteJob(id: number) {
+    await jobsService.remove(id)
+    jobs.value = jobs.value.filter((job) => job.id !== id)
+  }
+
   async function fetchApplicationsFor(jobId: number) {
     loading.value = true
     error.value = null
@@ -69,5 +74,5 @@ export function useEmployerJobs() {
     return updated
   }
 
-  return { jobs, applications, loading, error, fetchMyJobs, togglePublish, fetchApplicationsFor, updateApplicationStatus }
+  return { jobs, applications, loading, error, fetchMyJobs, togglePublish, deleteJob, fetchApplicationsFor, updateApplicationStatus }
 }

@@ -28,5 +28,11 @@ export function useJobsService() {
     })
   }
 
-  return { list, show, create, update }
+  function remove(id: number) {
+    return request<null>(`/jobs/${id}`, {
+      method: 'DELETE',
+    })
+  }
+
+  return { list, show, create, update, remove }
 }
