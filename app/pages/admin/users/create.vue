@@ -49,7 +49,7 @@ async function onSubmit() {
           <label class="text-sm font-medium text-gray-700">Role</label>
           <select
             v-model="form.role"
-            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+            class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500"
           >
             <option value="candidate">Candidate</option>
             <option value="employer">Employer</option>
@@ -72,7 +72,7 @@ async function onSubmit() {
       </form>
 
       <p class="mt-6 text-center text-sm text-gray-600">
-        <NuxtLink to="/admin/users" class="font-medium text-blue-600 hover:underline">Back to users</NuxtLink>
+        <NuxtLink to="/admin/users" class="font-medium text-brand-600 hover:underline">Back to users</NuxtLink>
       </p>
     </div>
   </div>

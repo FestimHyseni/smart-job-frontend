@@ -44,7 +44,7 @@ async function onSubmit() {
 
       <p class="mt-6 text-center text-sm text-gray-600">
         Don't have an account?
-        <NuxtLink to="/register" class="font-medium text-blue-600 hover:underline">Register</NuxtLink>
+        <NuxtLink to="/register" class="font-medium text-brand-600 hover:underline">Register</NuxtLink>
       </p>
     </div>
   </div>

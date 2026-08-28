@@ -13,7 +13,7 @@ onMounted(fetchUsers)
         <h1 class="text-2xl font-semibold text-gray-900">Users</h1>
         <NuxtLink
           to="/admin/users/create"
-          class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          class="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
         >
           Add user
         </NuxtLink>
@@ -43,7 +43,7 @@ onMounted(fetchUsers)
               <td class="px-4 py-3 text-right">
                 <NuxtLink
                   :to="`/admin/users/${user.id}/edit`"
-                  class="font-medium text-blue-600 hover:underline"
+                  class="font-medium text-brand-600 hover:underline"
                 >
                   Edit
                 </NuxtLink>

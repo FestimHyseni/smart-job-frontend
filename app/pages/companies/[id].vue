@@ -27,7 +27,7 @@ onMounted(async () => {
 <template>
   <div class="min-h-screen bg-gray-50 px-4 py-10">
     <div class="mx-auto max-w-3xl">
-      <NuxtLink to="/jobs" class="mb-6 inline-block text-sm font-medium text-blue-600 hover:underline">
+      <NuxtLink to="/jobs" class="mb-6 inline-block text-sm font-medium text-brand-600 hover:underline">
         ← Back to jobs
       </NuxtLink>
 
@@ -43,7 +43,7 @@ onMounted(async () => {
           <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
             <span v-if="company.industry">🏭 {{ company.industry }}</span>
             <span v-if="company.employees_count">👥 {{ company.employees_count }} employees</span>
-            <a v-if="company.website" :href="company.website" target="_blank" class="text-blue-600 hover:underline">
+            <a v-if="company.website" :href="company.website" target="_blank" class="text-brand-600 hover:underline">
               🔗 {{ company.website }}
             </a>
           </div>

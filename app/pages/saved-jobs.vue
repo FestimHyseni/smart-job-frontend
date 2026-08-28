@@ -14,7 +14,7 @@ onMounted(savedJobs.fetchMine)
       <p v-if="savedJobs.loading.value" class="text-sm text-gray-600">Duke ngarkuar...</p>
       <p v-else-if="savedJobs.error.value" class="text-sm text-red-600">{{ savedJobs.error.value }}</p>
       <p v-else-if="!savedJobs.items.value.length" class="text-sm text-gray-500">
-        Ende s'ke ruajtur asnjë job. <NuxtLink to="/jobs" class="text-blue-600 hover:underline">Shfleto job-et →</NuxtLink>
+        Ende s'ke ruajtur asnjë job. <NuxtLink to="/jobs" class="text-brand-600 hover:underline">Shfleto job-et →</NuxtLink>
       </p>
 
       <div v-else class="flex flex-col gap-4">

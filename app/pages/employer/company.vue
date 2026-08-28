@@ -84,7 +84,7 @@ async function onSubmit() {
       </form>
 
       <p v-if="existingCompany" class="mt-6 text-center text-sm text-gray-600">
-        <NuxtLink to="/employer/jobs/create" class="font-medium text-blue-600 hover:underline">Post a job →</NuxtLink>
+        <NuxtLink to="/employer/jobs/create" class="font-medium text-brand-600 hover:underline">Post a job →</NuxtLink>
       </p>
     </div>
   </div>

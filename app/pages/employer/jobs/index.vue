@@ -30,7 +30,7 @@ onMounted(fetchMyJobs)
     <div class="mx-auto max-w-3xl">
       <div class="mb-6 flex items-center justify-between">
         <h1 class="text-2xl font-semibold text-gray-900">Job-et e mia</h1>
-        <NuxtLink to="/employer/jobs/create" class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+        <NuxtLink to="/employer/jobs/create" class="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700">
           + Posto job të ri
         </NuxtLink>
       </div>
@@ -39,7 +39,7 @@ onMounted(fetchMyJobs)
       <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
       <p v-else-if="!jobs.length" class="text-sm text-gray-500">
         Ende s'ke postuar asnjë job. Sigurohu që ke krijuar
-        <NuxtLink to="/employer/company" class="text-blue-600 hover:underline">kompaninë</NuxtLink> tënde më parë.
+        <NuxtLink to="/employer/company" class="text-brand-600 hover:underline">kompaninë</NuxtLink> tënde më parë.
       </p>
 
       <ul v-else class="flex flex-col gap-3">
@@ -55,7 +55,7 @@ onMounted(fetchMyJobs)
           </div>
 
           <div class="mt-3 flex items-center gap-4 text-sm">
-            <NuxtLink :to="`/employer/jobs/${job.id}/applicants`" class="font-medium text-blue-600 hover:underline">
+            <NuxtLink :to="`/employer/jobs/${job.id}/applicants`" class="font-medium text-brand-600 hover:underline">
               Shiko aplikantët →
             </NuxtLink>
             <NuxtLink :to="`/employer/jobs/${job.id}/edit`" class="font-medium text-gray-600 hover:underline">

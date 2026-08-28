@@ -65,13 +65,13 @@ async function onSubmit() {
 
       <p v-if="!company" class="text-sm text-gray-600">
         You need to
-        <NuxtLink to="/employer/company" class="font-medium text-blue-600 hover:underline">set up your company</NuxtLink>
+        <NuxtLink to="/employer/company" class="font-medium text-brand-600 hover:underline">set up your company</NuxtLink>
         before posting a job.
       </p>
 
       <p v-else-if="created" class="text-sm font-medium text-green-600">
         Job posted successfully!
-        <NuxtLink to="/employer/jobs" class="font-medium text-blue-600 hover:underline">View my jobs</NuxtLink>
+        <NuxtLink to="/employer/jobs" class="font-medium text-brand-600 hover:underline">View my jobs</NuxtLink>
       </p>
 
       <form v-else class="flex flex-col gap-4" @submit.prevent="onSubmit">

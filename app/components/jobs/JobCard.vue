@@ -43,17 +43,17 @@ function onCompanyClick(event: Event) {
 <template>
   <NuxtLink
     :to="`/jobs/${job.id}`"
-    class="block rounded-lg border border-gray-200 bg-white p-5 transition hover:border-blue-400 hover:shadow-sm"
+    class="group block rounded-xl border border-gray-100 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lg hover:shadow-brand-100"
   >
     <div class="flex items-start justify-between gap-4">
       <div>
-        <h2 class="text-lg font-semibold text-gray-900">{{ job.title }}</h2>
-        <p class="text-sm text-gray-600 hover:text-blue-600 hover:underline" @click="onCompanyClick">
+        <h2 class="text-lg font-semibold text-gray-900 transition group-hover:text-brand-700">{{ job.title }}</h2>
+        <p class="text-sm text-gray-500 hover:text-brand-600 hover:underline" @click="onCompanyClick">
           {{ job.company?.name }}
         </p>
       </div>
       <div class="flex items-center gap-2">
-        <span class="whitespace-nowrap rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+        <span class="whitespace-nowrap rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
           {{ employmentLabels[job.employment_type] || job.employment_type }}
         </span>
         <button

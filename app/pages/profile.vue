@@ -198,7 +198,7 @@ function formatDate(date: string | null) {
     <div class="mx-auto flex max-w-3xl flex-col gap-5 px-4 pt-8">
       <!-- Header card: cover + avatar + completion -->
       <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
-        <div class="h-20 bg-gradient-to-r from-blue-600 to-blue-400" />
+        <div class="h-20 bg-gradient-to-r from-brand-600 to-brand-400" />
         <div class="flex flex-col gap-4 px-6 pb-6 sm:flex-row sm:items-end">
           <div class="relative -mt-10 shrink-0">
             <img
@@ -212,7 +212,7 @@ function formatDate(date: string | null) {
             </div>
             <button
               type="button"
-              class="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm text-white shadow ring-2 ring-white hover:bg-blue-700 disabled:opacity-60"
+              class="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full bg-brand-600 text-sm text-white shadow ring-2 ring-white hover:bg-brand-700 disabled:opacity-60"
               :disabled="avatarUploading"
               title="Ndrysho foton"
               @click="avatarInput?.click()"
@@ -295,7 +295,7 @@ function formatDate(date: string | null) {
             :key="resume.id"
             class="flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 px-3 py-2 text-sm transition hover:bg-gray-100"
           >
-            <a :href="resolveUrl(resume.file_url) ?? '#'" target="_blank" class="flex items-center gap-2 text-blue-600 hover:underline">
+            <a :href="resolveUrl(resume.file_url) ?? '#'" target="_blank" class="flex items-center gap-2 text-brand-600 hover:underline">
               📎 {{ resume.file_name }}
             </a>
             <button type="button" class="text-gray-400 hover:text-red-600" @click="resumes.remove(resume.id)">🗑</button>
@@ -383,10 +383,10 @@ function formatDate(date: string | null) {
           <span
             v-for="cs in candidateSkills.items.value"
             :key="cs.id"
-            class="flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700"
+            class="flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700"
           >
             {{ cs.skill?.name }}
-            <button type="button" class="text-blue-400 hover:text-red-600" @click="candidateSkills.remove(cs.id)">×</button>
+            <button type="button" class="text-brand-400 hover:text-red-600" @click="candidateSkills.remove(cs.id)">×</button>
           </span>
         </div>
 

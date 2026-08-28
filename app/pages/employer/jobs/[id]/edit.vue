@@ -134,7 +134,7 @@ async function onSubmit() {
       </form>
 
       <p class="mt-6 text-center text-sm text-gray-600">
-        <NuxtLink to="/employer/jobs" class="font-medium text-blue-600 hover:underline">← Back to my jobs</NuxtLink>
+        <NuxtLink to="/employer/jobs" class="font-medium text-brand-600 hover:underline">← Back to my jobs</NuxtLink>
       </p>
     </div>
   </div>

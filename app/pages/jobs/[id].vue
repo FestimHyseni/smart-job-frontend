@@ -55,7 +55,7 @@ async function onApply() {
 <template>
   <div class="min-h-screen bg-gray-50 px-4 py-10">
     <div class="mx-auto max-w-3xl">
-      <NuxtLink to="/jobs" class="mb-6 inline-block text-sm font-medium text-blue-600 hover:underline">
+      <NuxtLink to="/jobs" class="mb-6 inline-block text-sm font-medium text-brand-600 hover:underline">
         ← Back to jobs
       </NuxtLink>
 
@@ -69,13 +69,13 @@ async function onApply() {
             <NuxtLink
               v-if="job.company_id"
               :to="`/companies/${job.company_id}`"
-              class="text-gray-600 hover:text-blue-600 hover:underline"
+              class="text-gray-600 hover:text-brand-600 hover:underline"
             >
               {{ job.company?.name }}
             </NuxtLink>
           </div>
           <div class="flex items-center gap-2">
-            <span class="whitespace-nowrap rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+            <span class="whitespace-nowrap rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">
               {{ employmentLabels[job.employment_type] || job.employment_type }}
             </span>
             <button

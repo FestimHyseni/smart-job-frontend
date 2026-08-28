@@ -40,7 +40,7 @@ onUnmounted(() => {
 <template>
   <div class="flex min-h-screen flex-col bg-gray-50 px-4 py-10">
     <div class="mx-auto flex w-full max-w-2xl flex-1 flex-col">
-      <NuxtLink to="/messages" class="mb-4 inline-block text-sm font-medium text-blue-600 hover:underline">
+      <NuxtLink to="/messages" class="mb-4 inline-block text-sm font-medium text-brand-600 hover:underline">
         ← Të gjitha bisedat
       </NuxtLink>
 
@@ -60,7 +60,7 @@ onUnmounted(() => {
           >
             <div
               class="max-w-xs rounded-lg px-3 py-2 text-sm"
-              :class="message.sender_id === authStore.user?.id ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-800'"
+              :class="message.sender_id === authStore.user?.id ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-800'"
             >
               {{ message.message }}
             </div>
@@ -73,7 +73,7 @@ onUnmounted(() => {
             v-model="draft"
             type="text"
             placeholder="Shkruaj një mesazh..."
-            class="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+            class="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500"
           >
           <BaseButton type="submit" :full-width="false" :loading="sending" class="px-5">Dërgo</BaseButton>
         </form>

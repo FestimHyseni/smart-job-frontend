@@ -41,11 +41,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 px-4 py-10">
-    <div class="mx-auto max-w-4xl">
-      <h1 class="mb-6 text-2xl font-semibold text-gray-900">Jobs</h1>
+  <div class="min-h-screen bg-gray-50">
+    <div class="bg-gradient-to-br from-brand-700 via-brand-600 to-indigo-500 px-4 py-14 text-center">
+      <h1 class="text-3xl font-extrabold text-white sm:text-4xl">Gjej punën tënde të ardhshme</h1>
+      <p class="mx-auto mt-2 max-w-xl text-brand-100">
+        Mijëra shpallje pune nga kompani të vërteta — filtro, apliko, dhe ndiq statusin tënd në një vend.
+      </p>
+    </div>
 
-      <form class="mb-6 grid grid-cols-1 gap-3 rounded-lg border border-gray-200 bg-white p-4 sm:grid-cols-4" @submit.prevent="applyFilters">
+    <div class="mx-auto max-w-4xl px-4 py-10">
+      <form class="mb-6 grid grid-cols-1 gap-3 rounded-xl border border-gray-100 bg-white p-4 shadow-sm sm:grid-cols-4" @submit.prevent="applyFilters">
         <BaseInput v-model="filters.search" label="Search" placeholder="Job title" />
         <BaseSelect
           v-model="filters.category_id"

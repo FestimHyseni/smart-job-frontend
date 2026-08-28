@@ -79,7 +79,7 @@ onMounted(() => fetchApplicationsFor(jobId))
 <template>
   <div class="min-h-screen bg-gray-50 px-4 py-10">
     <div class="mx-auto max-w-3xl">
-      <NuxtLink to="/employer/jobs" class="mb-6 inline-block text-sm font-medium text-blue-600 hover:underline">
+      <NuxtLink to="/employer/jobs" class="mb-6 inline-block text-sm font-medium text-brand-600 hover:underline">
         ← Të gjitha job-et
       </NuxtLink>
 
@@ -99,13 +99,13 @@ onMounted(() => fetchApplicationsFor(jobId))
                 v-if="application.resume"
                 :href="resolveUrl(application.resume.file_url) ?? '#'"
                 target="_blank"
-                class="mt-1 inline-block text-sm text-blue-600 hover:underline"
+                class="mt-1 inline-block text-sm text-brand-600 hover:underline"
               >
                 📎 {{ application.resume.file_name }}
               </a>
             </div>
             <select
-              class="rounded-md border border-gray-300 px-2 py-1 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+              class="rounded-md border border-gray-300 px-2 py-1 text-sm outline-none focus:ring-2 focus:ring-brand-500"
               :value="application.status"
               @change="onStatusChange(application.id, $event)"
             >
@@ -128,7 +128,7 @@ onMounted(() => fetchApplicationsFor(jobId))
           <div class="mt-4 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-3">
             <button
               type="button"
-              class="flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 transition hover:bg-blue-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+              class="flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1.5 text-sm font-medium text-brand-700 transition hover:bg-brand-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
               :disabled="messaging === application.candidate_id"
               @click="onMessage(application.candidate_id)"
             >
