@@ -3,6 +3,13 @@ definePageMeta({ middleware: 'auth' })
 
 const { jobs, loading, error, fetchMyJobs, togglePublish, deleteJob } = useEmployerJobs()
 
+const search = ref('')
+const filteredJobs = computed(() => {
+  const q = search.value.trim().toLowerCase()
+  if (!q) return jobs.value
+  return jobs.value.filter((job) => job.title.toLowerCase().includes(q))
+})
+
 async function onDelete(jobId: number) {
   if (!confirm('A je i sigurt që do ta fshish këtë job? Ky veprim s\'mund të kthehet.')) return
   await deleteJob(jobId)
@@ -35,15 +42,26 @@ onMounted(fetchMyJobs)
         </NuxtLink>
       </div>
 
+      <div v-if="jobs.length" class="relative mb-4">
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+        <input
+          v-model="search"
+          type="text"
+          placeholder="Kërko sipas titullit..."
+          class="w-full rounded-md border border-gray-300 py-2 pl-9 pr-3 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/40"
+        >
+      </div>
+
       <p v-if="loading" class="text-sm text-gray-600">Duke ngarkuar...</p>
       <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
       <p v-else-if="!jobs.length" class="text-sm text-gray-500">
         Ende s'ke postuar asnjë job. Sigurohu që ke krijuar
         <NuxtLink to="/employer/company" class="text-brand-600 hover:underline">kompaninë</NuxtLink> tënde më parë.
       </p>
+      <p v-else-if="!filteredJobs.length" class="text-sm text-gray-500">Asnjë rezultat për "{{ search }}".</p>
 
       <ul v-else class="flex flex-col gap-3">
-        <li v-for="job in jobs" :key="job.id" class="rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
+        <li v-for="job in filteredJobs" :key="job.id" class="rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
           <div class="flex items-start justify-between gap-4">
             <div>
               <p class="font-medium text-gray-900">{{ job.title }}</p>
