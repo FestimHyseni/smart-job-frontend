@@ -1,5 +1,6 @@
 import type { Job } from './job'
 import type { User } from './user'
+import type { Interview } from './interview'
 
 export interface Resume {
   id: number
@@ -23,4 +24,5 @@ export interface Application {
   cover_letter: string | null
   status: ApplicationStatus
   applied_at: string | null
+  interviews: Interview[]
 }

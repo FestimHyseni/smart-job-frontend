@@ -1,9 +1,11 @@
 import { ApiRequestError } from '~/types/auth'
 import type { Application, ApplicationStatus } from '~/types/application'
+import type { InterviewPayload } from '~/types/interview'
 import type { Job, JobStatus } from '~/types/job'
 import { useJobsService } from '~/services/jobs'
 import { useApplicationsService } from '~/services/applications'
 import { useEmployerService } from '~/services/employer'
+import { useInterviewsService } from '~/services/interviews'
 
 const ALL_STATUSES: JobStatus[] = ['draft', 'published', 'closed', 'expired']
 
@@ -11,6 +13,7 @@ export function useEmployerJobs() {
   const jobsService = useJobsService()
   const applicationsService = useApplicationsService()
   const employerService = useEmployerService()
+  const interviewsService = useInterviewsService()
   const authStore = useAuthStore()
 
   const jobs = ref<Job[]>([])
@@ -58,8 +61,7 @@ export function useEmployerJobs() {
     loading.value = true
     error.value = null
     try {
-      const all = await applicationsService.list()
-      applications.value = all.filter((application) => application.job_id === jobId)
+      applications.value = await applicationsService.list({ job_id: jobId })
     } catch (err) {
       handleError(err)
     } finally {
@@ -74,5 +76,23 @@ export function useEmployerJobs() {
     return updated
   }
 
-  return { jobs, applications, loading, error, fetchMyJobs, togglePublish, deleteJob, fetchApplicationsFor, updateApplicationStatus }
+  async function scheduleInterview(payload: InterviewPayload) {
+    const interview = await interviewsService.create(payload)
+    const application = applications.value.find((a) => a.id === payload.application_id)
+    if (application) application.interviews.push(interview)
+    return interview
+  }
+
+  return {
+    jobs,
+    applications,
+    loading,
+    error,
+    fetchMyJobs,
+    togglePublish,
+    deleteJob,
+    fetchApplicationsFor,
+    updateApplicationStatus,
+    scheduleInterview,
+  }
 }

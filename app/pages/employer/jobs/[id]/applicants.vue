@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ApplicationStatus } from '~/types/application'
+import type { InterviewType } from '~/types/interview'
 import { useBackendOrigin } from '~/composables/useBackendOrigin'
 
 definePageMeta({ middleware: 'auth' })
@@ -7,7 +8,7 @@ definePageMeta({ middleware: 'auth' })
 const route = useRoute()
 const jobId = Number(route.params.id)
 
-const { applications, loading, error, fetchApplicationsFor, updateApplicationStatus } = useEmployerJobs()
+const { applications, loading, error, fetchApplicationsFor, updateApplicationStatus, scheduleInterview } = useEmployerJobs()
 const { resolveUrl } = useBackendOrigin()
 const { findOrStartConversationWith } = useMessaging()
 const messaging = ref<number | null>(null)
@@ -20,6 +21,42 @@ async function onMessage(candidateId: number) {
   } finally {
     messaging.value = null
   }
+}
+
+const schedulingFor = ref<number | null>(null)
+const scheduling = ref(false)
+const interviewForm = reactive({
+  scheduled_at: '',
+  type: 'online' as InterviewType,
+  location: '',
+  meeting_url: '',
+  notes: '',
+})
+
+function toggleSchedule(applicationId: number) {
+  schedulingFor.value = schedulingFor.value === applicationId ? null : applicationId
+  Object.assign(interviewForm, { scheduled_at: '', type: 'online', location: '', meeting_url: '', notes: '' })
+}
+
+async function onScheduleInterview(applicationId: number) {
+  scheduling.value = true
+  try {
+    await scheduleInterview({
+      application_id: applicationId,
+      scheduled_at: interviewForm.scheduled_at,
+      type: interviewForm.type,
+      location: interviewForm.type === 'physical' ? interviewForm.location : null,
+      meeting_url: interviewForm.type === 'online' ? interviewForm.meeting_url : null,
+      notes: interviewForm.notes || null,
+    })
+    schedulingFor.value = null
+  } finally {
+    scheduling.value = false
+  }
+}
+
+function formatInterviewDate(date: string) {
+  return new Date(date).toLocaleString('sq-AL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 }
 
 const statusOptions: { value: ApplicationStatus; label: string }[] = [
@@ -78,7 +115,17 @@ onMounted(() => fetchApplicationsFor(jobId))
 
           <p v-if="application.cover_letter" class="mt-3 whitespace-pre-line text-sm text-gray-600">{{ application.cover_letter }}</p>
 
-          <div class="mt-4 border-t border-gray-100 pt-3">
+          <div v-if="application.interviews?.length" class="mt-3 flex flex-col gap-1">
+            <div
+              v-for="interview in application.interviews"
+              :key="interview.id"
+              class="rounded-md bg-purple-50 px-3 py-2 text-sm text-purple-700"
+            >
+              📅 Intervistë {{ formatInterviewDate(interview.scheduled_at) }} ({{ interview.type }})
+            </div>
+          </div>
+
+          <div class="mt-4 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-3">
             <button
               type="button"
               class="flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 transition hover:bg-blue-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
@@ -88,7 +135,35 @@ onMounted(() => fetchApplicationsFor(jobId))
               <span v-if="messaging === application.candidate_id">Duke hapur...</span>
               <span v-else>💬 Kontakto kandidatin</span>
             </button>
+            <button
+              type="button"
+              class="flex items-center gap-1.5 rounded-full bg-purple-50 px-3 py-1.5 text-sm font-medium text-purple-700 transition hover:bg-purple-600 hover:text-white"
+              @click="toggleSchedule(application.id)"
+            >
+              📅 {{ schedulingFor === application.id ? 'Mbyll' : 'Cakto intervistë' }}
+            </button>
           </div>
+
+          <form
+            v-if="schedulingFor === application.id"
+            class="mt-3 flex flex-col gap-3 rounded-lg bg-gray-50 p-4"
+            @submit.prevent="onScheduleInterview(application.id)"
+          >
+            <BaseInput v-model="interviewForm.scheduled_at" label="Data dhe ora" type="datetime-local" />
+            <BaseSelect
+              v-model="interviewForm.type"
+              label="Lloji"
+              :options="[
+                { value: 'online', label: 'Online' },
+                { value: 'physical', label: 'Fizike' },
+                { value: 'phone', label: 'Telefonike' },
+              ]"
+            />
+            <BaseInput v-if="interviewForm.type === 'physical'" v-model="interviewForm.location" label="Vendndodhja" placeholder="Adresa e zyrës" />
+            <BaseInput v-if="interviewForm.type === 'online'" v-model="interviewForm.meeting_url" label="Link takimi" placeholder="https://meet.google.com/..." />
+            <BaseTextarea v-model="interviewForm.notes" label="Shënime (opsionale)" />
+            <BaseButton type="submit" :full-width="false" :loading="scheduling" class="self-start px-5">Cakto intervistën</BaseButton>
+          </form>
         </li>
       </ul>
     </div>
