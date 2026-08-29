@@ -1,7 +1,36 @@
 <script setup lang="ts">
+import type { JobViewStats } from '~/types/job'
+
 definePageMeta({ middleware: 'auth' })
 
-const { jobs, loading, error, fetchMyJobs, togglePublish, deleteJob } = useEmployerJobs()
+const { jobs, loading, error, fetchMyJobs, togglePublish, deleteJob, fetchViewStats } = useEmployerJobs()
+
+const statsFor = ref<number | null>(null)
+const statsCache = reactive<Record<number, JobViewStats>>({})
+const statsLoading = ref<number | null>(null)
+
+async function toggleStats(jobId: number) {
+  if (statsFor.value === jobId) {
+    statsFor.value = null
+    return
+  }
+  statsFor.value = jobId
+  if (statsCache[jobId]) return
+  statsLoading.value = jobId
+  try {
+    statsCache[jobId] = await fetchViewStats(jobId)
+  } finally {
+    statsLoading.value = null
+  }
+}
+
+function maxCount(stats: JobViewStats) {
+  return Math.max(1, ...stats.daily.map((d) => d.count))
+}
+
+function formatDay(date: string) {
+  return new Date(date).toLocaleDateString('sq-AL', { day: 'numeric', month: 'short', timeZone: 'UTC' })
+}
 
 const search = ref('')
 const filteredJobs = computed(() => {
@@ -97,11 +126,40 @@ onMounted(fetchMyJobs)
             </button>
             <button
               type="button"
+              class="font-medium text-gray-600 hover:underline"
+              @click="toggleStats(job.id)"
+            >
+              📊 Statistikat
+            </button>
+            <button
+              type="button"
               class="ml-auto font-medium text-gray-400 hover:text-red-600"
               @click="onDelete(job.id)"
             >
               🗑 Fshi
             </button>
+          </div>
+
+          <div v-if="statsFor === job.id" class="mt-4 rounded-lg bg-gray-50 p-4">
+            <p v-if="statsLoading === job.id" class="text-sm text-gray-500">Duke ngarkuar statistikat...</p>
+            <template v-else-if="statsCache[job.id]">
+              <p class="mb-3 text-sm text-gray-700">
+                👁️ <span class="font-semibold text-gray-900">{{ statsCache[job.id]!.total }}</span> shikime gjithsej
+              </p>
+              <div class="flex items-end gap-1" style="height: 60px">
+                <div
+                  v-for="day in statsCache[job.id]!.daily"
+                  :key="day.date"
+                  class="flex-1 rounded-t bg-brand-400 transition hover:bg-brand-600"
+                  :style="{ height: `${(day.count / maxCount(statsCache[job.id]!)) * 100}%` }"
+                  :title="`${formatDay(day.date)}: ${day.count} shikime`"
+                />
+              </div>
+              <div class="mt-1 flex justify-between text-[10px] text-gray-400">
+                <span>{{ formatDay(statsCache[job.id]!.daily[0]!.date) }}</span>
+                <span>{{ formatDay(statsCache[job.id]!.daily[statsCache[job.id]!.daily.length - 1]!.date) }}</span>
+              </div>
+            </template>
           </div>
         </li>
       </ul>

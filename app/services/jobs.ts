@@ -1,4 +1,4 @@
-import type { Job, JobFilters, JobPayload } from '~/types/job'
+import type { Job, JobFilters, JobPayload, JobViewStats } from '~/types/job'
 import { useApi } from './api'
 
 export function useJobsService() {
@@ -12,6 +12,10 @@ export function useJobsService() {
 
   function show(id: number) {
     return request<Job>(`/jobs/${id}`)
+  }
+
+  function viewStats(id: number) {
+    return request<JobViewStats>(`/jobs/${id}/view-stats`)
   }
 
   function create(payload: JobPayload) {
@@ -34,5 +38,5 @@ export function useJobsService() {
     })
   }
 
-  return { list, show, create, update, remove }
+  return { list, show, viewStats, create, update, remove }
 }

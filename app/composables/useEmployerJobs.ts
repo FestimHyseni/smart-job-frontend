@@ -1,7 +1,7 @@
 import { ApiRequestError } from '~/types/auth'
 import type { Application, ApplicationStatus } from '~/types/application'
 import type { InterviewPayload } from '~/types/interview'
-import type { Job, JobStatus } from '~/types/job'
+import type { Job, JobStatus, JobViewStats } from '~/types/job'
 import { useJobsService } from '~/services/jobs'
 import { useApplicationsService } from '~/services/applications'
 import { useEmployerService } from '~/services/employer'
@@ -83,6 +83,10 @@ export function useEmployerJobs() {
     return interview
   }
 
+  async function fetchViewStats(jobId: number): Promise<JobViewStats> {
+    return jobsService.viewStats(jobId)
+  }
+
   return {
     jobs,
     applications,
@@ -94,5 +98,6 @@ export function useEmployerJobs() {
     fetchApplicationsFor,
     updateApplicationStatus,
     scheduleInterview,
+    fetchViewStats,
   }
 }

@@ -4,6 +4,11 @@ export interface Location {
   country: string
 }
 
+export interface JobViewStats {
+  total: number
+  daily: { date: string; count: number }[]
+}
+
 export interface JobCategory {
   id: number
   name: string
