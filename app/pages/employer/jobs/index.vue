@@ -15,7 +15,6 @@ async function toggleStats(jobId: number) {
     return
   }
   statsFor.value = jobId
-  if (statsCache[jobId]) return
   statsLoading.value = jobId
   try {
     statsCache[jobId] = await fetchViewStats(jobId)

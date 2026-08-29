@@ -113,7 +113,12 @@ onMounted(() => fetchApplicationsFor(jobId))
         <li v-for="application in filteredApplications" :key="application.id" class="rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition hover:border-brand-200 hover:shadow-md">
           <div class="flex items-start justify-between gap-4">
             <div>
-              <p class="font-medium text-gray-900">{{ application.candidate?.name }}</p>
+              <NuxtLink
+                :to="`/candidates/${application.candidate_id}`"
+                class="font-medium text-gray-900 hover:text-brand-600 hover:underline"
+              >
+                {{ application.candidate?.name }}
+              </NuxtLink>
               <p class="text-sm text-gray-500">{{ application.candidate?.email }}</p>
               <a
                 v-if="application.resume"
