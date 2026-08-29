@@ -2,6 +2,7 @@
 const authStore = useAuthStore()
 const { logout } = useAuth()
 const route = useRoute()
+const { resolveUrl } = useBackendOrigin()
 
 async function onLogout() {
   await logout()
@@ -89,12 +90,29 @@ function isActive(path: string) {
           >
             Users
           </NuxtLink>
-          <button
-            class="ml-2 rounded-md px-3 py-1.5 font-medium text-red-600 transition hover:bg-red-50"
-            @click="onLogout"
-          >
-            Log out
-          </button>
+          <div class="ml-2 flex items-center gap-2 border-l border-gray-100 pl-3">
+            <span class="flex items-center gap-1.5 rounded-md px-1.5 py-1.5 text-sm font-medium text-gray-700">
+              <span
+                v-if="authStore.user?.avatar_url"
+                class="h-6 w-6 overflow-hidden rounded-full bg-gray-200"
+              >
+                <img :src="resolveUrl(authStore.user.avatar_url) ?? undefined" alt="" class="h-full w-full object-cover">
+              </span>
+              <span
+                v-else
+                class="flex h-6 w-6 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700"
+              >
+                {{ authStore.user?.name?.[0]?.toUpperCase() }}
+              </span>
+              <span class="max-w-[8rem] truncate">{{ authStore.user?.name }}</span>
+            </span>
+            <button
+              class="rounded-md px-3 py-1.5 font-medium text-red-600 transition hover:bg-red-50"
+              @click="onLogout"
+            >
+              Log out
+            </button>
+          </div>
         </template>
         <template v-else>
           <NuxtLink to="/login" class="rounded-md px-3 py-1.5 font-medium text-gray-600 transition hover:bg-gray-50 hover:text-gray-900">
