@@ -11,6 +11,7 @@ const catalogService = useCatalogService()
 const locations = ref<Location[]>([])
 const existingCompany = ref<Company | null>(null)
 const saved = ref(false)
+const isEditing = ref(false)
 
 const form = reactive<CompanyPayload>({
   name: '',
@@ -21,21 +22,36 @@ const form = reactive<CompanyPayload>({
   employees_count: null,
 })
 
+function fillForm(company: Company) {
+  form.name = company.name
+  form.description = company.description
+  form.website = company.website ?? ''
+  form.location_id = company.location_id
+  form.industry = company.industry
+  form.employees_count = company.employees_count
+}
+
 onMounted(async () => {
   locations.value = await catalogService.listLocations()
   const company = await fetchMyCompany()
   existingCompany.value = company
   if (company) {
-    form.name = company.name
-    form.description = company.description
-    form.website = company.website ?? ''
-    form.location_id = company.location_id
-    form.industry = company.industry
-    form.employees_count = company.employees_count
-  } else if (locations.value.length) {
-    form.location_id = locations.value[0].id
+    fillForm(company)
+  } else {
+    isEditing.value = true
+    if (locations.value.length) form.location_id = locations.value[0].id
   }
 })
+
+function onEdit() {
+  saved.value = false
+  isEditing.value = true
+}
+
+function onCancel() {
+  if (existingCompany.value) fillForm(existingCompany.value)
+  isEditing.value = false
+}
 
 async function onSubmit() {
   saved.value = false
@@ -46,6 +62,7 @@ async function onSubmit() {
       employees_count: form.employees_count ? Number(form.employees_count) : null,
     })
     saved.value = true
+    isEditing.value = false
   } catch {
     // error state is already handled by useEmployerCompany
   }
@@ -69,13 +86,62 @@ async function onSubmit() {
         </div>
       </div>
 
-      <!-- Form card -->
-      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <!-- View mode -->
+      <div v-if="existingCompany && !isEditing" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+        <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">📋 Të dhënat e kompanisë</h2>
+          <div class="flex items-center gap-3">
+            <span v-if="saved" class="text-sm font-medium text-green-600">✓ U ruajt</span>
+            <BaseButton type="button" :full-width="false" class="px-5" @click="onEdit">✏️ Edito</BaseButton>
+          </div>
+        </div>
+
+        <dl class="flex flex-col gap-4 text-sm">
+          <div>
+            <dt class="text-gray-500">Company name</dt>
+            <dd class="mt-0.5 font-medium text-gray-900">{{ existingCompany.name }}</dd>
+          </div>
+          <div v-if="existingCompany.description">
+            <dt class="text-gray-500">Description</dt>
+            <dd class="mt-0.5 whitespace-pre-line text-gray-700">{{ existingCompany.description }}</dd>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div v-if="existingCompany.location">
+              <dt class="text-gray-500">Location</dt>
+              <dd class="mt-0.5 text-gray-900">📍 {{ existingCompany.location.city }}, {{ existingCompany.location.country }}</dd>
+            </div>
+            <div v-if="existingCompany.industry">
+              <dt class="text-gray-500">Industry</dt>
+              <dd class="mt-0.5 text-gray-900">🏭 {{ existingCompany.industry }}</dd>
+            </div>
+            <div v-if="existingCompany.employees_count">
+              <dt class="text-gray-500">Employees count</dt>
+              <dd class="mt-0.5 text-gray-900">👥 {{ existingCompany.employees_count }}</dd>
+            </div>
+            <div v-if="existingCompany.website">
+              <dt class="text-gray-500">Website</dt>
+              <dd class="mt-0.5">
+                <a :href="existingCompany.website" target="_blank" class="text-brand-600 hover:underline">🔗 {{ existingCompany.website }}</a>
+              </dd>
+            </div>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Edit mode -->
+      <div v-else class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
         <form @submit.prevent="onSubmit">
           <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
             <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">📋 Të dhënat e kompanisë</h2>
             <div class="flex items-center gap-3">
-              <span v-if="saved" class="text-sm font-medium text-green-600">✓ U ruajt</span>
+              <button
+                v-if="existingCompany"
+                type="button"
+                class="text-sm font-medium text-gray-500 hover:text-gray-700"
+                @click="onCancel"
+              >
+                Anulo
+              </button>
               <BaseButton type="submit" :loading="loading" :full-width="false" class="px-5">Ruaj kompaninë</BaseButton>
             </div>
           </div>
