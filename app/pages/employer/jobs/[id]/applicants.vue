@@ -65,7 +65,7 @@ async function onScheduleInterview(applicationId: number) {
 }
 
 function formatInterviewDate(date: string) {
-  return new Date(date).toLocaleString('sq-AL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+  return new Date(date).toLocaleString('sq-AL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'UTC' })
 }
 
 const statusOptions: { value: ApplicationStatus; label: string }[] = [
