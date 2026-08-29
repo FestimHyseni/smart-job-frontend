@@ -30,7 +30,13 @@ export function useApply() {
     }
   }
 
-  async function applyToJob(jobId: number, resumeFile: File, coverLetter: string) {
+  async function applyToJob(
+    jobId: number,
+    resumeFile: File,
+    coverLetter: string,
+    experienceSummary: string,
+    languages: string,
+  ) {
     loading.value = true
     error.value = null
     try {
@@ -43,6 +49,8 @@ export function useApply() {
         candidate_id: userId,
         resume_id: resume.id,
         cover_letter: coverLetter || undefined,
+        experience_summary: experienceSummary || undefined,
+        languages: languages || undefined,
       })
     } catch (err) {
       handleError(err)

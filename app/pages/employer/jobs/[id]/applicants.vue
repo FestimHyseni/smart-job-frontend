@@ -140,6 +140,15 @@ onMounted(() => fetchApplicationsFor(jobId))
 
           <p v-if="application.cover_letter" class="mt-3 whitespace-pre-line text-sm text-gray-600">{{ application.cover_letter }}</p>
 
+          <div v-if="application.experience_summary || application.languages" class="mt-3 flex flex-col gap-2 rounded-lg bg-gray-50 p-3 text-sm">
+            <p v-if="application.experience_summary" class="text-gray-700">
+              <span class="font-medium text-gray-900">💼 Përvoja:</span> {{ application.experience_summary }}
+            </p>
+            <p v-if="application.languages" class="text-gray-700">
+              <span class="font-medium text-gray-900">🌐 Gjuhët:</span> {{ application.languages }}
+            </p>
+          </div>
+
           <div v-if="application.interviews?.length" class="mt-3 flex flex-col gap-1">
             <div
               v-for="interview in application.interviews"

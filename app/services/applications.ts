@@ -10,7 +10,14 @@ export function useApplicationsService() {
     })
   }
 
-  function apply(payload: { job_id: number; candidate_id: number; resume_id: number; cover_letter?: string }) {
+  function apply(payload: {
+    job_id: number
+    candidate_id: number
+    resume_id: number
+    cover_letter?: string
+    experience_summary?: string
+    languages?: string
+  }) {
     return request<Application>('/applications', {
       method: 'POST',
       body: payload,

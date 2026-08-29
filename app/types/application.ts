@@ -22,6 +22,8 @@ export interface Application {
   resume_id: number
   resume: Resume | null
   cover_letter: string | null
+  experience_summary: string | null
+  languages: string | null
   status: ApplicationStatus
   applied_at: string | null
   interviews: Interview[]
