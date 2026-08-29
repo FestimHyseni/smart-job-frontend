@@ -16,7 +16,6 @@ export function useApplicationsService() {
     resume_id: number
     cover_letter?: string
     experience_summary?: string
-    languages?: string
   }) {
     return request<Application>('/applications', {
       method: 'POST',

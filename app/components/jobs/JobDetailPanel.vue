@@ -19,7 +19,6 @@ const applySuccess = ref(false)
 const resumeFile = ref<File | null>(null)
 const coverLetter = ref('')
 const experienceSummary = ref('')
-const languages = ref('')
 
 const employmentLabels: Record<string, string> = {
   full_time: 'Full-time',
@@ -37,7 +36,6 @@ async function loadApplicationState(jobId: number) {
   resumeFile.value = null
   coverLetter.value = ''
   experienceSummary.value = ''
-  languages.value = ''
   if (canApply.value) {
     alreadyApplied.value = await hasAppliedTo(jobId)
   }
@@ -52,7 +50,7 @@ function onResumeChange(event: Event) {
 async function onApply() {
   if (!resumeFile.value) return
   try {
-    await applyToJob(props.job.id, resumeFile.value, coverLetter.value, experienceSummary.value, languages.value)
+    await applyToJob(props.job.id, resumeFile.value, coverLetter.value, experienceSummary.value)
     applySuccess.value = true
   } catch {
     // error state is already handled by useApply
@@ -64,7 +62,11 @@ async function onApply() {
   <div class="flex flex-col gap-5">
     <!-- Header card -->
     <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
-      <div class="h-16 bg-gradient-to-r from-brand-600 to-brand-400" />
+      <div class="flex h-16 items-center justify-end bg-gradient-to-r from-brand-600 to-brand-400 px-4">
+        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 text-sm font-extrabold text-white shadow-sm backdrop-blur-sm">
+          SJ
+        </span>
+      </div>
       <div class="flex flex-col gap-4 px-6 pb-6 sm:flex-row sm:items-start sm:justify-between">
         <div class="-mt-2">
           <h1 class="text-2xl font-semibold text-gray-900">{{ job.title }}</h1>
@@ -153,11 +155,6 @@ async function onApply() {
           v-model="experienceSummary"
           label="Përvoja e punës (opsionale)"
           placeholder="Përshkruaj shkurt përvojën tënde relevante për këtë pozitë..."
-        />
-        <BaseInput
-          v-model="languages"
-          label="Gjuhët e huaja (opsionale)"
-          placeholder="p.sh. Anglisht (C1), Gjermanisht (B2)"
         />
 
         <p v-if="applyError" class="text-sm text-red-600">{{ applyError }}</p>

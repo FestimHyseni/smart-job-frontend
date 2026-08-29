@@ -35,7 +35,6 @@ export function useApply() {
     resumeFile: File,
     coverLetter: string,
     experienceSummary: string,
-    languages: string,
   ) {
     loading.value = true
     error.value = null
@@ -50,7 +49,6 @@ export function useApply() {
         resume_id: resume.id,
         cover_letter: coverLetter || undefined,
         experience_summary: experienceSummary || undefined,
-        languages: languages || undefined,
       })
     } catch (err) {
       handleError(err)
