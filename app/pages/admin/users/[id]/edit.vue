@@ -44,7 +44,7 @@ async function onSubmit() {
 
 <template>
   <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10">
-    <div class="w-full max-w-sm rounded-lg bg-white p-8 shadow">
+    <div class="w-full max-w-sm rounded-xl border border-gray-100 bg-white p-8 shadow-sm">
       <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900">Edit user</h1>
 
       <p v-if="notFound" class="text-sm text-red-600">User not found.</p>

@@ -17,9 +17,14 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-    <div class="w-full max-w-sm rounded-lg bg-white p-8 shadow">
-      <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900">Log in</h1>
+  <div class="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-gray-50 to-white px-4">
+    <div class="w-full max-w-sm rounded-xl border border-gray-100 bg-white p-8 shadow-sm">
+      <div class="mb-6 flex flex-col items-center">
+        <div class="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-600 to-brand-400 text-lg font-bold text-white shadow">
+          SJ
+        </div>
+        <h1 class="text-2xl font-semibold text-gray-900">Log in</h1>
+      </div>
 
       <form class="flex flex-col gap-4" @submit.prevent="onSubmit">
         <BaseInput

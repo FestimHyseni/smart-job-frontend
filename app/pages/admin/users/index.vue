@@ -43,7 +43,7 @@ onMounted(fetchUsers)
       <p v-else-if="!users.length" class="text-sm text-gray-600">No users found.</p>
       <p v-else-if="!filteredUsers.length" class="text-sm text-gray-500">Asnjë rezultat për "{{ search }}".</p>
 
-      <div v-else class="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+      <div v-else class="overflow-x-auto rounded-xl border border-gray-100 bg-white shadow-sm">
         <table class="min-w-full divide-y divide-gray-200 text-sm">
           <thead class="bg-gray-50">
             <tr>
@@ -55,7 +55,7 @@ onMounted(fetchUsers)
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
-            <tr v-for="user in filteredUsers" :key="user.id">
+            <tr v-for="user in filteredUsers" :key="user.id" class="transition hover:bg-gray-50">
               <td class="px-4 py-3 text-gray-900">{{ user.name }}</td>
               <td class="px-4 py-3 text-gray-600">{{ user.email }}</td>
               <td class="px-4 py-3 text-gray-600 capitalize">{{ user.role }}</td>

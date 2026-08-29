@@ -35,7 +35,7 @@ onMounted(async () => {
       <p v-else-if="companyError" class="text-sm text-red-600">{{ companyError }}</p>
 
       <template v-else-if="company">
-        <div class="rounded-lg border border-gray-200 bg-white p-6">
+        <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
           <h1 class="text-2xl font-semibold text-gray-900">{{ company.name }}</h1>
           <p v-if="company.location" class="mt-1 text-sm text-gray-500">
             📍 {{ company.location.city }}, {{ company.location.country }}

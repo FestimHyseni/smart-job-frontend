@@ -110,7 +110,7 @@ onMounted(() => fetchApplicationsFor(jobId))
       <p v-else-if="!filteredApplications.length" class="text-sm text-gray-500">Asnjë rezultat për "{{ search }}".</p>
 
       <ul v-else class="flex flex-col gap-3">
-        <li v-for="application in filteredApplications" :key="application.id" class="rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
+        <li v-for="application in filteredApplications" :key="application.id" class="rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition hover:border-brand-200 hover:shadow-md">
           <div class="flex items-start justify-between gap-4">
             <div>
               <p class="font-medium text-gray-900">{{ application.candidate?.name }}</p>

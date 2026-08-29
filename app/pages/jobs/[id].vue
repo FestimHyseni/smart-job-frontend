@@ -62,7 +62,7 @@ async function onApply() {
       <p v-if="loading" class="text-sm text-gray-600">Loading job...</p>
       <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
 
-      <div v-else-if="job" class="rounded-lg border border-gray-200 bg-white p-6">
+      <div v-else-if="job" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
         <div class="flex items-start justify-between gap-4">
           <div>
             <h1 class="text-2xl font-semibold text-gray-900">{{ job.title }}</h1>

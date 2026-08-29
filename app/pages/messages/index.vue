@@ -44,7 +44,7 @@ onMounted(fetchMine)
         <li v-for="conversation in filteredConversations" :key="conversation.id">
           <NuxtLink
             :to="`/messages/${conversation.id}`"
-            class="flex items-center justify-between rounded-lg border border-gray-100 bg-white p-4 shadow-sm transition hover:border-brand-300"
+            class="flex items-center justify-between rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
           >
             <div>
               <p class="font-medium text-gray-900">{{ otherParticipant(conversation)?.name ?? 'Unknown' }}</p>

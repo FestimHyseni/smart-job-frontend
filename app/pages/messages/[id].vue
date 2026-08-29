@@ -50,7 +50,7 @@ onUnmounted(() => {
       <template v-else-if="current">
         <h1 class="mb-4 text-lg font-semibold text-gray-900">{{ otherParticipant(current)?.name }}</h1>
 
-        <div class="flex flex-1 flex-col gap-3 overflow-y-auto rounded-lg border border-gray-100 bg-white p-4">
+        <div class="flex flex-1 flex-col gap-3 overflow-y-auto rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
           <p v-if="!current.messages.length" class="text-sm text-gray-400">Ende s'ka mesazhe. Fillo bisedën!</p>
           <div
             v-for="message in current.messages"
