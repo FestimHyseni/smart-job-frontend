@@ -195,19 +195,19 @@ function formatDate(date: string | null) {
 
 <template>
   <div class="min-h-screen bg-gray-50 pb-16">
-    <div class="mx-auto flex max-w-3xl flex-col gap-5 px-4 pt-8">
+    <div class="mx-auto flex max-w-5xl flex-col gap-5 px-4 pt-8">
       <!-- Header card: cover + avatar + completion -->
       <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
         <div class="h-20 bg-gradient-to-r from-brand-600 to-brand-400" />
         <div class="flex flex-col gap-4 px-6 pb-6 sm:flex-row sm:items-end">
-          <div class="relative -mt-10 shrink-0">
+          <div class="relative -mt-12 shrink-0">
             <img
               v-if="authStore.user?.avatar_url"
               :src="resolveUrl(authStore.user.avatar_url)"
               alt="Avatar"
-              class="h-24 w-24 rounded-full border-4 border-white object-cover shadow"
+              class="h-24 w-24 rounded-full border-4 border-white object-cover shadow ring-4 ring-brand-100"
             >
-            <div v-else class="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gray-200 text-3xl font-semibold text-gray-500 shadow">
+            <div v-else class="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gray-200 text-3xl font-semibold text-gray-500 shadow ring-4 ring-brand-100">
               {{ authStore.user?.name?.[0] }}
             </div>
             <button
@@ -228,18 +228,49 @@ function formatDate(date: string | null) {
             <p v-if="authStore.user?.phone" class="text-sm text-gray-500">{{ authStore.user.phone }}</p>
           </div>
 
-          <div class="w-full pt-2 sm:w-48">
-            <div class="mb-1 flex items-center justify-between text-xs">
-              <span class="font-medium text-gray-500">Profili i plotësuar</span>
-              <span class="font-semibold text-green-600">{{ profileCompletion }}%</span>
+          <div class="w-full pt-2 sm:w-52">
+            <div class="mb-1 flex items-center justify-between">
+              <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Profili i plotësuar</span>
+              <span class="text-xl font-extrabold text-green-600">{{ profileCompletion }}%</span>
             </div>
-            <div class="h-2 overflow-hidden rounded-full bg-gray-100">
+            <div class="h-2.5 overflow-hidden rounded-full bg-gray-100">
               <div class="h-full rounded-full bg-green-500 transition-all" :style="{ width: `${profileCompletion}%` }" />
             </div>
           </div>
         </div>
       </div>
 
+      <div class="grid grid-cols-1 gap-5 lg:grid-cols-3 lg:items-start">
+        <!-- Sidebar -->
+        <div class="order-2 flex flex-col gap-5 lg:order-1 lg:sticky lg:top-20">
+          <!-- Documents / CV -->
+          <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+            <div class="mb-4 flex items-center justify-between">
+              <h2 class="flex items-center gap-2 text-base font-semibold text-gray-900">📄 Dokumentet e mia</h2>
+              <label class="cursor-pointer rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-orange-600">
+                + Shto
+                <input type="file" accept=".pdf,.doc,.docx" class="hidden" @change="onResumeUpload">
+              </label>
+            </div>
+            <p v-if="resumes.error.value" class="mb-3 text-sm text-red-600">{{ resumes.error.value }}</p>
+            <p v-if="!resumes.items.value.length" class="text-sm text-gray-400">Ende s'ke ngarkuar asnjë dokument.</p>
+            <ul class="flex flex-col gap-2">
+              <li
+                v-for="resume in resumes.items.value"
+                :key="resume.id"
+                class="flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 px-3 py-2 text-sm transition hover:bg-gray-100"
+              >
+                <a :href="resolveUrl(resume.file_url) ?? '#'" target="_blank" class="flex items-center gap-2 truncate text-brand-600 hover:underline">
+                  📎 {{ resume.file_name }}
+                </a>
+                <button type="button" class="shrink-0 text-gray-400 hover:text-red-600" @click="resumes.remove(resume.id)">🗑</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Main column -->
+        <div class="order-1 flex flex-col gap-5 lg:order-2 lg:col-span-2">
       <!-- Main profile form -->
       <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
         <form @submit.prevent="onSubmit">
@@ -276,31 +307,6 @@ function formatDate(date: string | null) {
             <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
           </div>
         </form>
-      </div>
-
-      <!-- Documents / CV -->
-      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-        <div class="mb-4 flex items-center justify-between">
-          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">📄 Dokumentet e mia</h2>
-          <label class="cursor-pointer rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-orange-600">
-            + Shto
-            <input type="file" accept=".pdf,.doc,.docx" class="hidden" @change="onResumeUpload">
-          </label>
-        </div>
-        <p v-if="resumes.error.value" class="mb-3 text-sm text-red-600">{{ resumes.error.value }}</p>
-        <p v-if="!resumes.items.value.length" class="text-sm text-gray-400">Ende s'ke ngarkuar asnjë dokument.</p>
-        <ul class="flex flex-col gap-2">
-          <li
-            v-for="resume in resumes.items.value"
-            :key="resume.id"
-            class="flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 px-3 py-2 text-sm transition hover:bg-gray-100"
-          >
-            <a :href="resolveUrl(resume.file_url) ?? '#'" target="_blank" class="flex items-center gap-2 text-brand-600 hover:underline">
-              📎 {{ resume.file_name }}
-            </a>
-            <button type="button" class="text-gray-400 hover:text-red-600" @click="resumes.remove(resume.id)">🗑</button>
-          </li>
-        </ul>
       </div>
 
       <!-- Experience -->
@@ -435,6 +441,8 @@ function formatDate(date: string | null) {
             <button type="button" class="text-gray-400 hover:text-red-600" @click="candidateLanguages.remove(lang.id)">🗑</button>
           </li>
         </ul>
+      </div>
+        </div>
       </div>
     </div>
   </div>
