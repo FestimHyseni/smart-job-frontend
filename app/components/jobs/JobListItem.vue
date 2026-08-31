@@ -6,6 +6,7 @@ const props = defineProps<{
   active?: boolean
   saved?: boolean
   showSave?: boolean
+  matchScore?: number
 }>()
 
 const emit = defineEmits<{
@@ -46,6 +47,7 @@ const daysAgo = computed(() => {
       <div class="mt-1 flex items-center gap-3 text-xs text-gray-400">
         <span v-if="job.location">📍 {{ job.location.city }}</span>
         <span>🕐 {{ daysAgo }}</span>
+        <span v-if="matchScore" class="rounded-full bg-green-50 px-1.5 py-0.5 font-medium text-green-700">🎯 {{ matchScore }}</span>
       </div>
     </div>
     <button

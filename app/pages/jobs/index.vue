@@ -8,12 +8,41 @@ const jobsService = useJobsService()
 const catalogService = useCatalogService()
 const authStore = useAuthStore()
 const savedJobs = useSavedJobs()
+const cvRec = useCvRecommendations()
 
 const canSave = computed(() => authStore.user?.role === 'candidate')
 
 const categories = ref<JobCategory[]>([])
 const locations = ref<Location[]>([])
 const selectedJob = ref<Job | null>(null)
+
+const showCvCard = ref(false)
+const cvFile = ref<File | null>(null)
+
+const displayedJobs = computed(() => cvRec.result.value?.jobs ?? jobs.value)
+
+function onCvFileChange(event: Event) {
+  cvFile.value = (event.target as HTMLInputElement).files?.[0] ?? null
+}
+
+async function onAnalyzeCv() {
+  if (!cvFile.value) return
+  await cvRec.analyze(cvFile.value)
+  if (cvRec.result.value) {
+    selectedJob.value = cvRec.result.value.jobs[0] ?? null
+  }
+}
+
+function onClearRecommendation() {
+  cvRec.reset()
+  cvFile.value = null
+  showCvCard.value = false
+  selectedJob.value = jobs.value[0] ?? null
+}
+
+function scoreFor(jobId: number) {
+  return cvRec.result.value?.jobs.find((j) => j.id === jobId)?.match_score
+}
 
 const filters = reactive({
   search: '',
@@ -93,10 +122,56 @@ onMounted(async () => {
       </form>
     </div>
 
+    <div class="mx-auto max-w-6xl px-4 pt-4">
+      <div class="rounded-xl border border-brand-100 bg-brand-50/40 p-4">
+        <button
+          type="button"
+          class="flex w-full items-center justify-between text-left"
+          @click="showCvCard = !showCvCard"
+        >
+          <span class="flex items-center gap-2 text-sm font-semibold text-gray-900">
+            🎯 Zbulo punët e përshtatshme për ty — ngarko CV-në
+          </span>
+          <span class="text-gray-400">{{ showCvCard ? '▲' : '▼' }}</span>
+        </button>
+
+        <div v-if="showCvCard" class="mt-3 flex flex-col gap-3">
+          <template v-if="!cvRec.result.value">
+            <p class="text-sm text-gray-600">Ngarko CV-në (PDF ose DOCX) dhe do të shohësh pozitat që përputhen më shumë me aftësitë e tua.</p>
+            <div class="flex flex-wrap items-center gap-3">
+              <input type="file" accept=".pdf,.docx" class="text-sm" @change="onCvFileChange">
+              <BaseButton type="button" :full-width="false" :loading="cvRec.loading.value" :disabled="!cvFile" class="px-5" @click="onAnalyzeCv">
+                Analizo CV-në
+              </BaseButton>
+            </div>
+            <p v-if="cvRec.error.value" class="text-sm text-red-600">{{ cvRec.error.value }}</p>
+          </template>
+
+          <template v-else>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <p v-if="cvRec.result.value.matched_skills.length" class="text-sm text-gray-700">
+                <span class="font-medium">Aftësitë e gjetura:</span> {{ cvRec.result.value.matched_skills.join(', ') }}
+              </p>
+              <p v-else class="text-sm text-gray-500">S'u identifikuan aftësi të njohura në CV-në tënde.</p>
+              <button type="button" class="text-sm font-medium text-brand-600 hover:underline" @click="onClearRecommendation">
+                ✕ Pastro rekomandimin
+              </button>
+            </div>
+            <p v-if="!cvRec.result.value.jobs.length" class="text-sm text-gray-500">
+              S'u gjetën pozita që përputhen me aftësitë e identifikuara.
+            </p>
+            <p v-else class="text-sm font-medium text-green-700">
+              🎯 {{ cvRec.result.value.jobs.length }} pozita të rekomanduara për ty, sipas përputhjes.
+            </p>
+          </template>
+        </div>
+      </div>
+    </div>
+
     <div class="mx-auto max-w-6xl px-4 py-6">
       <p v-if="loading" class="text-sm text-gray-600">Duke ngarkuar...</p>
       <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
-      <p v-else-if="!jobs.length" class="text-sm text-gray-600">Nuk u gjet asnjë pozitë.</p>
+      <p v-else-if="!displayedJobs.length" class="text-sm text-gray-600">Nuk u gjet asnjë pozitë.</p>
 
       <div v-else class="flex items-start gap-5">
         <!-- List pane -->
@@ -105,16 +180,17 @@ onMounted(async () => {
           :class="selectedJob ? 'hidden sm:flex' : 'flex'"
         >
           <div class="border-b border-gray-100 px-4 py-3 text-sm text-gray-500">
-            Gjetur <span class="font-semibold text-gray-900">{{ jobs.length }}</span> punë
+            Gjetur <span class="font-semibold text-gray-900">{{ displayedJobs.length }}</span> punë
           </div>
           <div class="max-h-[calc(100vh-11rem)] overflow-y-auto">
             <JobListItem
-              v-for="job in jobs"
+              v-for="job in displayedJobs"
               :key="job.id"
               :job="job"
               :active="selectedJob?.id === job.id"
               :show-save="canSave"
               :saved="savedJobs.isSaved(job.id)"
+              :match-score="scoreFor(job.id)"
               @select="selectJob"
               @toggle-save="savedJobs.toggle"
             />
