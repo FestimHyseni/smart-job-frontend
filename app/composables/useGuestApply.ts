@@ -16,7 +16,8 @@ export function useGuestApply() {
       return await service.apply(payload)
     } catch (err) {
       if (err instanceof ApiRequestError) {
-        error.value = err.message
+        const firstFieldError = err.errors ? Object.values(err.errors)[0]?.[0] : undefined
+        error.value = firstFieldError ?? err.message
         fieldErrors.value = err.errors ?? {}
       } else {
         error.value = 'Diçka shkoi keq. Provo përsëri.'

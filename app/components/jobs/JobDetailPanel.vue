@@ -193,10 +193,7 @@ async function onGuestApply() {
       </form>
 
       <form v-else class="flex flex-col gap-4" @submit.prevent="onGuestApply">
-        <div>
-          <h2 class="text-lg font-semibold text-gray-900">Apliko për këtë pozitë</h2>
-          <p class="text-sm text-gray-500">S'ke nevojë të regjistrohesh — plotëso të dhënat më poshtë.</p>
-        </div>
+        <h2 class="text-lg font-semibold text-gray-900">Apliko për këtë pozitë</h2>
 
         <div class="grid grid-cols-2 gap-3">
           <BaseInput v-model="guestFirstName" label="Emri" placeholder="Arben" :error="guestFieldErrors.first_name?.[0]" />
