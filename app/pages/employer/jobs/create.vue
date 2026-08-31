@@ -12,7 +12,6 @@ const company = ref<Company | null>(null)
 const categories = ref<JobCategory[]>([])
 const locations = ref<Location[]>([])
 const created = ref(false)
-const createdJobId = ref<number | null>(null)
 
 const form = reactive<Omit<JobPayload, 'company_id'>>({
   category_id: 0,
@@ -44,7 +43,7 @@ onMounted(async () => {
 async function onSubmit() {
   if (!company.value) return
   try {
-    const job = await createJob({
+    await createJob({
       ...form,
       company_id: company.value.id,
       category_id: Number(form.category_id),
@@ -52,7 +51,6 @@ async function onSubmit() {
       salary_min: form.salary_min ? Number(form.salary_min) : null,
       salary_max: form.salary_max ? Number(form.salary_max) : null,
     })
-    createdJobId.value = job.id
     created.value = true
   } catch {
     // error state is already handled by useJobs
@@ -61,80 +59,73 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-start justify-center bg-gray-50 px-4 py-10">
-    <div class="flex w-full max-w-lg flex-col gap-5">
-      <template v-if="created && createdJobId">
-        <div class="rounded-xl border border-gray-100 bg-white p-8 shadow-sm">
-          <p class="text-sm font-medium text-green-600">
-            Job posted successfully!
-            <NuxtLink to="/employer/jobs" class="font-medium text-brand-600 hover:underline">View my jobs</NuxtLink>
-          </p>
+  <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10">
+    <div class="w-full max-w-lg rounded-xl border border-gray-100 bg-white p-8 shadow-sm">
+      <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900">Post a job</h1>
+
+      <p v-if="!company" class="text-sm text-gray-600">
+        You need to
+        <NuxtLink to="/employer/company" class="font-medium text-brand-600 hover:underline">set up your company</NuxtLink>
+        before posting a job.
+      </p>
+
+      <p v-else-if="created" class="text-sm font-medium text-green-600">
+        Job posted successfully!
+        <NuxtLink to="/employer/jobs" class="font-medium text-brand-600 hover:underline">View my jobs</NuxtLink>
+      </p>
+
+      <form v-else class="flex flex-col gap-4" @submit.prevent="onSubmit">
+        <BaseInput v-model="form.title" label="Job title" placeholder="Senior Backend Developer" :error="fieldErrors.title?.[0]" />
+        <BaseTextarea v-model="form.description" label="Description" placeholder="Describe the role" :error="fieldErrors.description?.[0]" />
+        <BaseTextarea v-model="form.requirements" label="Requirements" placeholder="What are you looking for?" :error="fieldErrors.requirements?.[0]" />
+
+        <BaseSelect
+          v-model="form.category_id"
+          label="Category"
+          :options="categories.map((c) => ({ value: c.id, label: c.name }))"
+          :error="fieldErrors.category_id?.[0]"
+        />
+        <BaseSelect
+          v-model="form.location_id"
+          label="Location"
+          :options="locations.map((l) => ({ value: l.id, label: `${l.city}, ${l.country}` }))"
+          :error="fieldErrors.location_id?.[0]"
+        />
+        <BaseSelect
+          v-model="form.employment_type"
+          label="Employment type"
+          :options="[
+            { value: 'full_time', label: 'Full-time' },
+            { value: 'part_time', label: 'Part-time' },
+            { value: 'contract', label: 'Contract' },
+            { value: 'internship', label: 'Internship' },
+            { value: 'remote', label: 'Remote' },
+          ]"
+          :error="fieldErrors.employment_type?.[0]"
+        />
+        <BaseSelect
+          v-model="form.experience_level"
+          label="Experience level"
+          :options="[
+            { value: 'junior', label: 'Junior' },
+            { value: 'mid', label: 'Mid' },
+            { value: 'senior', label: 'Senior' },
+            { value: 'lead', label: 'Lead' },
+          ]"
+          :error="fieldErrors.experience_level?.[0]"
+        />
+
+        <div class="grid grid-cols-2 gap-3">
+          <BaseInput v-model="form.salary_min" label="Salary min (optional)" type="number" :error="fieldErrors.salary_min?.[0]" />
+          <BaseInput v-model="form.salary_max" label="Salary max (optional)" type="number" :error="fieldErrors.salary_max?.[0]" />
         </div>
-        <JobSkillsManager :job-id="createdJobId" />
-      </template>
+        <BaseInput v-model="form.salary_currency" label="Currency" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
+        <BaseInput v-model="form.deadline" label="Application deadline" type="date" :error="fieldErrors.deadline?.[0]" />
 
-      <div v-else class="rounded-xl border border-gray-100 bg-white p-8 shadow-sm">
-        <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900">Post a job</h1>
+        <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
 
-        <p v-if="!company" class="text-sm text-gray-600">
-          You need to
-          <NuxtLink to="/employer/company" class="font-medium text-brand-600 hover:underline">set up your company</NuxtLink>
-          before posting a job.
-        </p>
-
-        <form v-else class="flex flex-col gap-4" @submit.prevent="onSubmit">
-          <BaseInput v-model="form.title" label="Job title" placeholder="Senior Backend Developer" :error="fieldErrors.title?.[0]" />
-          <BaseTextarea v-model="form.description" label="Description" placeholder="Describe the role" :error="fieldErrors.description?.[0]" />
-          <BaseTextarea v-model="form.requirements" label="Requirements" placeholder="What are you looking for?" :error="fieldErrors.requirements?.[0]" />
-
-          <BaseSelect
-            v-model="form.category_id"
-            label="Category"
-            :options="categories.map((c) => ({ value: c.id, label: c.name }))"
-            :error="fieldErrors.category_id?.[0]"
-          />
-          <BaseSelect
-            v-model="form.location_id"
-            label="Location"
-            :options="locations.map((l) => ({ value: l.id, label: `${l.city}, ${l.country}` }))"
-            :error="fieldErrors.location_id?.[0]"
-          />
-          <BaseSelect
-            v-model="form.employment_type"
-            label="Employment type"
-            :options="[
-              { value: 'full_time', label: 'Full-time' },
-              { value: 'part_time', label: 'Part-time' },
-              { value: 'contract', label: 'Contract' },
-              { value: 'internship', label: 'Internship' },
-              { value: 'remote', label: 'Remote' },
-            ]"
-            :error="fieldErrors.employment_type?.[0]"
-          />
-          <BaseSelect
-            v-model="form.experience_level"
-            label="Experience level"
-            :options="[
-              { value: 'junior', label: 'Junior' },
-              { value: 'mid', label: 'Mid' },
-              { value: 'senior', label: 'Senior' },
-              { value: 'lead', label: 'Lead' },
-            ]"
-            :error="fieldErrors.experience_level?.[0]"
-          />
-
-          <div class="grid grid-cols-2 gap-3">
-            <BaseInput v-model="form.salary_min" label="Salary min (optional)" type="number" :error="fieldErrors.salary_min?.[0]" />
-            <BaseInput v-model="form.salary_max" label="Salary max (optional)" type="number" :error="fieldErrors.salary_max?.[0]" />
-          </div>
-          <BaseInput v-model="form.salary_currency" label="Currency" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
-          <BaseInput v-model="form.deadline" label="Application deadline" type="date" :error="fieldErrors.deadline?.[0]" />
-
-          <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
-
-          <BaseButton type="submit" :loading="loading">Post job</BaseButton>
-        </form>
-      </div>
+        <BaseButton type="submit" :loading="loading">Post job</BaseButton>
+      </form>
     </div>
   </div>
 </template>
