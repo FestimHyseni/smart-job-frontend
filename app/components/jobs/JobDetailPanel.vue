@@ -13,12 +13,16 @@ const emit = defineEmits<{
 
 const authStore = useAuthStore()
 const { loading: applying, error: applyError, hasAppliedTo, applyToJob } = useApply()
+const { loading: guestApplying, error: guestApplyError, fieldErrors: guestFieldErrors, applyAsGuest } = useGuestApply()
 
 const alreadyApplied = ref(false)
 const applySuccess = ref(false)
 const resumeFile = ref<File | null>(null)
 const coverLetter = ref('')
 const experienceSummary = ref('')
+const guestFirstName = ref('')
+const guestLastName = ref('')
+const guestEmail = ref('')
 
 const employmentLabels: Record<string, string> = {
   full_time: 'Full-time',
@@ -28,7 +32,8 @@ const employmentLabels: Record<string, string> = {
   remote: 'Remote',
 }
 
-const canApply = computed(() => authStore.user?.role === 'candidate')
+const canApplyLoggedIn = computed(() => authStore.isAuthenticated && authStore.user?.role === 'candidate')
+const showGuestForm = computed(() => !authStore.isAuthenticated)
 
 async function loadApplicationState(jobId: number) {
   alreadyApplied.value = false
@@ -36,7 +41,10 @@ async function loadApplicationState(jobId: number) {
   resumeFile.value = null
   coverLetter.value = ''
   experienceSummary.value = ''
-  if (canApply.value) {
+  guestFirstName.value = ''
+  guestLastName.value = ''
+  guestEmail.value = ''
+  if (canApplyLoggedIn.value) {
     alreadyApplied.value = await hasAppliedTo(jobId)
   }
 }
@@ -54,6 +62,24 @@ async function onApply() {
     applySuccess.value = true
   } catch {
     // error state is already handled by useApply
+  }
+}
+
+async function onGuestApply() {
+  if (!resumeFile.value) return
+  try {
+    await applyAsGuest({
+      job_id: props.job.id,
+      first_name: guestFirstName.value,
+      last_name: guestLastName.value,
+      email: guestEmail.value,
+      resume: resumeFile.value,
+      cover_letter: coverLetter.value || undefined,
+      experience_summary: experienceSummary.value || undefined,
+    })
+    applySuccess.value = true
+  } catch {
+    // error state is already handled by useGuestApply
   }
 }
 </script>
@@ -79,11 +105,11 @@ async function onApply() {
           </NuxtLink>
           <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
             <span v-if="job.location">📍 {{ job.location.city }}, {{ job.location.country }}</span>
-            <span class="capitalize">{{ job.experience_level }} level</span>
+            <span class="capitalize">Niveli {{ job.experience_level }}</span>
             <span v-if="job.salary_min || job.salary_max">
               💰 {{ job.salary_min }}–{{ job.salary_max }} {{ job.salary_currency }}
             </span>
-            <span v-if="job.deadline">⏳ Apply by {{ new Date(job.deadline).toLocaleDateString() }}</span>
+            <span v-if="job.deadline">⏳ Apliko deri më {{ new Date(job.deadline).toLocaleDateString('sq-AL') }}</span>
           </div>
         </div>
         <div class="flex items-center gap-2 pt-1">
@@ -108,17 +134,17 @@ async function onApply() {
 
     <!-- Description -->
     <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-      <h2 class="mb-2 flex items-center gap-2 text-lg font-semibold text-gray-900">📝 Description</h2>
+      <h2 class="mb-2 flex items-center gap-2 text-lg font-semibold text-gray-900">📝 Përshkrimi</h2>
       <p class="whitespace-pre-line text-gray-700">{{ job.description }}</p>
     </div>
 
     <div v-if="job.requirements" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-      <h2 class="mb-2 flex items-center gap-2 text-lg font-semibold text-gray-900">✅ Requirements</h2>
+      <h2 class="mb-2 flex items-center gap-2 text-lg font-semibold text-gray-900">✅ Kërkesat</h2>
       <p class="whitespace-pre-line text-gray-700">{{ job.requirements }}</p>
     </div>
 
     <div v-if="job.skills?.length" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-      <h2 class="mb-3 flex items-center gap-2 text-lg font-semibold text-gray-900">🛠️ Skills</h2>
+      <h2 class="mb-3 flex items-center gap-2 text-lg font-semibold text-gray-900">🛠️ Aftësitë</h2>
       <div class="flex flex-wrap gap-2">
         <span
           v-for="skill in job.skills"
@@ -130,18 +156,22 @@ async function onApply() {
       </div>
     </div>
 
-    <div v-if="canApply" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+    <div v-if="canApplyLoggedIn || showGuestForm" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
       <p v-if="applySuccess" class="text-sm font-medium text-green-600">
-        ✓ Your application has been submitted!
+        ✓ Aplikimi u dërgua me sukses!
+        <span v-if="showGuestForm" class="block font-normal text-gray-600">
+          Kompania do të të kontaktojë përmes email-it {{ guestEmail }}.
+        </span>
       </p>
       <p v-else-if="alreadyApplied" class="text-sm font-medium text-gray-600">
-        You have already applied to this job.
+        Ke aplikuar tashmë për këtë pozitë.
       </p>
-      <form v-else class="flex flex-col gap-4" @submit.prevent="onApply">
-        <h2 class="text-lg font-semibold text-gray-900">Apply for this job</h2>
+
+      <form v-else-if="canApplyLoggedIn" class="flex flex-col gap-4" @submit.prevent="onApply">
+        <h2 class="text-lg font-semibold text-gray-900">Apliko për këtë pozitë</h2>
 
         <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-700">Resume (PDF or Word)</label>
+          <label class="text-sm font-medium text-gray-700">CV (PDF ose Word)</label>
           <input
             type="file"
             accept=".pdf,.doc,.docx"
@@ -150,7 +180,7 @@ async function onApply() {
           >
         </div>
 
-        <BaseTextarea v-model="coverLetter" label="Cover letter (optional)" placeholder="Why are you a good fit?" />
+        <BaseTextarea v-model="coverLetter" label="Letër motivuese (opsionale)" placeholder="Pse je kandidati i përshtatshëm?" />
         <BaseTextarea
           v-model="experienceSummary"
           label="Përvoja e punës (opsionale)"
@@ -159,7 +189,44 @@ async function onApply() {
 
         <p v-if="applyError" class="text-sm text-red-600">{{ applyError }}</p>
 
-        <BaseButton type="submit" :loading="applying" :disabled="!resumeFile">Submit application</BaseButton>
+        <BaseButton type="submit" :loading="applying" :disabled="!resumeFile">Dërgo aplikimin</BaseButton>
+      </form>
+
+      <form v-else class="flex flex-col gap-4" @submit.prevent="onGuestApply">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">Apliko për këtë pozitë</h2>
+          <p class="text-sm text-gray-500">S'ke nevojë të regjistrohesh — plotëso të dhënat më poshtë.</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <BaseInput v-model="guestFirstName" label="Emri" placeholder="Arben" :error="guestFieldErrors.first_name?.[0]" />
+          <BaseInput v-model="guestLastName" label="Mbiemri" placeholder="Krasniqi" :error="guestFieldErrors.last_name?.[0]" />
+        </div>
+        <BaseInput v-model="guestEmail" label="Email" type="email" placeholder="ti@example.com" :error="guestFieldErrors.email?.[0]" />
+
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-gray-700">CV (PDF ose Word)</label>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            class="text-sm"
+            @change="onResumeChange"
+          >
+          <p v-if="guestFieldErrors.resume?.[0]" class="text-sm text-red-600">{{ guestFieldErrors.resume[0] }}</p>
+        </div>
+
+        <BaseTextarea v-model="coverLetter" label="Letër motivuese (opsionale)" placeholder="Pse je kandidati i përshtatshëm?" />
+        <BaseTextarea
+          v-model="experienceSummary"
+          label="Përvoja e punës (opsionale)"
+          placeholder="Përshkruaj shkurt përvojën tënde relevante për këtë pozitë..."
+        />
+
+        <p v-if="guestApplyError" class="text-sm text-red-600">{{ guestApplyError }}</p>
+
+        <BaseButton type="submit" :loading="guestApplying" :disabled="!resumeFile || !guestFirstName || !guestLastName || !guestEmail">
+          Dërgo aplikimin
+        </BaseButton>
       </form>
     </div>
   </div>
