@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CandidateProfile, CandidateProfilePayload } from '~/types/candidateProfile'
 import type { Location } from '~/types/job'
-import type { LanguageProficiency, Skill } from '~/types/profileExtras'
+import type { LanguageProficiency } from '~/types/profileExtras'
 import { useCatalogService } from '~/services/catalog'
 
 definePageMeta({ middleware: 'auth' })
@@ -14,16 +14,15 @@ const { resolveUrl } = useBackendOrigin()
 
 const experiences = useExperiences()
 const educations = useEducations()
-const candidateSkills = useCandidateSkills()
 const candidateLanguages = useCandidateLanguages()
 const resumes = useResumes()
 
 const locations = ref<Location[]>([])
-const skillsCatalog = ref<Skill[]>([])
 const existingProfile = ref<CandidateProfile | null>(null)
 const saved = ref(false)
 const avatarUploading = ref(false)
 const avatarInput = ref<HTMLInputElement | null>(null)
+const isEditingProfile = ref(false)
 
 const form = reactive<CandidateProfilePayload>({
   headline: '',
@@ -44,40 +43,52 @@ const profileCompletion = computed(() => {
     resumes.items.value.length > 0,
     experiences.items.value.length > 0,
     educations.items.value.length > 0,
-    candidateSkills.items.value.length > 0,
     candidateLanguages.items.value.length > 0,
   ]
   return Math.round((checks.filter(Boolean).length / checks.length) * 100)
 })
 
+function fillForm(profile: CandidateProfile) {
+  form.headline = profile.headline
+  form.bio = profile.bio
+  form.location_id = profile.location_id
+  form.years_experience = profile.years_experience
+  form.expected_salary = profile.expected_salary
+  form.salary_currency = profile.salary_currency
+  form.linkedin_url = profile.linkedin_url ?? ''
+  form.github_url = profile.github_url ?? ''
+  form.portfolio_url = profile.portfolio_url ?? ''
+}
+
 onMounted(async () => {
   locations.value = await catalogService.listLocations()
-  skillsCatalog.value = await catalogService.listSkills()
 
   const profile = await fetchMyProfile()
   existingProfile.value = profile
   if (profile) {
-    form.headline = profile.headline
-    form.bio = profile.bio
-    form.location_id = profile.location_id
-    form.years_experience = profile.years_experience
-    form.expected_salary = profile.expected_salary
-    form.salary_currency = profile.salary_currency
-    form.linkedin_url = profile.linkedin_url ?? ''
-    form.github_url = profile.github_url ?? ''
-    form.portfolio_url = profile.portfolio_url ?? ''
-  } else if (locations.value.length) {
-    form.location_id = locations.value[0].id
+    fillForm(profile)
+  } else {
+    isEditingProfile.value = true
+    if (locations.value.length) form.location_id = locations.value[0].id
   }
 
   await Promise.all([
     resumes.fetchMine(),
     experiences.fetchMine(),
     educations.fetchMine(),
-    candidateSkills.fetchMine(),
     candidateLanguages.fetchMine(),
   ])
 })
+
+function onEditProfile() {
+  saved.value = false
+  isEditingProfile.value = true
+}
+
+function onCancelProfile() {
+  if (existingProfile.value) fillForm(existingProfile.value)
+  isEditingProfile.value = false
+}
 
 async function onSubmit() {
   saved.value = false
@@ -89,6 +100,7 @@ async function onSubmit() {
       location_id: Number(form.location_id),
     })
     saved.value = true
+    isEditingProfile.value = false
   } catch {
     // error state is already handled by useCandidateProfile
   }
@@ -153,15 +165,6 @@ async function onAddEducation() {
   await educations.add({ ...educationForm, end_date: educationForm.end_date || null })
   Object.assign(educationForm, { institution: '', degree: '', field: '', start_date: '', end_date: '', description: '' })
   showEducationForm.value = false
-}
-
-// Skills
-const newSkillId = ref<number | ''>('')
-const newSkillLevel = ref<'beginner' | 'intermediate' | 'advanced' | 'expert'>('intermediate')
-async function onAddSkill() {
-  if (!newSkillId.value) return
-  await candidateSkills.add(Number(newSkillId.value), newSkillLevel.value)
-  newSkillId.value = ''
 }
 
 // Languages
@@ -271,38 +274,101 @@ function formatDate(date: string | null) {
 
         <!-- Main column -->
         <div class="order-1 flex flex-col gap-5 lg:order-2 lg:col-span-2">
-      <!-- Main profile form -->
-      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <!-- Main profile: view mode -->
+      <div v-if="existingProfile && !isEditingProfile" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+        <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">👤 Të dhënat e profilit</h2>
+          <div class="flex items-center gap-3">
+            <span v-if="saved" class="text-sm font-medium text-green-600">✓ U ruajt</span>
+            <BaseButton type="button" :full-width="false" class="px-5" @click="onEditProfile">✏️ Edito</BaseButton>
+          </div>
+        </div>
+
+        <dl class="flex flex-col gap-4 text-sm">
+          <div v-if="existingProfile.headline">
+            <dt class="text-gray-500">Titulli profesional</dt>
+            <dd class="mt-0.5 font-medium text-gray-900">{{ existingProfile.headline }}</dd>
+          </div>
+          <div v-if="existingProfile.bio">
+            <dt class="text-gray-500">Përmbledhje e shkurtër</dt>
+            <dd class="mt-0.5 whitespace-pre-line text-gray-700">{{ existingProfile.bio }}</dd>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div v-if="existingProfile.location">
+              <dt class="text-gray-500">Qyteti</dt>
+              <dd class="mt-0.5 text-gray-900">📍 {{ existingProfile.location.city }}, {{ existingProfile.location.country }}</dd>
+            </div>
+            <div>
+              <dt class="text-gray-500">Vite përvojë</dt>
+              <dd class="mt-0.5 text-gray-900">{{ existingProfile.years_experience }}</dd>
+            </div>
+            <div v-if="existingProfile.expected_salary">
+              <dt class="text-gray-500">Paga e pritur</dt>
+              <dd class="mt-0.5 text-gray-900">💰 {{ existingProfile.expected_salary }} {{ existingProfile.salary_currency }}</dd>
+            </div>
+          </div>
+          <div v-if="existingProfile.linkedin_url || existingProfile.github_url || existingProfile.portfolio_url" class="flex flex-wrap gap-4">
+            <a v-if="existingProfile.linkedin_url" :href="existingProfile.linkedin_url" target="_blank" class="text-brand-600 hover:underline">LinkedIn</a>
+            <a v-if="existingProfile.github_url" :href="existingProfile.github_url" target="_blank" class="text-brand-600 hover:underline">GitHub</a>
+            <a v-if="existingProfile.portfolio_url" :href="existingProfile.portfolio_url" target="_blank" class="text-brand-600 hover:underline">Portfolio</a>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Main profile: edit mode -->
+      <div v-else class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
         <form @submit.prevent="onSubmit">
           <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
             <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">👤 Të dhënat e profilit</h2>
             <div class="flex items-center gap-3">
-              <span v-if="saved" class="text-sm font-medium text-green-600">✓ U ruajt</span>
+              <button
+                v-if="existingProfile"
+                type="button"
+                class="text-sm font-medium text-gray-500 hover:text-gray-700"
+                @click="onCancelProfile"
+              >
+                Anulo
+              </button>
               <BaseButton type="submit" :loading="loading" :full-width="false" class="px-5">Ruaj profilin</BaseButton>
             </div>
           </div>
 
-          <div class="flex flex-col gap-4">
-            <BaseInput v-model="form.headline" label="Titulli profesional" placeholder="Senior Backend Developer" :error="fieldErrors.headline?.[0]" />
-            <BaseTextarea v-model="form.bio" label="Përmbledhje e shkurtër" placeholder="Trego diçka për veten tek employer-at" :error="fieldErrors.bio?.[0]" />
-
-            <BaseSelect
-              v-model="form.location_id"
-              label="Qyteti"
-              :options="locations.map((l) => ({ value: l.id, label: `${l.city}, ${l.country}` }))"
-              :error="fieldErrors.location_id?.[0]"
-            />
-
-            <BaseInput v-model="form.years_experience" label="Vite përvojë" type="number" :error="fieldErrors.years_experience?.[0]" />
-
-            <div class="grid grid-cols-2 gap-3">
-              <BaseInput v-model="form.expected_salary" label="Paga e pritur" type="number" :error="fieldErrors.expected_salary?.[0]" />
-              <BaseInput v-model="form.salary_currency" label="Monedha" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
+          <div class="flex flex-col gap-6">
+            <!-- Përmbledhja -->
+            <div class="flex flex-col gap-4">
+              <BaseInput v-model="form.headline" label="Titulli profesional" placeholder="Senior Backend Developer" :error="fieldErrors.headline?.[0]" />
+              <BaseTextarea v-model="form.bio" label="Përmbledhje e shkurtër" placeholder="Trego diçka për veten tek employer-at" :error="fieldErrors.bio?.[0]" />
             </div>
 
-            <BaseInput v-model="form.linkedin_url" label="LinkedIn (opsionale)" placeholder="https://linkedin.com/in/..." :error="fieldErrors.linkedin_url?.[0]" />
-            <BaseInput v-model="form.github_url" label="GitHub (opsionale)" placeholder="https://github.com/..." :error="fieldErrors.github_url?.[0]" />
-            <BaseInput v-model="form.portfolio_url" label="Portfolio (opsionale)" placeholder="https://..." :error="fieldErrors.portfolio_url?.[0]" />
+            <!-- Detajet -->
+            <div>
+              <p class="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                <span>📍</span> Detajet
+              </p>
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <BaseSelect
+                  v-model="form.location_id"
+                  label="Qyteti"
+                  :options="locations.map((l) => ({ value: l.id, label: `${l.city}, ${l.country}` }))"
+                  :error="fieldErrors.location_id?.[0]"
+                />
+                <BaseInput v-model="form.years_experience" label="Vite përvojë" type="number" :error="fieldErrors.years_experience?.[0]" />
+                <BaseInput v-model="form.expected_salary" label="Paga e pritur" type="number" :error="fieldErrors.expected_salary?.[0]" />
+                <BaseInput v-model="form.salary_currency" label="Monedha" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
+              </div>
+            </div>
+
+            <!-- Linqe -->
+            <div>
+              <p class="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                <span>🔗</span> Linqe (opsionale)
+              </p>
+              <div class="flex flex-col gap-3">
+                <BaseInput v-model="form.linkedin_url" label="LinkedIn" placeholder="https://linkedin.com/in/..." :error="fieldErrors.linkedin_url?.[0]" />
+                <BaseInput v-model="form.github_url" label="GitHub" placeholder="https://github.com/..." :error="fieldErrors.github_url?.[0]" />
+                <BaseInput v-model="form.portfolio_url" label="Portfolio" placeholder="https://..." :error="fieldErrors.portfolio_url?.[0]" />
+              </div>
+            </div>
 
             <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
           </div>
@@ -378,34 +444,6 @@ function formatDate(date: string | null) {
             <button type="button" class="text-gray-400 hover:text-red-600" @click="educations.remove(edu.id)">🗑</button>
           </li>
         </ul>
-      </div>
-
-      <!-- Skills -->
-      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-        <h2 class="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900">🛠️ Aftësitë</h2>
-
-        <p v-if="!candidateSkills.items.value.length" class="mb-4 text-sm text-gray-400">Ende s'ke shtuar aftësi.</p>
-        <div v-else class="mb-5 flex flex-wrap gap-2">
-          <span
-            v-for="cs in candidateSkills.items.value"
-            :key="cs.id"
-            class="flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700"
-          >
-            {{ cs.skill?.name }}
-            <button type="button" class="text-brand-400 hover:text-red-600" @click="candidateSkills.remove(cs.id)">×</button>
-          </span>
-        </div>
-
-        <div class="flex flex-wrap items-end gap-2 rounded-lg bg-gray-50 p-4">
-          <BaseSelect v-model="newSkillId" label="Shto aftësi" placeholder="Zgjedh aftësinë" :options="skillsCatalog.map((s) => ({ value: s.id, label: s.name }))" />
-          <BaseSelect v-model="newSkillLevel" label="Niveli" :options="[
-            { value: 'beginner', label: 'Fillestar' },
-            { value: 'intermediate', label: 'Mesatar' },
-            { value: 'advanced', label: 'I avancuar' },
-            { value: 'expert', label: 'Ekspert' },
-          ]" />
-          <BaseButton type="button" :full-width="false" class="px-5" @click="onAddSkill">+ Shto</BaseButton>
-        </div>
       </div>
 
       <!-- Languages -->
