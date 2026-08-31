@@ -19,7 +19,7 @@ export function useResumes() {
       const all = await service.list()
       items.value = all.filter((item) => item.user_id === authStore.user?.id)
     } catch (err) {
-      error.value = err instanceof ApiRequestError ? err.message : 'Something went wrong. Please try again.'
+      error.value = err instanceof ApiRequestError ? err.message : 'Diçka shkoi keq. Provo përsëri.'
     } finally {
       loading.value = false
     }
@@ -35,7 +35,7 @@ export function useResumes() {
       if (err instanceof ApiRequestError) {
         error.value = err.errors?.file?.[0] ?? err.message
       } else {
-        error.value = 'Something went wrong. Please try again.'
+        error.value = 'Diçka shkoi keq. Provo përsëri.'
       }
       throw err
     }

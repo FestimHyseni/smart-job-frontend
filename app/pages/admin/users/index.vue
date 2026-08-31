@@ -19,12 +19,12 @@ onMounted(fetchUsers)
   <div class="min-h-screen bg-gray-50 px-4 py-10">
     <div class="mx-auto max-w-4xl">
       <div class="mb-6 flex items-center justify-between">
-        <h1 class="text-2xl font-semibold text-gray-900">Users</h1>
+        <h1 class="text-2xl font-semibold text-gray-900">Përdoruesit</h1>
         <NuxtLink
           to="/admin/users/create"
           class="rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
         >
-          Add user
+          Shto përdorues
         </NuxtLink>
       </div>
 
@@ -38,19 +38,19 @@ onMounted(fetchUsers)
         >
       </div>
 
-      <p v-if="loading" class="text-sm text-gray-600">Loading users...</p>
+      <p v-if="loading" class="text-sm text-gray-600">Duke ngarkuar...</p>
       <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
-      <p v-else-if="!users.length" class="text-sm text-gray-600">No users found.</p>
+      <p v-else-if="!users.length" class="text-sm text-gray-600">S'u gjet asnjë përdorues.</p>
       <p v-else-if="!filteredUsers.length" class="text-sm text-gray-500">Asnjë rezultat për "{{ search }}".</p>
 
       <div v-else class="overflow-x-auto rounded-xl border border-gray-100 bg-white shadow-sm">
         <table class="min-w-full divide-y divide-gray-200 text-sm">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-4 py-3 text-left font-medium text-gray-700">Name</th>
+              <th class="px-4 py-3 text-left font-medium text-gray-700">Emri</th>
               <th class="px-4 py-3 text-left font-medium text-gray-700">Email</th>
-              <th class="px-4 py-3 text-left font-medium text-gray-700">Role</th>
-              <th class="px-4 py-3 text-left font-medium text-gray-700">Phone</th>
+              <th class="px-4 py-3 text-left font-medium text-gray-700">Roli</th>
+              <th class="px-4 py-3 text-left font-medium text-gray-700">Telefoni</th>
               <th class="px-4 py-3" />
             </tr>
           </thead>
@@ -65,7 +65,7 @@ onMounted(fetchUsers)
                   :to="`/admin/users/${user.id}/edit`"
                   class="font-medium text-brand-600 hover:underline"
                 >
-                  Edit
+                  Edito
                 </NuxtLink>
               </td>
             </tr>

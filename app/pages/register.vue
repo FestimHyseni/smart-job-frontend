@@ -29,44 +29,44 @@ async function onSubmit() {
         <div class="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-600 to-brand-400 text-lg font-bold text-white shadow">
           SJ
         </div>
-        <h1 class="text-2xl font-semibold text-gray-900">Create account</h1>
+        <h1 class="text-2xl font-semibold text-gray-900">Krijo llogari</h1>
       </div>
 
       <form class="flex flex-col gap-4" @submit.prevent="onSubmit">
         <BaseInput
           v-model="form.name"
-          label="Full name"
-          placeholder="John Doe"
+          label="Emri i plotë"
+          placeholder="Arben Krasniqi"
           :error="fieldErrors.name?.[0]"
         />
         <BaseInput
           v-model="form.email"
           label="Email"
           type="email"
-          placeholder="you@example.com"
+          placeholder="ti@example.com"
           :error="fieldErrors.email?.[0]"
         />
         <BaseInput
           v-model="form.password"
-          label="Password"
+          label="Fjalëkalimi"
           type="password"
           placeholder="••••••••"
           :error="fieldErrors.password?.[0]"
         />
         <BaseInput
           v-model="form.password_confirmation"
-          label="Confirm password"
+          label="Konfirmo fjalëkalimin"
           type="password"
           placeholder="••••••••"
         />
 
         <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-700">I am a</label>
+          <label class="text-sm font-medium text-gray-700">Jam</label>
           <select
             v-model="form.role"
             class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500"
           >
-            <option value="candidate">Candidate</option>
+            <option value="candidate">Kandidat</option>
             <option value="employer">Employer</option>
           </select>
           <p v-if="fieldErrors.role?.[0]" class="text-sm text-red-600">{{ fieldErrors.role[0] }}</p>
@@ -74,7 +74,7 @@ async function onSubmit() {
 
         <BaseInput
           v-model="form.phone"
-          label="Phone (optional)"
+          label="Telefoni (opsional)"
           type="tel"
           placeholder="+383 44 000 000"
           :error="fieldErrors.phone?.[0]"
@@ -82,12 +82,12 @@ async function onSubmit() {
 
         <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
 
-        <BaseButton type="submit" :loading="loading">Create account</BaseButton>
+        <BaseButton type="submit" :loading="loading">Krijo llogari</BaseButton>
       </form>
 
       <p class="mt-6 text-center text-sm text-gray-600">
-        Already have an account?
-        <NuxtLink to="/login" class="font-medium text-brand-600 hover:underline">Log in</NuxtLink>
+        Ke tashmë llogari?
+        <NuxtLink to="/login" class="font-medium text-brand-600 hover:underline">Kyçu</NuxtLink>
       </p>
     </div>
   </div>

@@ -16,7 +16,7 @@ export function useJobs() {
     try {
       jobs.value = await jobsService.list(filters)
     } catch (err) {
-      error.value = err instanceof ApiRequestError ? err.message : 'Something went wrong. Please try again.'
+      error.value = err instanceof ApiRequestError ? err.message : 'Diçka shkoi keq. Provo përsëri.'
     } finally {
       loading.value = false
     }
@@ -28,7 +28,7 @@ export function useJobs() {
     try {
       return await jobsService.show(id)
     } catch (err) {
-      error.value = err instanceof ApiRequestError ? err.message : 'Something went wrong. Please try again.'
+      error.value = err instanceof ApiRequestError ? err.message : 'Diçka shkoi keq. Provo përsëri.'
       throw err
     } finally {
       loading.value = false
@@ -46,7 +46,7 @@ export function useJobs() {
         error.value = err.message
         fieldErrors.value = err.errors ?? {}
       } else {
-        error.value = 'Something went wrong. Please try again.'
+        error.value = 'Diçka shkoi keq. Provo përsëri.'
       }
       throw err
     } finally {
@@ -65,7 +65,7 @@ export function useJobs() {
         error.value = err.message
         fieldErrors.value = err.errors ?? {}
       } else {
-        error.value = 'Something went wrong. Please try again.'
+        error.value = 'Diçka shkoi keq. Provo përsëri.'
       }
       throw err
     } finally {

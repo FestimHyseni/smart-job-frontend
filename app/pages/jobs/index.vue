@@ -91,7 +91,7 @@ onMounted(async () => {
   <div class="min-h-screen bg-gray-50">
     <div class="border-b border-gray-100 bg-white px-4 py-4">
       <form class="mx-auto grid max-w-6xl grid-cols-1 gap-3 sm:grid-cols-4 lg:grid-cols-5" @submit.prevent="applyFilters">
-        <BaseInput v-model="filters.search" label="Kërko sipas pozitës së punës" placeholder="Job title" />
+        <BaseInput v-model="filters.search" label="Kërko sipas pozitës së punës" placeholder="Titulli i punës" />
         <BaseSelect
           v-model="filters.category_id"
           label="Industria"

@@ -20,7 +20,7 @@ export function useApi() {
     } catch (error) {
       const apiError = (error as { data?: ApiError }).data
       throw new ApiRequestError(
-        apiError?.message || 'Something went wrong. Please try again.',
+        apiError?.message || 'Diçka shkoi keq. Provo përsëri.',
         apiError?.errors ?? null,
       )
     }

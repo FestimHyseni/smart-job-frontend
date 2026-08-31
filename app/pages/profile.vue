@@ -283,26 +283,26 @@ function formatDate(date: string | null) {
           </div>
 
           <div class="flex flex-col gap-4">
-            <BaseInput v-model="form.headline" label="Headline" placeholder="Senior Backend Developer" :error="fieldErrors.headline?.[0]" />
-            <BaseTextarea v-model="form.bio" label="Përmbledhje e shkurtër" placeholder="Tell employers about yourself" :error="fieldErrors.bio?.[0]" />
+            <BaseInput v-model="form.headline" label="Titulli profesional" placeholder="Senior Backend Developer" :error="fieldErrors.headline?.[0]" />
+            <BaseTextarea v-model="form.bio" label="Përmbledhje e shkurtër" placeholder="Trego diçka për veten tek employer-at" :error="fieldErrors.bio?.[0]" />
 
             <BaseSelect
               v-model="form.location_id"
-              label="Location"
+              label="Qyteti"
               :options="locations.map((l) => ({ value: l.id, label: `${l.city}, ${l.country}` }))"
               :error="fieldErrors.location_id?.[0]"
             />
 
-            <BaseInput v-model="form.years_experience" label="Years of experience" type="number" :error="fieldErrors.years_experience?.[0]" />
+            <BaseInput v-model="form.years_experience" label="Vite përvojë" type="number" :error="fieldErrors.years_experience?.[0]" />
 
             <div class="grid grid-cols-2 gap-3">
-              <BaseInput v-model="form.expected_salary" label="Expected salary" type="number" :error="fieldErrors.expected_salary?.[0]" />
-              <BaseInput v-model="form.salary_currency" label="Currency" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
+              <BaseInput v-model="form.expected_salary" label="Paga e pritur" type="number" :error="fieldErrors.expected_salary?.[0]" />
+              <BaseInput v-model="form.salary_currency" label="Monedha" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
             </div>
 
-            <BaseInput v-model="form.linkedin_url" label="LinkedIn URL (optional)" placeholder="https://linkedin.com/in/..." :error="fieldErrors.linkedin_url?.[0]" />
-            <BaseInput v-model="form.github_url" label="GitHub URL (optional)" placeholder="https://github.com/..." :error="fieldErrors.github_url?.[0]" />
-            <BaseInput v-model="form.portfolio_url" label="Portfolio URL (optional)" placeholder="https://..." :error="fieldErrors.portfolio_url?.[0]" />
+            <BaseInput v-model="form.linkedin_url" label="LinkedIn (opsionale)" placeholder="https://linkedin.com/in/..." :error="fieldErrors.linkedin_url?.[0]" />
+            <BaseInput v-model="form.github_url" label="GitHub (opsionale)" placeholder="https://github.com/..." :error="fieldErrors.github_url?.[0]" />
+            <BaseInput v-model="form.portfolio_url" label="Portfolio (opsionale)" placeholder="https://..." :error="fieldErrors.portfolio_url?.[0]" />
 
             <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
           </div>
@@ -399,10 +399,10 @@ function formatDate(date: string | null) {
         <div class="flex flex-wrap items-end gap-2 rounded-lg bg-gray-50 p-4">
           <BaseSelect v-model="newSkillId" label="Shto aftësi" placeholder="Zgjedh aftësinë" :options="skillsCatalog.map((s) => ({ value: s.id, label: s.name }))" />
           <BaseSelect v-model="newSkillLevel" label="Niveli" :options="[
-            { value: 'beginner', label: 'Beginner' },
-            { value: 'intermediate', label: 'Intermediate' },
-            { value: 'advanced', label: 'Advanced' },
-            { value: 'expert', label: 'Expert' },
+            { value: 'beginner', label: 'Fillestar' },
+            { value: 'intermediate', label: 'Mesatar' },
+            { value: 'advanced', label: 'I avancuar' },
+            { value: 'expert', label: 'Ekspert' },
           ]" />
           <BaseButton type="button" :full-width="false" class="px-5" @click="onAddSkill">+ Shto</BaseButton>
         </div>

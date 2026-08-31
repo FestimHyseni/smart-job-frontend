@@ -16,7 +16,7 @@ onMounted(async () => {
   try {
     company.value = await catalogService.showCompany(companyId)
   } catch {
-    companyError.value = 'Company not found.'
+    companyError.value = 'Kompania nuk u gjet.'
   } finally {
     companyLoading.value = false
   }
@@ -28,10 +28,10 @@ onMounted(async () => {
   <div class="min-h-screen bg-gray-50 pb-16">
     <div class="mx-auto flex max-w-3xl flex-col gap-5 px-4 pt-8">
       <NuxtLink to="/jobs" class="inline-flex w-fit items-center gap-1 text-sm font-medium text-brand-600 hover:underline">
-        ← Back to jobs
+        ← Të gjitha job-et
       </NuxtLink>
 
-      <p v-if="companyLoading" class="text-sm text-gray-600">Loading company...</p>
+      <p v-if="companyLoading" class="text-sm text-gray-600">Duke ngarkuar...</p>
       <p v-else-if="companyError" class="text-sm text-red-600">{{ companyError }}</p>
 
       <template v-else-if="company">
@@ -53,7 +53,7 @@ onMounted(async () => {
         <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
           <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
             <span v-if="company.industry">🏭 {{ company.industry }}</span>
-            <span v-if="company.employees_count">👥 {{ company.employees_count }} employees</span>
+            <span v-if="company.employees_count">👥 {{ company.employees_count }} punonjës</span>
             <a v-if="company.website" :href="company.website" target="_blank" class="text-brand-600 hover:underline">
               🔗 {{ company.website }}
             </a>

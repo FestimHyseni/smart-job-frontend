@@ -15,7 +15,7 @@ export function useApply() {
       const firstFieldError = err.errors ? Object.values(err.errors)[0]?.[0] : undefined
       error.value = firstFieldError ?? err.message
     } else {
-      error.value = 'Something went wrong. Please try again.'
+      error.value = 'Diçka shkoi keq. Provo përsëri.'
     }
   }
 

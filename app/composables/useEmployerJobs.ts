@@ -22,7 +22,7 @@ export function useEmployerJobs() {
   const error = ref<string | null>(null)
 
   function handleError(err: unknown) {
-    error.value = err instanceof ApiRequestError ? err.message : 'Something went wrong. Please try again.'
+    error.value = err instanceof ApiRequestError ? err.message : 'Diçka shkoi keq. Provo përsëri.'
   }
 
   async function fetchMyJobs() {

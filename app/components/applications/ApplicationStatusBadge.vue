@@ -6,12 +6,12 @@ defineProps<{
 }>()
 
 const labels: Record<ApplicationStatus, string> = {
-  pending: 'Pending',
-  reviewed: 'Reviewed',
-  shortlisted: 'Shortlisted',
-  interview: 'Interview',
-  accepted: 'Accepted',
-  rejected: 'Rejected',
+  pending: 'Në pritje',
+  reviewed: 'Shqyrtuar',
+  shortlisted: 'I përzgjedhur',
+  interview: 'Intervistë',
+  accepted: 'I pranuar',
+  rejected: 'I refuzuar',
 }
 
 const colors: Record<ApplicationStatus, string> = {

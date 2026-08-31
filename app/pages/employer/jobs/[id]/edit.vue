@@ -75,30 +75,30 @@ async function onSubmit() {
 <template>
   <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10">
     <div class="w-full max-w-lg rounded-xl border border-gray-100 bg-white p-8 shadow-sm">
-      <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900">Edit job</h1>
+      <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900">Edito job-in</h1>
 
-      <p v-if="notFound" class="text-sm text-red-600">Job not found.</p>
+      <p v-if="notFound" class="text-sm text-red-600">Job-i nuk u gjet.</p>
 
       <form v-else class="flex flex-col gap-4" @submit.prevent="onSubmit">
-        <BaseInput v-model="form.title" label="Job title" placeholder="Senior Backend Developer" :error="fieldErrors.title?.[0]" />
-        <BaseTextarea v-model="form.description" label="Description" placeholder="Describe the role" :error="fieldErrors.description?.[0]" />
-        <BaseTextarea v-model="form.requirements" label="Requirements" placeholder="What are you looking for?" :error="fieldErrors.requirements?.[0]" />
+        <BaseInput v-model="form.title" label="Titulli i job-it" placeholder="Senior Backend Developer" :error="fieldErrors.title?.[0]" />
+        <BaseTextarea v-model="form.description" label="Përshkrimi" placeholder="Përshkruaj pozitën" :error="fieldErrors.description?.[0]" />
+        <BaseTextarea v-model="form.requirements" label="Kërkesat" placeholder="Çfarë kërkon nga kandidati?" :error="fieldErrors.requirements?.[0]" />
 
         <BaseSelect
           v-model="form.category_id"
-          label="Category"
+          label="Industria"
           :options="categories.map((c) => ({ value: c.id, label: c.name }))"
           :error="fieldErrors.category_id?.[0]"
         />
         <BaseSelect
           v-model="form.location_id"
-          label="Location"
+          label="Qyteti"
           :options="locations.map((l) => ({ value: l.id, label: `${l.city}, ${l.country}` }))"
           :error="fieldErrors.location_id?.[0]"
         />
         <BaseSelect
           v-model="form.employment_type"
-          label="Employment type"
+          label="Lloji i punësimit"
           :options="[
             { value: 'full_time', label: 'Full-time' },
             { value: 'part_time', label: 'Part-time' },
@@ -110,7 +110,7 @@ async function onSubmit() {
         />
         <BaseSelect
           v-model="form.experience_level"
-          label="Experience level"
+          label="Niveli i përvojës"
           :options="[
             { value: 'junior', label: 'Junior' },
             { value: 'mid', label: 'Mid' },
@@ -121,20 +121,20 @@ async function onSubmit() {
         />
 
         <div class="grid grid-cols-2 gap-3">
-          <BaseInput v-model="form.salary_min" label="Salary min (optional)" type="number" :error="fieldErrors.salary_min?.[0]" />
-          <BaseInput v-model="form.salary_max" label="Salary max (optional)" type="number" :error="fieldErrors.salary_max?.[0]" />
+          <BaseInput v-model="form.salary_min" label="Paga minimale (opsionale)" type="number" :error="fieldErrors.salary_min?.[0]" />
+          <BaseInput v-model="form.salary_max" label="Paga maksimale (opsionale)" type="number" :error="fieldErrors.salary_max?.[0]" />
         </div>
-        <BaseInput v-model="form.salary_currency" label="Currency" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
-        <BaseInput v-model="form.deadline" label="Application deadline" type="date" :error="fieldErrors.deadline?.[0]" />
+        <BaseInput v-model="form.salary_currency" label="Monedha" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
+        <BaseInput v-model="form.deadline" label="Afati i aplikimit" type="date" :error="fieldErrors.deadline?.[0]" />
 
         <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
-        <p v-if="saved" class="text-sm font-medium text-green-600">Job updated successfully.</p>
+        <p v-if="saved" class="text-sm font-medium text-green-600">Job-i u përditësua me sukses.</p>
 
-        <BaseButton type="submit" :loading="loading">Save changes</BaseButton>
+        <BaseButton type="submit" :loading="loading">Ruaj ndryshimet</BaseButton>
       </form>
 
       <p class="mt-6 text-center text-sm text-gray-600">
-        <NuxtLink to="/employer/jobs" class="font-medium text-brand-600 hover:underline">← Back to my jobs</NuxtLink>
+        <NuxtLink to="/employer/jobs" class="font-medium text-brand-600 hover:underline">← Mbrapa te job-et e mia</NuxtLink>
       </p>
     </div>
   </div>

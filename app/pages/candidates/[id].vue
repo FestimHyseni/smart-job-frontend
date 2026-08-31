@@ -19,7 +19,7 @@ onMounted(async () => {
   try {
     candidate.value = await candidatesService.show(candidateId)
   } catch (err) {
-    error.value = err instanceof ApiRequestError ? err.message : 'Something went wrong. Please try again.'
+    error.value = err instanceof ApiRequestError ? err.message : 'Diçka shkoi keq. Provo përsëri.'
   } finally {
     loading.value = false
   }
@@ -32,6 +32,13 @@ function formatDate(date: string | null) {
 
 const proficiencyLabels: Record<string, string> = {
   a1: 'A1', a2: 'A2', b1: 'B1', b2: 'B2', c1: 'C1', c2: 'C2',
+}
+
+const skillLevelLabels: Record<string, string> = {
+  beginner: 'Fillestar',
+  intermediate: 'Mesatar',
+  advanced: 'I avancuar',
+  expert: 'Ekspert',
 }
 </script>
 
@@ -107,7 +114,7 @@ const proficiencyLabels: Record<string, string> = {
               :key="cs.id"
               class="rounded-full bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700"
             >
-              {{ cs.skill?.name }} <span class="text-brand-400">· {{ cs.level }}</span>
+              {{ cs.skill?.name }} <span class="text-brand-400">· {{ skillLevelLabels[cs.level] ?? cs.level }}</span>
             </span>
           </div>
         </div>

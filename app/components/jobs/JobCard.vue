@@ -73,7 +73,7 @@ function onCompanyClick(event: Event) {
 
     <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
       <span v-if="job.location">📍 {{ job.location.city }}, {{ job.location.country }}</span>
-      <span class="capitalize">{{ job.experience_level }} level</span>
+      <span class="capitalize">Niveli {{ job.experience_level }}</span>
       <span v-if="salaryRange">💰 {{ salaryRange }}</span>
     </div>
   </NuxtLink>

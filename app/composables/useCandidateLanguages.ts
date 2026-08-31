@@ -17,7 +17,7 @@ export function useCandidateLanguages() {
       const all = await service.list()
       items.value = all.filter((item) => item.user_id === authStore.user?.id)
     } catch (err) {
-      error.value = err instanceof ApiRequestError ? err.message : 'Something went wrong. Please try again.'
+      error.value = err instanceof ApiRequestError ? err.message : 'Diçka shkoi keq. Provo përsëri.'
     } finally {
       loading.value = false
     }

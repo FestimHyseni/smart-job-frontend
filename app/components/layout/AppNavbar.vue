@@ -189,10 +189,10 @@ const tabLinkClass = (path: string) =>
         </template>
         <template v-else>
           <NuxtLink to="/login" class="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-600 transition hover:bg-gray-50 hover:text-gray-900">
-            Log in
+            Kyçu
           </NuxtLink>
           <NuxtLink to="/register" class="ml-1 rounded-lg bg-gradient-to-r from-brand-600 to-brand-500 px-3 py-1.5 text-sm font-semibold text-white shadow-sm shadow-brand-200 transition hover:from-brand-700 hover:to-brand-600">
-            Register
+            Regjistrohu
           </NuxtLink>
         </template>
 
@@ -234,7 +234,7 @@ const tabLinkClass = (path: string) =>
           💬 Mesazhet
         </NuxtLink>
         <NuxtLink v-if="authStore.user?.role === 'admin'" to="/admin/users" class="border-b-2 px-3 py-2.5 text-sm font-medium transition" :class="tabLinkClass('/admin/users')">
-          👥 Users
+          👥 Përdoruesit
         </NuxtLink>
       </div>
     </div>
@@ -251,7 +251,7 @@ const tabLinkClass = (path: string) =>
           <NuxtLink v-if="authStore.user?.role === 'employer'" to="/employer/company" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/employer/company')">🏢 Kompania ime</NuxtLink>
           <NuxtLink v-if="authStore.user?.role === 'employer'" to="/employer/jobs" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/employer/jobs')">📋 Job-et e mia</NuxtLink>
           <NuxtLink v-if="authStore.user?.role === 'candidate' || authStore.user?.role === 'employer'" to="/messages" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/messages')">💬 Mesazhet</NuxtLink>
-          <NuxtLink v-if="authStore.user?.role === 'admin'" to="/admin/users" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/admin/users')">👥 Users</NuxtLink>
+          <NuxtLink v-if="authStore.user?.role === 'admin'" to="/admin/users" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/admin/users')">👥 Përdoruesit</NuxtLink>
 
           <div class="mt-2 flex items-center justify-between border-t border-gray-100 pt-3">
             <span class="flex items-center gap-2 text-sm font-medium text-gray-700">
@@ -264,13 +264,13 @@ const tabLinkClass = (path: string) =>
               {{ authStore.user?.name }}
             </span>
             <button class="rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-50" @click="onLogout">
-              Log out
+              Dil
             </button>
           </div>
         </template>
         <template v-else>
-          <NuxtLink to="/login" class="rounded-lg px-3 py-2 font-medium text-gray-600 transition hover:bg-gray-50">Log in</NuxtLink>
-          <NuxtLink to="/register" class="rounded-lg bg-gradient-to-r from-brand-600 to-brand-500 px-3 py-2 font-semibold text-white shadow-sm">Register</NuxtLink>
+          <NuxtLink to="/login" class="rounded-lg px-3 py-2 font-medium text-gray-600 transition hover:bg-gray-50">Kyçu</NuxtLink>
+          <NuxtLink to="/register" class="rounded-lg bg-gradient-to-r from-brand-600 to-brand-500 px-3 py-2 font-semibold text-white shadow-sm">Regjistrohu</NuxtLink>
         </template>
       </div>
     </div>

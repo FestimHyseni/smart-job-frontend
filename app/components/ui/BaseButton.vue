@@ -17,7 +17,7 @@ withDefaults(
     class="flex items-center justify-center rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-60"
     :class="fullWidth ? 'w-full' : ''"
   >
-    <span v-if="loading">Loading...</span>
+    <span v-if="loading">Duke ngarkuar...</span>
     <slot v-else />
   </button>
 </template>

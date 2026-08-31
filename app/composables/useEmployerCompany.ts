@@ -16,7 +16,7 @@ export function useEmployerCompany() {
       error.value = err.message
       fieldErrors.value = err.errors ?? {}
     } else {
-      error.value = 'Something went wrong. Please try again.'
+      error.value = 'Diçka shkoi keq. Provo përsëri.'
       fieldErrors.value = {}
     }
   }

@@ -68,13 +68,19 @@ function formatInterviewDate(date: string) {
   return new Date(date).toLocaleString('sq-AL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'UTC' })
 }
 
+const interviewTypeLabels: Record<string, string> = {
+  online: 'Online',
+  physical: 'Fizike',
+  phone: 'Telefonike',
+}
+
 const statusOptions: { value: ApplicationStatus; label: string }[] = [
-  { value: 'pending', label: 'Pending' },
-  { value: 'reviewed', label: 'Reviewed' },
-  { value: 'shortlisted', label: 'Shortlisted' },
-  { value: 'interview', label: 'Interview' },
-  { value: 'accepted', label: 'Accepted' },
-  { value: 'rejected', label: 'Rejected' },
+  { value: 'pending', label: 'Në pritje' },
+  { value: 'reviewed', label: 'Shqyrtuar' },
+  { value: 'shortlisted', label: 'I përzgjedhur' },
+  { value: 'interview', label: 'Intervistë' },
+  { value: 'accepted', label: 'I pranuar' },
+  { value: 'rejected', label: 'I refuzuar' },
 ]
 
 async function onStatusChange(applicationId: number, event: Event) {
@@ -155,7 +161,7 @@ onMounted(() => fetchApplicationsFor(jobId))
               :key="interview.id"
               class="rounded-md bg-purple-50 px-3 py-2 text-sm text-purple-700"
             >
-              📅 Intervistë {{ formatInterviewDate(interview.scheduled_at) }} ({{ interview.type }})
+              📅 Intervistë {{ formatInterviewDate(interview.scheduled_at) }} ({{ interviewTypeLabels[interview.type] }})
             </div>
           </div>
 

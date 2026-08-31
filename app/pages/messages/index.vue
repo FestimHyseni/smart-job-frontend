@@ -47,7 +47,7 @@ onMounted(fetchMine)
             class="flex items-center justify-between rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md"
           >
             <div>
-              <p class="font-medium text-gray-900">{{ otherParticipant(conversation)?.name ?? 'Unknown' }}</p>
+              <p class="font-medium text-gray-900">{{ otherParticipant(conversation)?.name ?? 'I panjohur' }}</p>
               <p class="truncate text-sm text-gray-500">{{ lastMessagePreview(conversation) }}</p>
             </div>
           </NuxtLink>

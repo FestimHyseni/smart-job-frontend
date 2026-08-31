@@ -23,7 +23,7 @@ async function onSubmit() {
         <div class="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-600 to-brand-400 text-lg font-bold text-white shadow">
           SJ
         </div>
-        <h1 class="text-2xl font-semibold text-gray-900">Log in</h1>
+        <h1 class="text-2xl font-semibold text-gray-900">Kyçu</h1>
       </div>
 
       <form class="flex flex-col gap-4" @submit.prevent="onSubmit">
@@ -31,12 +31,12 @@ async function onSubmit() {
           v-model="form.email"
           label="Email"
           type="email"
-          placeholder="you@example.com"
+          placeholder="ti@example.com"
           :error="fieldErrors.email?.[0]"
         />
         <BaseInput
           v-model="form.password"
-          label="Password"
+          label="Fjalëkalimi"
           type="password"
           placeholder="••••••••"
           :error="fieldErrors.password?.[0]"
@@ -44,12 +44,12 @@ async function onSubmit() {
 
         <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
 
-        <BaseButton type="submit" :loading="loading">Log in</BaseButton>
+        <BaseButton type="submit" :loading="loading">Kyçu</BaseButton>
       </form>
 
       <p class="mt-6 text-center text-sm text-gray-600">
-        Don't have an account?
-        <NuxtLink to="/register" class="font-medium text-brand-600 hover:underline">Register</NuxtLink>
+        S'ke llogari?
+        <NuxtLink to="/register" class="font-medium text-brand-600 hover:underline">Regjistrohu</NuxtLink>
       </p>
     </div>
   </div>

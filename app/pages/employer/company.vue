@@ -98,24 +98,24 @@ async function onSubmit() {
 
         <dl class="flex flex-col gap-4 text-sm">
           <div>
-            <dt class="text-gray-500">Company name</dt>
+            <dt class="text-gray-500">Emri i kompanisë</dt>
             <dd class="mt-0.5 font-medium text-gray-900">{{ existingCompany.name }}</dd>
           </div>
           <div v-if="existingCompany.description">
-            <dt class="text-gray-500">Description</dt>
+            <dt class="text-gray-500">Përshkrimi</dt>
             <dd class="mt-0.5 whitespace-pre-line text-gray-700">{{ existingCompany.description }}</dd>
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div v-if="existingCompany.location">
-              <dt class="text-gray-500">Location</dt>
+              <dt class="text-gray-500">Qyteti</dt>
               <dd class="mt-0.5 text-gray-900">📍 {{ existingCompany.location.city }}, {{ existingCompany.location.country }}</dd>
             </div>
             <div v-if="existingCompany.industry">
-              <dt class="text-gray-500">Industry</dt>
+              <dt class="text-gray-500">Industria</dt>
               <dd class="mt-0.5 text-gray-900">🏭 {{ existingCompany.industry }}</dd>
             </div>
             <div v-if="existingCompany.employees_count">
-              <dt class="text-gray-500">Employees count</dt>
+              <dt class="text-gray-500">Numri i punonjësve</dt>
               <dd class="mt-0.5 text-gray-900">👥 {{ existingCompany.employees_count }}</dd>
             </div>
             <div v-if="existingCompany.website">
@@ -147,26 +147,26 @@ async function onSubmit() {
           </div>
 
           <div class="flex flex-col gap-4">
-            <BaseInput v-model="form.name" label="Company name" placeholder="Acme Inc." :error="fieldErrors.name?.[0]" />
-            <BaseTextarea v-model="form.description" label="Description" placeholder="What does your company do?" :error="fieldErrors.description?.[0]" />
+            <BaseInput v-model="form.name" label="Emri i kompanisë" placeholder="Acme Inc." :error="fieldErrors.name?.[0]" />
+            <BaseTextarea v-model="form.description" label="Përshkrimi" placeholder="Çfarë bën kompania juaj?" :error="fieldErrors.description?.[0]" />
 
             <BaseSelect
               v-model="form.location_id"
-              label="Location"
+              label="Qyteti"
               :options="locations.map((l) => ({ value: l.id, label: `${l.city}, ${l.country}` }))"
               :error="fieldErrors.location_id?.[0]"
             />
 
             <div class="grid grid-cols-2 gap-3">
-              <BaseInput v-model="form.industry" label="Industry" placeholder="Software Development" :error="fieldErrors.industry?.[0]" />
+              <BaseInput v-model="form.industry" label="Industria" placeholder="Software Development" :error="fieldErrors.industry?.[0]" />
               <BaseInput
                 v-model="form.employees_count"
-                label="Employees count (optional)"
+                label="Numri i punonjësve (opsionale)"
                 type="number"
                 :error="fieldErrors.employees_count?.[0]"
               />
             </div>
-            <BaseInput v-model="form.website" label="Website (optional)" placeholder="https://..." :error="fieldErrors.website?.[0]" />
+            <BaseInput v-model="form.website" label="Website (opsionale)" placeholder="https://..." :error="fieldErrors.website?.[0]" />
 
             <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
           </div>

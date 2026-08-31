@@ -17,7 +17,7 @@ export function useMyApplications() {
       if (!authStore.user) return
       applications.value = await applicationsService.list({ candidate_id: authStore.user.id, per_page: 100 })
     } catch (err) {
-      error.value = err instanceof ApiRequestError ? err.message : 'Something went wrong. Please try again.'
+      error.value = err instanceof ApiRequestError ? err.message : 'Diçka shkoi keq. Provo përsëri.'
     } finally {
       loading.value = false
     }
