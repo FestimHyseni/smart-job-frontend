@@ -73,8 +73,9 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10">
-    <div class="w-full max-w-lg rounded-xl border border-gray-100 bg-white p-8 shadow-sm">
+  <div class="flex min-h-screen items-start justify-center bg-gray-50 px-4 py-10">
+    <div class="flex w-full max-w-lg flex-col gap-5">
+    <div class="rounded-xl border border-gray-100 bg-white p-8 shadow-sm">
       <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900">Edit job</h1>
 
       <p v-if="notFound" class="text-sm text-red-600">Job not found.</p>
@@ -136,6 +137,9 @@ async function onSubmit() {
       <p class="mt-6 text-center text-sm text-gray-600">
         <NuxtLink to="/employer/jobs" class="font-medium text-brand-600 hover:underline">← Back to my jobs</NuxtLink>
       </p>
+    </div>
+
+    <JobSkillsManager v-if="!notFound" :job-id="jobId" />
     </div>
   </div>
 </template>
