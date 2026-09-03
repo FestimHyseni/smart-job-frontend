@@ -1,7 +1,8 @@
 <script setup lang="ts">
 definePageMeta({ middleware: 'admin' })
 
-const { users, loading, error, fetchUsers } = useUsers()
+const { users, loading, error, fetchUsers, deleteUser } = useUsers()
+const authStore = useAuthStore()
 
 const search = ref('')
 const filteredUsers = computed(() => {
@@ -11,6 +12,21 @@ const filteredUsers = computed(() => {
     (user) => user.name.toLowerCase().includes(q) || user.email.toLowerCase().includes(q) || user.role.toLowerCase().includes(q),
   )
 })
+
+const deletingId = ref<number | null>(null)
+
+async function onDelete(userId: number, userName: string) {
+  if (!confirm(`Të fshihet përdoruesi "${userName}"? Ky veprim nuk mund të kthehet.`)) return
+
+  deletingId.value = userId
+  try {
+    await deleteUser(userId)
+  } catch {
+    // error is already surfaced via the `error` ref
+  } finally {
+    deletingId.value = null
+  }
+}
 
 onMounted(fetchUsers)
 </script>
@@ -67,6 +83,15 @@ onMounted(fetchUsers)
                 >
                   Edito
                 </NuxtLink>
+                <button
+                  v-if="user.id !== authStore.user?.id"
+                  type="button"
+                  class="ml-3 font-medium text-red-600 hover:underline disabled:opacity-50"
+                  :disabled="deletingId === user.id"
+                  @click="onDelete(user.id, user.name)"
+                >
+                  {{ deletingId === user.id ? 'Duke fshirë...' : 'Fshi' }}
+                </button>
               </td>
             </tr>
           </tbody>

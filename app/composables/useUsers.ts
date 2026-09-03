@@ -73,5 +73,19 @@ export function useUsers() {
     }
   }
 
-  return { users, loading, error, fieldErrors, fetchUsers, fetchUser, createUser, updateUser }
+  async function deleteUser(id: number) {
+    loading.value = true
+    error.value = null
+    try {
+      await usersService.remove(id)
+      users.value = users.value.filter((user) => user.id !== id)
+    } catch (err) {
+      handleError(err)
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return { users, loading, error, fieldErrors, fetchUsers, fetchUser, createUser, updateUser, deleteUser }
 }

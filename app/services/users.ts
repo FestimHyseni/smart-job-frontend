@@ -26,5 +26,11 @@ export function useUsersService() {
     })
   }
 
-  return { list, show, create, update }
+  function remove(id: number) {
+    return request<null>(`/users/${id}`, {
+      method: 'DELETE',
+    })
+  }
+
+  return { list, show, create, update, remove }
 }
