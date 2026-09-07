@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const authStore = useAuthStore()
 const { logout } = useAuth()
+const { theme, toggle: toggleTheme } = useTheme()
 const route = useRoute()
 const { resolveUrl } = useBackendOrigin()
 const { items: notifications, unreadCount, fetchMine: fetchNotifications, markAsRead, markAllAsRead } = useNotifications()
@@ -79,46 +80,57 @@ onUnmounted(() => {
 })
 
 const navLinkClass = (path: string) =>
-  isActive(path) ? 'bg-brand-50 text-brand-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+  isActive(path)
+    ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400'
+    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white'
 
 const tabLinkClass = (path: string) =>
   isActive(path)
-    ? 'border-brand-600 text-brand-700'
-    : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-800'
+    ? 'border-brand-600 text-brand-700 dark:text-brand-400'
+    : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-800 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:text-gray-200'
 </script>
 
 <template>
-  <nav class="sticky top-0 z-20 border-b border-gray-100 bg-white/80 shadow-sm shadow-gray-100/50 backdrop-blur-md">
+  <nav class="sticky top-0 z-20 border-b border-gray-100 bg-white/80 shadow-sm shadow-gray-100/50 backdrop-blur-md dark:border-gray-800 dark:bg-gray-950/80 dark:shadow-black/20">
     <!-- Top bar -->
     <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
       <NuxtLink to="/jobs" class="flex shrink-0 items-center gap-2">
         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 via-brand-600 to-indigo-600 text-sm font-extrabold text-white shadow-md shadow-brand-200">
           SJ
         </span>
-        <span class="text-lg font-extrabold tracking-tight text-gray-900">Smart<span class="text-brand-600">Job</span></span>
+        <span class="text-lg font-extrabold tracking-tight text-gray-900 dark:text-white">Smart<span class="text-brand-600">Job</span></span>
       </NuxtLink>
 
       <div class="flex items-center gap-1">
         <NuxtLink
           to="/jobs"
-          class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-50 hover:text-gray-900"
+          class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
           title="Kërko punë"
         >
           🔍
         </NuxtLink>
 
+        <button
+          type="button"
+          class="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+          :title="theme === 'dark' ? 'Kalo në pamje të çelët' : 'Kalo në pamje të errët'"
+          @click="toggleTheme"
+        >
+          {{ theme === 'dark' ? '☀️' : '🌙' }}
+        </button>
+
         <template v-if="authStore.isAuthenticated">
           <div ref="notificationsRef" class="relative">
             <button
               type="button"
-              class="relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-50 hover:text-gray-900"
+              class="relative flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
               title="Njoftimet"
               @click="showNotifications = !showNotifications; showAccountMenu = false"
             >
               🔔
               <span
                 v-if="unreadCount > 0"
-                class="absolute -right-0.5 -top-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white ring-2 ring-white"
+                class="absolute -right-0.5 -top-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white ring-2 ring-white dark:ring-gray-950"
               >
                 {{ unreadCount > 9 ? '9+' : unreadCount }}
               </span>
@@ -126,10 +138,10 @@ const tabLinkClass = (path: string) =>
 
             <div
               v-if="showNotifications"
-              class="absolute right-0 top-full z-20 mt-2 w-72 rounded-xl border border-gray-100 bg-white shadow-lg sm:w-80"
+              class="absolute right-0 top-full z-20 mt-2 w-72 rounded-xl border border-gray-100 bg-white shadow-lg sm:w-80 dark:border-gray-800 dark:bg-gray-900"
             >
-              <div class="flex items-center justify-between border-b border-gray-100 px-4 py-3">
-                <span class="text-sm font-semibold text-gray-900">Njoftimet</span>
+              <div class="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-gray-800">
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">Njoftimet</span>
                 <button v-if="unreadCount > 0" type="button" class="text-xs font-medium text-brand-600 hover:underline" @click="markAllAsRead">
                   Shëno të gjitha si të lexuara
                 </button>
@@ -142,15 +154,15 @@ const tabLinkClass = (path: string) =>
                   v-for="notification in notifications"
                   :key="notification.id"
                   type="button"
-                  class="flex w-full flex-col gap-0.5 border-b border-gray-50 px-4 py-3 text-left transition last:border-0 hover:bg-gray-50"
-                  :class="!notification.read_at ? 'bg-brand-50/40' : ''"
+                  class="flex w-full flex-col gap-0.5 border-b border-gray-50 px-4 py-3 text-left transition last:border-0 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800"
+                  :class="!notification.read_at ? 'bg-brand-50/40 dark:bg-brand-500/10' : ''"
                   @click="markAsRead(notification.id)"
                 >
                   <span class="flex items-center gap-2">
                     <span v-if="!notification.read_at" class="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-600" />
-                    <span class="text-sm font-medium text-gray-900">{{ notification.title }}</span>
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">{{ notification.title }}</span>
                   </span>
-                  <span class="text-sm text-gray-600">{{ notification.message }}</span>
+                  <span class="text-sm text-gray-600 dark:text-gray-400">{{ notification.message }}</span>
                   <span class="text-xs text-gray-400">{{ formatRelative(notification.created_at) }}</span>
                 </button>
               </div>
@@ -161,7 +173,7 @@ const tabLinkClass = (path: string) =>
           <div ref="accountMenuRef" class="relative ml-1 hidden md:block">
             <button
               type="button"
-              class="flex items-center gap-1.5 rounded-lg py-1.5 pl-1.5 pr-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+              class="flex items-center gap-1.5 rounded-lg py-1.5 pl-1.5 pr-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800"
               @click="showAccountMenu = !showAccountMenu; showNotifications = false"
             >
               <span v-if="authStore.user?.avatar_url" class="h-8 w-8 overflow-hidden rounded-full ring-2 ring-brand-100">
@@ -176,19 +188,19 @@ const tabLinkClass = (path: string) =>
 
             <div
               v-if="showAccountMenu"
-              class="absolute right-0 top-full z-20 mt-2 w-52 overflow-hidden rounded-xl border border-gray-100 bg-white py-1 shadow-lg"
+              class="absolute right-0 top-full z-20 mt-2 w-52 overflow-hidden rounded-xl border border-gray-100 bg-white py-1 shadow-lg dark:border-gray-800 dark:bg-gray-900"
             >
-              <NuxtLink :to="profileLink" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-50">
+              <NuxtLink :to="profileLink" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800">
                 👤 Profili im
               </NuxtLink>
-              <button type="button" class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 transition hover:bg-red-50" @click="onLogout">
+              <button type="button" class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 transition hover:bg-red-50 dark:hover:bg-red-500/10" @click="onLogout">
                 🚪 Dil
               </button>
             </div>
           </div>
         </template>
         <template v-else>
-          <NuxtLink to="/login" class="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-600 transition hover:bg-gray-50 hover:text-gray-900">
+          <NuxtLink to="/login" class="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-600 transition hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white">
             Kyçu
           </NuxtLink>
           <NuxtLink to="/register" class="ml-1 rounded-lg bg-gradient-to-r from-brand-600 to-brand-500 px-3 py-1.5 text-sm font-semibold text-white shadow-sm shadow-brand-200 transition hover:from-brand-700 hover:to-brand-600">
@@ -198,7 +210,7 @@ const tabLinkClass = (path: string) =>
 
         <button
           type="button"
-          class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 transition hover:bg-gray-50 md:hidden"
+          class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 transition hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800 md:hidden"
           :aria-expanded="mobileMenuOpen"
           aria-label="Menu"
           @click="mobileMenuOpen = !mobileMenuOpen"
@@ -210,7 +222,7 @@ const tabLinkClass = (path: string) =>
     </div>
 
     <!-- Secondary tab bar (desktop, authenticated) -->
-    <div v-if="authStore.isAuthenticated" class="hidden border-t border-gray-100 md:block">
+    <div v-if="authStore.isAuthenticated" class="hidden border-t border-gray-100 dark:border-gray-800 md:block">
       <div class="mx-auto flex max-w-6xl items-center gap-1 px-4 sm:px-6">
         <NuxtLink to="/jobs" class="border-b-2 px-3 py-2.5 text-sm font-medium transition" :class="tabLinkClass('/jobs')">
           💼 Vende Pune
@@ -240,7 +252,7 @@ const tabLinkClass = (path: string) =>
     </div>
 
     <!-- Mobile menu panel -->
-    <div v-if="mobileMenuOpen" class="border-t border-gray-100 bg-white px-4 py-3 md:hidden">
+    <div v-if="mobileMenuOpen" class="border-t border-gray-100 bg-white px-4 py-3 dark:border-gray-800 dark:bg-gray-950 md:hidden">
       <div class="flex flex-col gap-1 text-sm">
         <NuxtLink to="/jobs" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/jobs')">💼 Vende Pune</NuxtLink>
 
@@ -253,8 +265,8 @@ const tabLinkClass = (path: string) =>
           <NuxtLink v-if="authStore.user?.role === 'candidate' || authStore.user?.role === 'employer'" to="/messages" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/messages')">💬 Mesazhet</NuxtLink>
           <NuxtLink v-if="authStore.user?.role === 'admin'" to="/admin/users" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/admin/users')">👥 Përdoruesit</NuxtLink>
 
-          <div class="mt-2 flex items-center justify-between border-t border-gray-100 pt-3">
-            <span class="flex items-center gap-2 text-sm font-medium text-gray-700">
+          <div class="mt-2 flex items-center justify-between border-t border-gray-100 pt-3 dark:border-gray-800">
+            <span class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200">
               <span v-if="authStore.user?.avatar_url" class="h-7 w-7 overflow-hidden rounded-full ring-2 ring-brand-100">
                 <img :src="resolveUrl(authStore.user.avatar_url) ?? undefined" alt="" class="h-full w-full object-cover">
               </span>
@@ -269,7 +281,7 @@ const tabLinkClass = (path: string) =>
           </div>
         </template>
         <template v-else>
-          <NuxtLink to="/login" class="rounded-lg px-3 py-2 font-medium text-gray-600 transition hover:bg-gray-50">Kyçu</NuxtLink>
+          <NuxtLink to="/login" class="rounded-lg px-3 py-2 font-medium text-gray-600 transition hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800">Kyçu</NuxtLink>
           <NuxtLink to="/register" class="rounded-lg bg-gradient-to-r from-brand-600 to-brand-500 px-3 py-2 font-semibold text-white shadow-sm">Regjistrohu</NuxtLink>
         </template>
       </div>

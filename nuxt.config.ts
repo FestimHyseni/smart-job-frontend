@@ -15,6 +15,11 @@ export default defineNuxtConfig({
           href: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
         },
       ],
+      script: [
+        {
+          innerHTML: `(function(){try{var t=localStorage.getItem('smartjob-theme');if(t==='dark'||(t!==('light')&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()`,
+        },
+      ],
     },
   },
   runtimeConfig: {
