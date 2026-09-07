@@ -73,9 +73,9 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10">
-    <div class="w-full max-w-lg rounded-xl border border-gray-100 bg-white p-8 shadow-sm">
-      <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900">Edito job-in</h1>
+  <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10 dark:bg-gray-950">
+    <div class="w-full max-w-lg rounded-xl border border-gray-100 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900 dark:text-white">Edito job-in</h1>
 
       <p v-if="notFound" class="text-sm text-red-600">Job-i nuk u gjet.</p>
 
@@ -133,7 +133,7 @@ async function onSubmit() {
         <BaseButton type="submit" :loading="loading">Ruaj ndryshimet</BaseButton>
       </form>
 
-      <p class="mt-6 text-center text-sm text-gray-600">
+      <p class="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         <NuxtLink to="/employer/jobs" class="font-medium text-brand-600 hover:underline">← Mbrapa te job-et e mia</NuxtLink>
       </p>
     </div>

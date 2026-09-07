@@ -14,11 +14,11 @@ defineEmits<{
 
 <template>
   <div class="flex flex-col gap-1">
-    <label v-if="label" class="text-sm font-medium text-gray-700">{{ label }}</label>
+    <label v-if="label" class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ label }}</label>
     <select
       :value="modelValue"
-      class="rounded-md border px-3 py-2 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/40"
-      :class="error ? 'border-red-500' : 'border-gray-300'"
+      class="rounded-md border bg-white px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/40 dark:bg-gray-900 dark:text-white"
+      :class="error ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'"
       @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
     >
       <option v-if="placeholder" value="">{{ placeholder }}</option>

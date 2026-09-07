@@ -197,10 +197,10 @@ function formatDate(date: string | null) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 pb-16">
+  <div class="min-h-screen bg-gray-50 pb-16 dark:bg-gray-950">
     <div class="mx-auto flex max-w-5xl flex-col gap-5 px-4 pt-8">
       <!-- Header card: cover + avatar + completion -->
-      <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
+      <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="h-20 bg-gradient-to-r from-brand-600 to-brand-400" />
         <div class="flex flex-col gap-4 px-6 pb-6 sm:flex-row sm:items-end">
           <div class="relative -mt-12 shrink-0">
@@ -210,7 +210,7 @@ function formatDate(date: string | null) {
               alt="Avatar"
               class="h-24 w-24 rounded-full border-4 border-white object-cover shadow ring-4 ring-brand-100"
             >
-            <div v-else class="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gray-200 text-3xl font-semibold text-gray-500 shadow ring-4 ring-brand-100">
+            <div v-else class="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gray-200 text-3xl font-semibold text-gray-500 shadow ring-4 ring-brand-100 dark:text-gray-400 dark:bg-gray-800">
               {{ authStore.user?.name?.[0] }}
             </div>
             <button
@@ -226,17 +226,17 @@ function formatDate(date: string | null) {
           </div>
 
           <div class="flex-1 pt-2">
-            <h1 class="text-xl font-semibold text-gray-900">{{ authStore.user?.name }}</h1>
-            <p class="text-sm text-gray-500">{{ authStore.user?.email }}</p>
-            <p v-if="authStore.user?.phone" class="text-sm text-gray-500">{{ authStore.user.phone }}</p>
+            <h1 class="text-xl font-semibold text-gray-900 dark:text-white">{{ authStore.user?.name }}</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{ authStore.user?.email }}</p>
+            <p v-if="authStore.user?.phone" class="text-sm text-gray-500 dark:text-gray-400">{{ authStore.user.phone }}</p>
           </div>
 
           <div class="w-full pt-2 sm:w-52">
             <div class="mb-1 flex items-center justify-between">
-              <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Profili i plotësuar</span>
+              <span class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Profili i plotësuar</span>
               <span class="text-xl font-extrabold text-green-600">{{ profileCompletion }}%</span>
             </div>
-            <div class="h-2.5 overflow-hidden rounded-full bg-gray-100">
+            <div class="h-2.5 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
               <div class="h-full rounded-full bg-green-500 transition-all" :style="{ width: `${profileCompletion}%` }" />
             </div>
           </div>
@@ -247,26 +247,26 @@ function formatDate(date: string | null) {
         <!-- Sidebar -->
         <div class="order-2 flex flex-col gap-5 lg:order-1 lg:sticky lg:top-20">
           <!-- Documents / CV -->
-          <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
             <div class="mb-4 flex items-center justify-between">
-              <h2 class="flex items-center gap-2 text-base font-semibold text-gray-900">📄 Dokumentet e mia</h2>
+              <h2 class="flex items-center gap-2 text-base font-semibold text-gray-900 dark:text-white">📄 Dokumentet e mia</h2>
               <label class="cursor-pointer rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-orange-600">
                 + Shto
                 <input type="file" accept=".pdf,.doc,.docx" class="hidden" @change="onResumeUpload">
               </label>
             </div>
             <p v-if="resumes.error.value" class="mb-3 text-sm text-red-600">{{ resumes.error.value }}</p>
-            <p v-if="!resumes.items.value.length" class="text-sm text-gray-400">Ende s'ke ngarkuar asnjë dokument.</p>
+            <p v-if="!resumes.items.value.length" class="text-sm text-gray-400 dark:text-gray-500">Ende s'ke ngarkuar asnjë dokument.</p>
             <ul class="flex flex-col gap-2">
               <li
                 v-for="resume in resumes.items.value"
                 :key="resume.id"
-                class="flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 px-3 py-2 text-sm transition hover:bg-gray-100"
+                class="flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 px-3 py-2 text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-800 dark:bg-gray-950"
               >
                 <a :href="resolveUrl(resume.file_url) ?? '#'" target="_blank" class="flex items-center gap-2 truncate text-brand-600 hover:underline">
                   📎 {{ resume.file_name }}
                 </a>
-                <button type="button" class="shrink-0 text-gray-400 hover:text-red-600" @click="resumes.remove(resume.id)">🗑</button>
+                <button type="button" class="shrink-0 text-gray-400 hover:text-red-600 dark:text-gray-500" @click="resumes.remove(resume.id)">🗑</button>
               </li>
             </ul>
           </div>
@@ -275,9 +275,9 @@ function formatDate(date: string | null) {
         <!-- Main column -->
         <div class="order-1 flex flex-col gap-5 lg:order-2 lg:col-span-2">
       <!-- Main profile: view mode -->
-      <div v-if="existingProfile && !isEditingProfile" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-        <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
-          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">👤 Të dhënat e profilit</h2>
+      <div v-if="existingProfile && !isEditingProfile" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4 dark:border-gray-800">
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">👤 Të dhënat e profilit</h2>
           <div class="flex items-center gap-3">
             <span v-if="saved" class="text-sm font-medium text-green-600">✓ U ruajt</span>
             <BaseButton type="button" :full-width="false" class="px-5" @click="onEditProfile">✏️ Edito</BaseButton>
@@ -286,25 +286,25 @@ function formatDate(date: string | null) {
 
         <dl class="flex flex-col gap-4 text-sm">
           <div v-if="existingProfile.headline">
-            <dt class="text-gray-500">Titulli profesional</dt>
-            <dd class="mt-0.5 font-medium text-gray-900">{{ existingProfile.headline }}</dd>
+            <dt class="text-gray-500 dark:text-gray-400">Titulli profesional</dt>
+            <dd class="mt-0.5 font-medium text-gray-900 dark:text-white">{{ existingProfile.headline }}</dd>
           </div>
           <div v-if="existingProfile.bio">
-            <dt class="text-gray-500">Përmbledhje e shkurtër</dt>
-            <dd class="mt-0.5 whitespace-pre-line text-gray-700">{{ existingProfile.bio }}</dd>
+            <dt class="text-gray-500 dark:text-gray-400">Përmbledhje e shkurtër</dt>
+            <dd class="mt-0.5 whitespace-pre-line text-gray-700 dark:text-gray-200">{{ existingProfile.bio }}</dd>
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div v-if="existingProfile.location">
-              <dt class="text-gray-500">Qyteti</dt>
-              <dd class="mt-0.5 text-gray-900">📍 {{ existingProfile.location.city }}, {{ existingProfile.location.country }}</dd>
+              <dt class="text-gray-500 dark:text-gray-400">Qyteti</dt>
+              <dd class="mt-0.5 text-gray-900 dark:text-white">📍 {{ existingProfile.location.city }}, {{ existingProfile.location.country }}</dd>
             </div>
             <div>
-              <dt class="text-gray-500">Vite përvojë</dt>
-              <dd class="mt-0.5 text-gray-900">{{ existingProfile.years_experience }}</dd>
+              <dt class="text-gray-500 dark:text-gray-400">Vite përvojë</dt>
+              <dd class="mt-0.5 text-gray-900 dark:text-white">{{ existingProfile.years_experience }}</dd>
             </div>
             <div v-if="existingProfile.expected_salary">
-              <dt class="text-gray-500">Paga e pritur</dt>
-              <dd class="mt-0.5 text-gray-900">💰 {{ existingProfile.expected_salary }} {{ existingProfile.salary_currency }}</dd>
+              <dt class="text-gray-500 dark:text-gray-400">Paga e pritur</dt>
+              <dd class="mt-0.5 text-gray-900 dark:text-white">💰 {{ existingProfile.expected_salary }} {{ existingProfile.salary_currency }}</dd>
             </div>
           </div>
           <div v-if="existingProfile.linkedin_url || existingProfile.github_url || existingProfile.portfolio_url" class="flex flex-wrap gap-4">
@@ -316,15 +316,15 @@ function formatDate(date: string | null) {
       </div>
 
       <!-- Main profile: edit mode -->
-      <div v-else class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div v-else class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <form @submit.prevent="onSubmit">
-          <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
-            <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">👤 Të dhënat e profilit</h2>
+          <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4 dark:border-gray-800">
+            <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">👤 Të dhënat e profilit</h2>
             <div class="flex items-center gap-3">
               <button
                 v-if="existingProfile"
                 type="button"
-                class="text-sm font-medium text-gray-500 hover:text-gray-700"
+                class="text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400"
                 @click="onCancelProfile"
               >
                 Anulo
@@ -342,7 +342,7 @@ function formatDate(date: string | null) {
 
             <!-- Detajet -->
             <div>
-              <p class="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+              <p class="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
                 <span>📍</span> Detajet
               </p>
               <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -360,7 +360,7 @@ function formatDate(date: string | null) {
 
             <!-- Linqe -->
             <div>
-              <p class="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+              <p class="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
                 <span>🔗</span> Linqe (opsionale)
               </p>
               <div class="flex flex-col gap-3">
@@ -376,15 +376,15 @@ function formatDate(date: string | null) {
       </div>
 
       <!-- Experience -->
-      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="mb-4 flex items-center justify-between">
-          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">💼 Përvoja e punës</h2>
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">💼 Përvoja e punës</h2>
           <button type="button" class="rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-orange-600" @click="showExperienceForm = !showExperienceForm">
             {{ showExperienceForm ? 'Mbyll' : '+ Shto' }}
           </button>
         </div>
 
-        <form v-if="showExperienceForm" class="mb-5 flex flex-col gap-3 rounded-lg bg-gray-50 p-4" @submit.prevent="onAddExperience">
+        <form v-if="showExperienceForm" class="mb-5 flex flex-col gap-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-950" @submit.prevent="onAddExperience">
           <BaseInput v-model="experienceForm.position" label="Pozita" placeholder="Frontend Developer" />
           <BaseInput v-model="experienceForm.company_name" label="Kompania" placeholder="Acme Inc." />
           <BaseTextarea v-model="experienceForm.description" label="Përshkrimi (opsional)" />
@@ -392,36 +392,36 @@ function formatDate(date: string | null) {
             <BaseInput v-model="experienceForm.start_date" label="Fillimi" type="date" />
             <BaseInput v-model="experienceForm.end_date" label="Mbarimi" type="date" :disabled="experienceForm.is_current" />
           </div>
-          <label class="flex items-center gap-2 text-sm text-gray-700">
+          <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200">
             <input v-model="experienceForm.is_current" type="checkbox">
             Aktualisht punoj këtu
           </label>
           <BaseButton type="submit" :full-width="false" class="self-start px-5">Ruaj</BaseButton>
         </form>
 
-        <p v-if="!experiences.items.value.length && !showExperienceForm" class="text-sm text-gray-400">Ende s'ke shtuar përvojë pune.</p>
+        <p v-if="!experiences.items.value.length && !showExperienceForm" class="text-sm text-gray-400 dark:text-gray-500">Ende s'ke shtuar përvojë pune.</p>
         <ul class="flex flex-col gap-3">
-          <li v-for="exp in experiences.items.value" :key="exp.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+          <li v-for="exp in experiences.items.value" :key="exp.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0 dark:border-gray-800">
             <div>
-              <p class="font-medium text-gray-900">{{ exp.position }}</p>
-              <p class="text-sm text-gray-600">{{ exp.company_name }}</p>
-              <p class="text-xs text-gray-400">{{ formatDate(exp.start_date) }} — {{ exp.is_current ? 'Aktualisht' : formatDate(exp.end_date) }}</p>
+              <p class="font-medium text-gray-900 dark:text-white">{{ exp.position }}</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">{{ exp.company_name }}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-500">{{ formatDate(exp.start_date) }} — {{ exp.is_current ? 'Aktualisht' : formatDate(exp.end_date) }}</p>
             </div>
-            <button type="button" class="text-gray-400 hover:text-red-600" @click="experiences.remove(exp.id)">🗑</button>
+            <button type="button" class="text-gray-400 hover:text-red-600 dark:text-gray-500" @click="experiences.remove(exp.id)">🗑</button>
           </li>
         </ul>
       </div>
 
       <!-- Education -->
-      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="mb-4 flex items-center justify-between">
-          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">🎓 Edukimi</h2>
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">🎓 Edukimi</h2>
           <button type="button" class="rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-orange-600" @click="showEducationForm = !showEducationForm">
             {{ showEducationForm ? 'Mbyll' : '+ Shto' }}
           </button>
         </div>
 
-        <form v-if="showEducationForm" class="mb-5 flex flex-col gap-3 rounded-lg bg-gray-50 p-4" @submit.prevent="onAddEducation">
+        <form v-if="showEducationForm" class="mb-5 flex flex-col gap-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-950" @submit.prevent="onAddEducation">
           <BaseInput v-model="educationForm.degree" label="Diploma / Programi" placeholder="Computer Science" />
           <BaseInput v-model="educationForm.institution" label="Institucioni" placeholder="University for Business and Technology" />
           <BaseInput v-model="educationForm.field" label="Fusha" placeholder="Software Engineering" />
@@ -433,29 +433,29 @@ function formatDate(date: string | null) {
           <BaseButton type="submit" :full-width="false" class="self-start px-5">Ruaj</BaseButton>
         </form>
 
-        <p v-if="!educations.items.value.length && !showEducationForm" class="text-sm text-gray-400">Ende s'ke shtuar edukim.</p>
+        <p v-if="!educations.items.value.length && !showEducationForm" class="text-sm text-gray-400 dark:text-gray-500">Ende s'ke shtuar edukim.</p>
         <ul class="flex flex-col gap-3">
-          <li v-for="edu in educations.items.value" :key="edu.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+          <li v-for="edu in educations.items.value" :key="edu.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0 dark:border-gray-800">
             <div>
-              <p class="font-medium text-gray-900">{{ edu.degree }}</p>
-              <p class="text-sm text-gray-600">{{ edu.institution }}</p>
-              <p class="text-xs text-gray-400">{{ formatDate(edu.start_date) }} — {{ formatDate(edu.end_date) || 'Prezent' }}</p>
+              <p class="font-medium text-gray-900 dark:text-white">{{ edu.degree }}</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">{{ edu.institution }}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-500">{{ formatDate(edu.start_date) }} — {{ formatDate(edu.end_date) || 'Prezent' }}</p>
             </div>
-            <button type="button" class="text-gray-400 hover:text-red-600" @click="educations.remove(edu.id)">🗑</button>
+            <button type="button" class="text-gray-400 hover:text-red-600 dark:text-gray-500" @click="educations.remove(edu.id)">🗑</button>
           </li>
         </ul>
       </div>
 
       <!-- Languages -->
-      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="mb-4 flex items-center justify-between">
-          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">🌐 Gjuhët e huaja</h2>
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">🌐 Gjuhët e huaja</h2>
           <button type="button" class="rounded-md bg-orange-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-orange-600" @click="showLanguageForm = !showLanguageForm">
             {{ showLanguageForm ? 'Mbyll' : '+ Shto' }}
           </button>
         </div>
 
-        <form v-if="showLanguageForm" class="mb-5 flex flex-col gap-3 rounded-lg bg-gray-50 p-4" @submit.prevent="onAddLanguage">
+        <form v-if="showLanguageForm" class="mb-5 flex flex-col gap-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-950" @submit.prevent="onAddLanguage">
           <BaseInput v-model="languageForm.name" label="Gjuha" placeholder="Anglisht" />
           <div class="grid grid-cols-2 gap-3">
             <BaseSelect v-model="languageForm.speaking" label="Të folurit" :options="proficiencyOptions" />
@@ -466,17 +466,17 @@ function formatDate(date: string | null) {
           <BaseButton type="submit" :full-width="false" class="self-start px-5">Ruaj</BaseButton>
         </form>
 
-        <p v-if="!candidateLanguages.items.value.length && !showLanguageForm" class="text-sm text-gray-400">Ende s'ke shtuar gjuhë.</p>
+        <p v-if="!candidateLanguages.items.value.length && !showLanguageForm" class="text-sm text-gray-400 dark:text-gray-500">Ende s'ke shtuar gjuhë.</p>
         <ul class="flex flex-col gap-3">
-          <li v-for="lang in candidateLanguages.items.value" :key="lang.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0">
+          <li v-for="lang in candidateLanguages.items.value" :key="lang.id" class="flex items-start justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0 dark:border-gray-800">
             <div>
-              <p class="font-medium text-gray-900">{{ lang.name }}</p>
-              <p class="text-xs text-gray-500">
+              <p class="font-medium text-gray-900 dark:text-white">{{ lang.name }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">
                 Të folurit: {{ lang.speaking.toUpperCase() }} · Të shkruarit: {{ lang.writing.toUpperCase() }} ·
                 Të dëgjuarit: {{ lang.listening.toUpperCase() }} · Të kuptuarit: {{ lang.understanding.toUpperCase() }}
               </p>
             </div>
-            <button type="button" class="text-gray-400 hover:text-red-600" @click="candidateLanguages.remove(lang.id)">🗑</button>
+            <button type="button" class="text-gray-400 hover:text-red-600 dark:text-gray-500" @click="candidateLanguages.remove(lang.id)">🗑</button>
           </li>
         </ul>
       </div>

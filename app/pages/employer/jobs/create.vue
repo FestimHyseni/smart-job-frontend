@@ -59,11 +59,11 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10">
-    <div class="w-full max-w-lg rounded-xl border border-gray-100 bg-white p-8 shadow-sm">
-      <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900">Posto job</h1>
+  <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-10 dark:bg-gray-950">
+    <div class="w-full max-w-lg rounded-xl border border-gray-100 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900 dark:text-white">Posto job</h1>
 
-      <p v-if="!company" class="text-sm text-gray-600">
+      <p v-if="!company" class="text-sm text-gray-600 dark:text-gray-400">
         Duhet të
         <NuxtLink to="/employer/company" class="font-medium text-brand-600 hover:underline">krijosh kompaninë</NuxtLink>
         para se të postosh një job.

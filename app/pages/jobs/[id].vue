@@ -23,13 +23,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 pb-16">
+  <div class="min-h-screen bg-gray-50 pb-16 dark:bg-gray-950">
     <div class="mx-auto flex max-w-3xl flex-col gap-5 px-4 pt-8">
       <NuxtLink to="/jobs" class="inline-flex w-fit items-center gap-1 text-sm font-medium text-brand-600 hover:underline">
         ← Të gjitha job-et
       </NuxtLink>
 
-      <p v-if="loading" class="text-sm text-gray-600">Duke ngarkuar...</p>
+      <p v-if="loading" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
       <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
 
       <JobDetailPanel

@@ -87,7 +87,7 @@ async function onGuestApply() {
 <template>
   <div class="flex flex-col gap-5">
     <!-- Header card -->
-    <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
+    <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <div class="flex h-16 items-center justify-end bg-gradient-to-r from-brand-600 to-brand-400 px-4">
         <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 text-sm font-extrabold text-white shadow-sm backdrop-blur-sm">
           SJ
@@ -95,15 +95,15 @@ async function onGuestApply() {
       </div>
       <div class="flex flex-col gap-4 px-6 pb-6 sm:flex-row sm:items-start sm:justify-between">
         <div class="-mt-2">
-          <h1 class="text-2xl font-semibold text-gray-900">{{ job.title }}</h1>
+          <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ job.title }}</h1>
           <NuxtLink
             v-if="job.company_id"
             :to="`/companies/${job.company_id}`"
-            class="text-gray-600 hover:text-brand-600 hover:underline"
+            class="text-gray-600 hover:text-brand-600 hover:underline dark:text-gray-400"
           >
             {{ job.company?.name }}
           </NuxtLink>
-          <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
+          <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 dark:text-gray-400">
             <span v-if="job.location">📍 {{ job.location.city }}, {{ job.location.country }}</span>
             <span class="capitalize">Niveli {{ job.experience_level }}</span>
             <span v-if="job.salary_min || job.salary_max">
@@ -122,7 +122,7 @@ async function onGuestApply() {
             class="flex items-center gap-1 whitespace-nowrap rounded-full border px-3 py-1.5 text-sm font-medium transition"
             :class="saved
               ? 'border-green-600 bg-green-600 text-white shadow-sm hover:bg-green-700'
-              : 'border-gray-300 bg-gray-100 text-gray-600 hover:border-gray-400'"
+              : 'border-gray-300 bg-gray-100 text-gray-600 hover:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400'"
             :title="saved ? 'Hiq nga të ruajturat' : 'Ruaj këtë job'"
             @click="emit('toggleSave', job.id)"
           >
@@ -133,45 +133,45 @@ async function onGuestApply() {
     </div>
 
     <!-- Description -->
-    <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-      <h2 class="mb-2 flex items-center gap-2 text-lg font-semibold text-gray-900">📝 Përshkrimi</h2>
-      <p class="whitespace-pre-line text-gray-700">{{ job.description }}</p>
+    <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <h2 class="mb-2 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">📝 Përshkrimi</h2>
+      <p class="whitespace-pre-line text-gray-700 dark:text-gray-200">{{ job.description }}</p>
     </div>
 
-    <div v-if="job.requirements" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-      <h2 class="mb-2 flex items-center gap-2 text-lg font-semibold text-gray-900">✅ Kërkesat</h2>
-      <p class="whitespace-pre-line text-gray-700">{{ job.requirements }}</p>
+    <div v-if="job.requirements" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <h2 class="mb-2 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">✅ Kërkesat</h2>
+      <p class="whitespace-pre-line text-gray-700 dark:text-gray-200">{{ job.requirements }}</p>
     </div>
 
-    <div v-if="job.skills?.length" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-      <h2 class="mb-3 flex items-center gap-2 text-lg font-semibold text-gray-900">🛠️ Aftësitë</h2>
+    <div v-if="job.skills?.length" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <h2 class="mb-3 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">🛠️ Aftësitë</h2>
       <div class="flex flex-wrap gap-2">
         <span
           v-for="skill in job.skills"
           :key="skill.id"
-          class="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700"
+          class="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700 dark:text-gray-200 dark:bg-gray-800"
         >
           {{ skill.name }}
         </span>
       </div>
     </div>
 
-    <div v-if="canApplyLoggedIn || showGuestForm" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+    <div v-if="canApplyLoggedIn || showGuestForm" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <p v-if="applySuccess" class="text-sm font-medium text-green-600">
         ✓ Aplikimi u dërgua me sukses!
-        <span v-if="showGuestForm" class="block font-normal text-gray-600">
+        <span v-if="showGuestForm" class="block font-normal text-gray-600 dark:text-gray-400">
           Kompania do të të kontaktojë përmes email-it {{ guestEmail }}.
         </span>
       </p>
-      <p v-else-if="alreadyApplied" class="text-sm font-medium text-gray-600">
+      <p v-else-if="alreadyApplied" class="text-sm font-medium text-gray-600 dark:text-gray-400">
         Ke aplikuar tashmë për këtë pozitë.
       </p>
 
       <form v-else-if="canApplyLoggedIn" class="flex flex-col gap-4" @submit.prevent="onApply">
-        <h2 class="text-lg font-semibold text-gray-900">Apliko për këtë pozitë</h2>
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Apliko për këtë pozitë</h2>
 
         <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-700">CV (PDF ose Word)</label>
+          <label class="text-sm font-medium text-gray-700 dark:text-gray-200">CV (PDF ose Word)</label>
           <input
             type="file"
             accept=".pdf,.doc,.docx"
@@ -193,7 +193,7 @@ async function onGuestApply() {
       </form>
 
       <form v-else class="flex flex-col gap-4" @submit.prevent="onGuestApply">
-        <h2 class="text-lg font-semibold text-gray-900">Apliko për këtë pozitë</h2>
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Apliko për këtë pozitë</h2>
 
         <div class="grid grid-cols-2 gap-3">
           <BaseInput v-model="guestFirstName" label="Emri" placeholder="Arben" :error="guestFieldErrors.first_name?.[0]" />
@@ -202,7 +202,7 @@ async function onGuestApply() {
         <BaseInput v-model="guestEmail" label="Email" type="email" placeholder="ti@example.com" :error="guestFieldErrors.email?.[0]" />
 
         <div class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-gray-700">CV (PDF ose Word)</label>
+          <label class="text-sm font-medium text-gray-700 dark:text-gray-200">CV (PDF ose Word)</label>
           <input
             type="file"
             accept=".pdf,.doc,.docx"

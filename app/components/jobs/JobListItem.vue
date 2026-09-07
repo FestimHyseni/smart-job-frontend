@@ -33,8 +33,8 @@ const daysAgo = computed(() => {
   <div
     role="button"
     tabindex="0"
-    class="flex w-full cursor-pointer items-start gap-3 border-b border-gray-100 px-4 py-3 text-left transition last:border-0 hover:bg-gray-50"
-    :class="active ? 'bg-brand-50/70' : ''"
+    class="flex w-full cursor-pointer items-start gap-3 border-b border-gray-100 px-4 py-3 text-left transition last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800 dark:border-gray-800"
+    :class="active ? 'bg-brand-50/70 dark:bg-brand-500/10' : ''"
     @click="emit('select', job)"
     @keydown.enter="emit('select', job)"
   >
@@ -42,9 +42,9 @@ const daysAgo = computed(() => {
       {{ job.company?.name?.[0]?.toUpperCase() || '?' }}
     </div>
     <div class="min-w-0 flex-1">
-      <p class="truncate text-sm font-semibold" :class="active ? 'text-brand-700' : 'text-gray-900'">{{ job.title }}</p>
-      <p class="truncate text-xs text-gray-500">{{ job.company?.name }}</p>
-      <div class="mt-1 flex items-center gap-3 text-xs text-gray-400">
+      <p class="truncate text-sm font-semibold" :class="active ? 'text-brand-700 dark:text-brand-400' : 'text-gray-900 dark:text-white'">{{ job.title }}</p>
+      <p class="truncate text-xs text-gray-500 dark:text-gray-400">{{ job.company?.name }}</p>
+      <div class="mt-1 flex items-center gap-3 text-xs text-gray-400 dark:text-gray-500">
         <span v-if="job.location">📍 {{ job.location.city }}</span>
         <span>🕐 {{ daysAgo }}</span>
         <span v-if="matchScore" class="rounded-full bg-green-50 px-1.5 py-0.5 font-medium text-green-700">🎯 {{ matchScore }}</span>
@@ -54,7 +54,7 @@ const daysAgo = computed(() => {
       v-if="showSave"
       type="button"
       class="shrink-0 text-lg leading-none transition"
-      :class="saved ? 'text-green-600' : 'text-gray-300 hover:text-gray-400'"
+      :class="saved ? 'text-green-600' : 'text-gray-300 hover:text-gray-400 dark:text-gray-600 dark:hover:text-gray-500'"
       :title="saved ? 'Hiq nga të ruajturat' : 'Ruaj këtë job'"
       @click="onToggleSave"
     >

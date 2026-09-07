@@ -70,26 +70,26 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 pb-16">
+  <div class="min-h-screen bg-gray-50 pb-16 dark:bg-gray-950">
     <div class="mx-auto flex max-w-2xl flex-col gap-5 px-4 pt-8">
       <!-- Header card -->
-      <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
+      <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="h-16 bg-gradient-to-r from-brand-600 to-brand-400" />
         <div class="flex items-center gap-4 px-6 pb-5">
           <div class="-mt-8 flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border-4 border-white bg-brand-50 text-2xl shadow">
             🏢
           </div>
           <div class="pt-1">
-            <h1 class="text-xl font-semibold text-gray-900">Kompania ime</h1>
-            <p class="text-sm text-gray-500">Këto të dhëna shfaqen publikisht tek shpalljet e job-eve tuaja.</p>
+            <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Kompania ime</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Këto të dhëna shfaqen publikisht tek shpalljet e job-eve tuaja.</p>
           </div>
         </div>
       </div>
 
       <!-- View mode -->
-      <div v-if="existingCompany && !isEditing" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-        <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
-          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">📋 Të dhënat e kompanisë</h2>
+      <div v-if="existingCompany && !isEditing" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4 dark:border-gray-800">
+          <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">📋 Të dhënat e kompanisë</h2>
           <div class="flex items-center gap-3">
             <span v-if="saved" class="text-sm font-medium text-green-600">✓ U ruajt</span>
             <BaseButton type="button" :full-width="false" class="px-5" @click="onEdit">✏️ Edito</BaseButton>
@@ -98,28 +98,28 @@ async function onSubmit() {
 
         <dl class="flex flex-col gap-4 text-sm">
           <div>
-            <dt class="text-gray-500">Emri i kompanisë</dt>
-            <dd class="mt-0.5 font-medium text-gray-900">{{ existingCompany.name }}</dd>
+            <dt class="text-gray-500 dark:text-gray-400">Emri i kompanisë</dt>
+            <dd class="mt-0.5 font-medium text-gray-900 dark:text-white">{{ existingCompany.name }}</dd>
           </div>
           <div v-if="existingCompany.description">
-            <dt class="text-gray-500">Përshkrimi</dt>
-            <dd class="mt-0.5 whitespace-pre-line text-gray-700">{{ existingCompany.description }}</dd>
+            <dt class="text-gray-500 dark:text-gray-400">Përshkrimi</dt>
+            <dd class="mt-0.5 whitespace-pre-line text-gray-700 dark:text-gray-200">{{ existingCompany.description }}</dd>
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div v-if="existingCompany.location">
-              <dt class="text-gray-500">Qyteti</dt>
-              <dd class="mt-0.5 text-gray-900">📍 {{ existingCompany.location.city }}, {{ existingCompany.location.country }}</dd>
+              <dt class="text-gray-500 dark:text-gray-400">Qyteti</dt>
+              <dd class="mt-0.5 text-gray-900 dark:text-white">📍 {{ existingCompany.location.city }}, {{ existingCompany.location.country }}</dd>
             </div>
             <div v-if="existingCompany.industry">
-              <dt class="text-gray-500">Industria</dt>
-              <dd class="mt-0.5 text-gray-900">🏭 {{ existingCompany.industry }}</dd>
+              <dt class="text-gray-500 dark:text-gray-400">Industria</dt>
+              <dd class="mt-0.5 text-gray-900 dark:text-white">🏭 {{ existingCompany.industry }}</dd>
             </div>
             <div v-if="existingCompany.employees_count">
-              <dt class="text-gray-500">Numri i punonjësve</dt>
-              <dd class="mt-0.5 text-gray-900">👥 {{ existingCompany.employees_count }}</dd>
+              <dt class="text-gray-500 dark:text-gray-400">Numri i punonjësve</dt>
+              <dd class="mt-0.5 text-gray-900 dark:text-white">👥 {{ existingCompany.employees_count }}</dd>
             </div>
             <div v-if="existingCompany.website">
-              <dt class="text-gray-500">Website</dt>
+              <dt class="text-gray-500 dark:text-gray-400">Website</dt>
               <dd class="mt-0.5">
                 <a :href="existingCompany.website" target="_blank" class="text-brand-600 hover:underline">🔗 {{ existingCompany.website }}</a>
               </dd>
@@ -129,15 +129,15 @@ async function onSubmit() {
       </div>
 
       <!-- Edit mode -->
-      <div v-else class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div v-else class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <form @submit.prevent="onSubmit">
-          <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
-            <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900">📋 Të dhënat e kompanisë</h2>
+          <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4 dark:border-gray-800">
+            <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">📋 Të dhënat e kompanisë</h2>
             <div class="flex items-center gap-3">
               <button
                 v-if="existingCompany"
                 type="button"
-                class="text-sm font-medium text-gray-500 hover:text-gray-700"
+                class="text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400"
                 @click="onCancel"
               >
                 Anulo
@@ -173,7 +173,7 @@ async function onSubmit() {
         </form>
       </div>
 
-      <div v-if="existingCompany" class="rounded-xl border border-brand-100 bg-brand-50/50 p-4 text-center text-sm text-gray-600">
+      <div v-if="existingCompany" class="rounded-xl border border-brand-100 bg-brand-50/50 p-4 text-center text-sm text-gray-600 dark:text-gray-400">
         Gati për të postuar një job?
         <NuxtLink to="/employer/jobs/create" class="font-medium text-brand-600 hover:underline">Posto job të ri →</NuxtLink>
       </div>

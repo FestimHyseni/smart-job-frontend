@@ -88,8 +88,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <div class="border-b border-gray-100 bg-white px-4 py-4">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div class="border-b border-gray-100 bg-white px-4 py-4 dark:border-gray-800 dark:bg-gray-900">
       <form class="mx-auto grid max-w-6xl grid-cols-1 gap-3 sm:grid-cols-4 lg:grid-cols-5" @submit.prevent="applyFilters">
         <BaseInput v-model="filters.search" label="Kërko sipas pozitës së punës" placeholder="Titulli i punës" />
         <BaseSelect
@@ -129,15 +129,15 @@ onMounted(async () => {
           class="flex w-full items-center justify-between text-left"
           @click="showCvCard = !showCvCard"
         >
-          <span class="flex items-center gap-2 text-sm font-semibold text-gray-900">
+          <span class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
             🎯 Zbulo punët e përshtatshme për ty — ngarko CV-në
           </span>
-          <span class="text-gray-400">{{ showCvCard ? '▲' : '▼' }}</span>
+          <span class="text-gray-400 dark:text-gray-500">{{ showCvCard ? '▲' : '▼' }}</span>
         </button>
 
         <div v-if="showCvCard" class="mt-3 flex flex-col gap-3">
           <template v-if="!cvRec.result.value">
-            <p class="text-sm text-gray-600">Ngarko CV-në (PDF ose DOCX) dhe do të shohësh pozitat që përputhen më shumë me aftësitë e tua.</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Ngarko CV-në (PDF ose DOCX) dhe do të shohësh pozitat që përputhen më shumë me aftësitë e tua.</p>
             <div class="flex flex-wrap items-center gap-3">
               <input type="file" accept=".pdf,.docx" class="text-sm" @change="onCvFileChange">
               <BaseButton type="button" :full-width="false" :loading="cvRec.loading.value" :disabled="!cvFile" class="px-5" @click="onAnalyzeCv">
@@ -149,15 +149,15 @@ onMounted(async () => {
 
           <template v-else>
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <p v-if="cvRec.result.value.matched_skills.length" class="text-sm text-gray-700">
+              <p v-if="cvRec.result.value.matched_skills.length" class="text-sm text-gray-700 dark:text-gray-200">
                 <span class="font-medium">Aftësitë e gjetura:</span> {{ cvRec.result.value.matched_skills.join(', ') }}
               </p>
-              <p v-else class="text-sm text-gray-500">S'u identifikuan aftësi të njohura në CV-në tënde.</p>
+              <p v-else class="text-sm text-gray-500 dark:text-gray-400">S'u identifikuan aftësi të njohura në CV-në tënde.</p>
               <button type="button" class="text-sm font-medium text-brand-600 hover:underline" @click="onClearRecommendation">
                 ✕ Pastro rekomandimin
               </button>
             </div>
-            <p v-if="!cvRec.result.value.jobs.length" class="text-sm text-gray-500">
+            <p v-if="!cvRec.result.value.jobs.length" class="text-sm text-gray-500 dark:text-gray-400">
               S'u gjetën pozita që përputhen me aftësitë e identifikuara.
             </p>
             <p v-else class="text-sm font-medium text-green-700">
@@ -169,18 +169,18 @@ onMounted(async () => {
     </div>
 
     <div class="mx-auto max-w-6xl px-4 py-6">
-      <p v-if="loading" class="text-sm text-gray-600">Duke ngarkuar...</p>
+      <p v-if="loading" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
       <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
-      <p v-else-if="!displayedJobs.length" class="text-sm text-gray-600">Nuk u gjet asnjë pozitë.</p>
+      <p v-else-if="!displayedJobs.length" class="text-sm text-gray-600 dark:text-gray-400">Nuk u gjet asnjë pozitë.</p>
 
       <div v-else class="flex items-start gap-5">
         <!-- List pane -->
         <div
-          class="w-full shrink-0 flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm sm:w-80 lg:w-96"
+          class="w-full shrink-0 flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm sm:w-80 lg:w-96 dark:border-gray-800 dark:bg-gray-900"
           :class="selectedJob ? 'hidden sm:flex' : 'flex'"
         >
-          <div class="border-b border-gray-100 px-4 py-3 text-sm text-gray-500">
-            Gjetur <span class="font-semibold text-gray-900">{{ displayedJobs.length }}</span> punë
+          <div class="border-b border-gray-100 px-4 py-3 text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400">
+            Gjetur <span class="font-semibold text-gray-900 dark:text-white">{{ displayedJobs.length }}</span> punë
           </div>
           <div class="max-h-[calc(100vh-11rem)] overflow-y-auto">
             <JobListItem
@@ -216,7 +216,7 @@ onMounted(async () => {
             :saved="savedJobs.isSaved(selectedJob.id)"
             @toggle-save="savedJobs.toggle"
           />
-          <div v-else class="flex h-64 items-center justify-center rounded-xl border border-dashed border-gray-200 text-sm text-gray-400">
+          <div v-else class="flex h-64 items-center justify-center rounded-xl border border-dashed border-gray-200 text-sm text-gray-400 dark:border-gray-700 dark:text-gray-500">
             Zgjedh një pozitë nga lista për të parë detajet.
           </div>
         </div>

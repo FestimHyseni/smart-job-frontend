@@ -16,26 +16,26 @@ onMounted(savedJobs.fetchMine)
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 px-4 py-10">
+  <div class="min-h-screen bg-gray-50 px-4 py-10 dark:bg-gray-950">
     <div class="mx-auto max-w-4xl">
-      <h1 class="mb-6 text-2xl font-semibold text-gray-900">Job-et e ruajtura</h1>
+      <h1 class="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">Job-et e ruajtura</h1>
 
       <div v-if="savedJobs.items.value.length" class="relative mb-4">
-        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">🔍</span>
         <input
           v-model="search"
           type="text"
           placeholder="Kërko sipas titullit ose kompanisë..."
-          class="w-full rounded-md border border-gray-300 py-2 pl-9 pr-3 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/40"
+          class="w-full rounded-md border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/40 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
         >
       </div>
 
-      <p v-if="savedJobs.loading.value" class="text-sm text-gray-600">Duke ngarkuar...</p>
+      <p v-if="savedJobs.loading.value" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
       <p v-else-if="savedJobs.error.value" class="text-sm text-red-600">{{ savedJobs.error.value }}</p>
-      <p v-else-if="!savedJobs.items.value.length" class="text-sm text-gray-500">
+      <p v-else-if="!savedJobs.items.value.length" class="text-sm text-gray-500 dark:text-gray-400">
         Ende s'ke ruajtur asnjë job. <NuxtLink to="/jobs" class="text-brand-600 hover:underline">Shfleto job-et →</NuxtLink>
       </p>
-      <p v-else-if="!filteredSavedJobs.length" class="text-sm text-gray-500">Asnjë rezultat për "{{ search }}".</p>
+      <p v-else-if="!filteredSavedJobs.length" class="text-sm text-gray-500 dark:text-gray-400">Asnjë rezultat për "{{ search }}".</p>
 
       <div v-else class="flex flex-col gap-4">
         <JobCard
