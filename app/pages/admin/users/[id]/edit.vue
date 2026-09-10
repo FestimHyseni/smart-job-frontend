@@ -47,7 +47,7 @@ async function onSubmit() {
     <div class="w-full max-w-sm rounded-xl border border-gray-100 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900 dark:text-white">Edito përdoruesin</h1>
 
-      <p v-if="notFound" class="text-sm text-red-600">Përdoruesi nuk u gjet.</p>
+      <p v-if="notFound" class="text-sm text-red-600 dark:text-red-400">Përdoruesi nuk u gjet.</p>
 
       <form v-else class="flex flex-col gap-4" @submit.prevent="onSubmit">
         <BaseInput v-model="form.name" label="Emri i plotë" placeholder="Arben Krasniqi" :error="fieldErrors.name?.[0]" />
@@ -76,7 +76,7 @@ async function onSubmit() {
             <option value="employer">Employer</option>
             <option value="admin">Admin</option>
           </select>
-          <p v-if="fieldErrors.role?.[0]" class="text-sm text-red-600">{{ fieldErrors.role[0] }}</p>
+          <p v-if="fieldErrors.role?.[0]" class="text-sm text-red-600 dark:text-red-400">{{ fieldErrors.role[0] }}</p>
         </div>
 
         <BaseInput
@@ -87,7 +87,7 @@ async function onSubmit() {
           :error="fieldErrors.phone?.[0]"
         />
 
-        <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+        <p v-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
 
         <BaseButton type="submit" :loading="loading">Ruaj ndryshimet</BaseButton>
       </form>

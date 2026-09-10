@@ -45,7 +45,7 @@ onMounted(fetchUsers)
       </div>
 
       <div class="relative mb-4">
-        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">🔍</span>
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-400">🔍</span>
         <input
           v-model="search"
           type="text"
@@ -55,7 +55,7 @@ onMounted(fetchUsers)
       </div>
 
       <p v-if="loading" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
-      <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
+      <p v-else-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
       <p v-else-if="!users.length" class="text-sm text-gray-600 dark:text-gray-400">S'u gjet asnjë përdorues.</p>
       <p v-else-if="!filteredUsers.length" class="text-sm text-gray-500 dark:text-gray-400">Asnjë rezultat për "{{ search }}".</p>
 
@@ -86,7 +86,7 @@ onMounted(fetchUsers)
                 <button
                   v-if="user.id !== authStore.user?.id"
                   type="button"
-                  class="ml-3 font-medium text-red-600 hover:underline disabled:opacity-50"
+                  class="ml-3 font-medium text-red-600 hover:underline disabled:opacity-50 dark:text-red-400"
                   :disabled="deletingId === user.id"
                   @click="onDelete(user.id, user.name)"
                 >

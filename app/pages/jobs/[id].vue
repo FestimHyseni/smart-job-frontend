@@ -30,7 +30,7 @@ onMounted(async () => {
       </NuxtLink>
 
       <p v-if="loading" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
-      <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
+      <p v-else-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
 
       <JobDetailPanel
         v-else-if="job"

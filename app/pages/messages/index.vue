@@ -26,7 +26,7 @@ onMounted(fetchMine)
       <h1 class="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">Mesazhet</h1>
 
       <div v-if="conversations.length" class="relative mb-4">
-        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">🔍</span>
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-400">🔍</span>
         <input
           v-model="search"
           type="text"
@@ -36,7 +36,7 @@ onMounted(fetchMine)
       </div>
 
       <p v-if="loading" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
-      <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
+      <p v-else-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
       <p v-else-if="!conversations.length" class="text-sm text-gray-500 dark:text-gray-400">Ende s'ke asnjë bisedë.</p>
       <p v-else-if="!filteredConversations.length" class="text-sm text-gray-500 dark:text-gray-400">Asnjë rezultat për "{{ search }}".</p>
 

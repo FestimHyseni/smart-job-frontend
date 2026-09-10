@@ -69,7 +69,7 @@ async function onSubmit() {
         para se të postosh një job.
       </p>
 
-      <p v-else-if="created" class="text-sm font-medium text-green-600">
+      <p v-else-if="created" class="text-sm font-medium text-green-600 dark:text-green-400">
         Job-i u postua me sukses!
         <NuxtLink to="/employer/jobs" class="font-medium text-brand-600 hover:underline">Shiko job-et e mia</NuxtLink>
       </p>
@@ -122,7 +122,7 @@ async function onSubmit() {
         <BaseInput v-model="form.salary_currency" label="Monedha" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
         <BaseInput v-model="form.deadline" label="Afati i aplikimit" type="date" :error="fieldErrors.deadline?.[0]" />
 
-        <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+        <p v-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
 
         <BaseButton type="submit" :loading="loading">Posto job-in</BaseButton>
       </form>

@@ -44,10 +44,10 @@ const daysAgo = computed(() => {
     <div class="min-w-0 flex-1">
       <p class="truncate text-sm font-semibold" :class="active ? 'text-brand-700 dark:text-brand-400' : 'text-gray-900 dark:text-white'">{{ job.title }}</p>
       <p class="truncate text-xs text-gray-500 dark:text-gray-400">{{ job.company?.name }}</p>
-      <div class="mt-1 flex items-center gap-3 text-xs text-gray-400 dark:text-gray-500">
+      <div class="mt-1 flex items-center gap-3 text-xs text-gray-400 dark:text-gray-400">
         <span v-if="job.location">📍 {{ job.location.city }}</span>
         <span>🕐 {{ daysAgo }}</span>
-        <span v-if="matchScore" class="rounded-full bg-green-50 px-1.5 py-0.5 font-medium text-green-700">🎯 {{ matchScore }}</span>
+        <span v-if="matchScore" class="rounded-full bg-green-50 px-1.5 py-0.5 font-medium text-green-700 dark:text-green-400">🎯 {{ matchScore }}</span>
       </div>
     </div>
     <button

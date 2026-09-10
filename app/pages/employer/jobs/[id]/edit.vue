@@ -77,7 +77,7 @@ async function onSubmit() {
     <div class="w-full max-w-lg rounded-xl border border-gray-100 bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900 dark:text-white">Edito job-in</h1>
 
-      <p v-if="notFound" class="text-sm text-red-600">Job-i nuk u gjet.</p>
+      <p v-if="notFound" class="text-sm text-red-600 dark:text-red-400">Job-i nuk u gjet.</p>
 
       <form v-else class="flex flex-col gap-4" @submit.prevent="onSubmit">
         <BaseInput v-model="form.title" label="Titulli i job-it" placeholder="Senior Backend Developer" :error="fieldErrors.title?.[0]" />
@@ -127,8 +127,8 @@ async function onSubmit() {
         <BaseInput v-model="form.salary_currency" label="Monedha" placeholder="EUR" :error="fieldErrors.salary_currency?.[0]" />
         <BaseInput v-model="form.deadline" label="Afati i aplikimit" type="date" :error="fieldErrors.deadline?.[0]" />
 
-        <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
-        <p v-if="saved" class="text-sm font-medium text-green-600">Job-i u përditësua me sukses.</p>
+        <p v-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
+        <p v-if="saved" class="text-sm font-medium text-green-600 dark:text-green-400">Job-i u përditësua me sukses.</p>
 
         <BaseButton type="submit" :loading="loading">Ruaj ndryshimet</BaseButton>
       </form>

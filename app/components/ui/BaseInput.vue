@@ -23,6 +23,6 @@ defineEmits<{
       :class="error ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     >
-    <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+    <p v-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
   </div>
 </template>

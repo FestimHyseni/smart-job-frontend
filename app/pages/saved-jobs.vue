@@ -21,7 +21,7 @@ onMounted(savedJobs.fetchMine)
       <h1 class="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">Job-et e ruajtura</h1>
 
       <div v-if="savedJobs.items.value.length" class="relative mb-4">
-        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">🔍</span>
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-400">🔍</span>
         <input
           v-model="search"
           type="text"
@@ -31,7 +31,7 @@ onMounted(savedJobs.fetchMine)
       </div>
 
       <p v-if="savedJobs.loading.value" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
-      <p v-else-if="savedJobs.error.value" class="text-sm text-red-600">{{ savedJobs.error.value }}</p>
+      <p v-else-if="savedJobs.error.value" class="text-sm text-red-600 dark:text-red-400">{{ savedJobs.error.value }}</p>
       <p v-else-if="!savedJobs.items.value.length" class="text-sm text-gray-500 dark:text-gray-400">
         Ende s'ke ruajtur asnjë job. <NuxtLink to="/jobs" class="text-brand-600 hover:underline">Shfleto job-et →</NuxtLink>
       </p>

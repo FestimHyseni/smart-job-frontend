@@ -50,7 +50,7 @@ const skillLevelLabels: Record<string, string> = {
       </NuxtLink>
 
       <p v-if="loading" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
-      <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
+      <p v-else-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
 
       <template v-else-if="candidate">
         <!-- Header card -->
@@ -126,7 +126,7 @@ const skillLevelLabels: Record<string, string> = {
             <li v-for="exp in candidate.experiences" :key="exp.id" class="border-b border-gray-100 pb-3 last:border-0 last:pb-0 dark:border-gray-800">
               <p class="font-medium text-gray-900 dark:text-white">{{ exp.position }}</p>
               <p class="text-sm text-gray-600 dark:text-gray-400">{{ exp.company_name }}</p>
-              <p class="text-xs text-gray-400 dark:text-gray-500">{{ formatDate(exp.start_date) }} — {{ exp.is_current ? 'Aktualisht' : formatDate(exp.end_date) }}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-400">{{ formatDate(exp.start_date) }} — {{ exp.is_current ? 'Aktualisht' : formatDate(exp.end_date) }}</p>
               <p v-if="exp.description" class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ exp.description }}</p>
             </li>
           </ul>
@@ -139,7 +139,7 @@ const skillLevelLabels: Record<string, string> = {
             <li v-for="edu in candidate.educations" :key="edu.id" class="border-b border-gray-100 pb-3 last:border-0 last:pb-0 dark:border-gray-800">
               <p class="font-medium text-gray-900 dark:text-white">{{ edu.degree }}</p>
               <p class="text-sm text-gray-600 dark:text-gray-400">{{ edu.institution }}</p>
-              <p class="text-xs text-gray-400 dark:text-gray-500">{{ formatDate(edu.start_date) }} — {{ formatDate(edu.end_date) || 'Prezent' }}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-400">{{ formatDate(edu.start_date) }} — {{ formatDate(edu.end_date) || 'Prezent' }}</p>
             </li>
           </ul>
         </div>

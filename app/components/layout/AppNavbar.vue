@@ -193,7 +193,7 @@ const tabLinkClass = (path: string) =>
               <NuxtLink :to="profileLink" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-800">
                 👤 Profili im
               </NuxtLink>
-              <button type="button" class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 transition hover:bg-red-50 dark:hover:bg-red-500/10" @click="onLogout">
+              <button type="button" class="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 transition hover:bg-red-50 dark:hover:bg-red-500/10 dark:text-red-400" @click="onLogout">
                 🚪 Dil
               </button>
             </div>
@@ -275,7 +275,7 @@ const tabLinkClass = (path: string) =>
               </span>
               {{ authStore.user?.name }}
             </span>
-            <button class="rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-50" @click="onLogout">
+            <button class="rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-50 dark:text-red-400" @click="onLogout">
               Dil
             </button>
           </div>

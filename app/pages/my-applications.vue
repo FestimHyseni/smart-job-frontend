@@ -36,7 +36,7 @@ onMounted(fetchMine)
       <h1 class="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">Aplikimet e mia</h1>
 
       <div v-if="applications.length" class="relative mb-4">
-        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">🔍</span>
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-400">🔍</span>
         <input
           v-model="search"
           type="text"
@@ -46,7 +46,7 @@ onMounted(fetchMine)
       </div>
 
       <p v-if="loading" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
-      <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
+      <p v-else-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
       <p v-else-if="!applications.length" class="text-sm text-gray-500 dark:text-gray-400">
         Ende s'ke aplikuar për asnjë job. <NuxtLink to="/jobs" class="text-brand-600 hover:underline">Shfleto job-et →</NuxtLink>
       </p>
@@ -60,7 +60,7 @@ onMounted(fetchMine)
                 {{ application.job?.title }}
               </NuxtLink>
               <p class="text-sm text-gray-500 dark:text-gray-400">{{ application.job?.company?.name }}</p>
-              <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Aplikuar më {{ formatDate(application.applied_at) }}</p>
+              <p class="mt-1 text-xs text-gray-400 dark:text-gray-400">Aplikuar më {{ formatDate(application.applied_at) }}</p>
             </div>
             <ApplicationStatusBadge :status="application.status" />
           </div>
@@ -83,12 +83,12 @@ onMounted(fetchMine)
               class="rounded-md bg-purple-50 p-3 text-sm text-purple-800"
             >
               <p class="font-medium">📅 Intervistë e caktuar — {{ formatInterviewDate(interview.scheduled_at) }}</p>
-              <p class="text-purple-600">{{ typeLabels[interview.type] }}</p>
-              <p v-if="interview.location" class="text-purple-600">📍 {{ interview.location }}</p>
-              <a v-if="interview.meeting_url" :href="interview.meeting_url" target="_blank" class="text-purple-600 underline">
+              <p class="text-purple-600 dark:text-purple-400">{{ typeLabels[interview.type] }}</p>
+              <p v-if="interview.location" class="text-purple-600 dark:text-purple-400">📍 {{ interview.location }}</p>
+              <a v-if="interview.meeting_url" :href="interview.meeting_url" target="_blank" class="text-purple-600 underline dark:text-purple-400">
                 🔗 {{ interview.meeting_url }}
               </a>
-              <p v-if="interview.notes" class="mt-1 text-purple-600">{{ interview.notes }}</p>
+              <p v-if="interview.notes" class="mt-1 text-purple-600 dark:text-purple-400">{{ interview.notes }}</p>
             </div>
           </div>
         </li>

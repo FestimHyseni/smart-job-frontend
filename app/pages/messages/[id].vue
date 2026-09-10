@@ -45,13 +45,13 @@ onUnmounted(() => {
       </NuxtLink>
 
       <p v-if="loading && !current" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
-      <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
+      <p v-else-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
 
       <template v-else-if="current">
         <h1 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">{{ otherParticipant(current)?.name }}</h1>
 
         <div class="flex flex-1 flex-col gap-3 overflow-y-auto rounded-xl border border-gray-100 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-          <p v-if="!current.messages.length" class="text-sm text-gray-400 dark:text-gray-500">Ende s'ka mesazhe. Fillo bisedën!</p>
+          <p v-if="!current.messages.length" class="text-sm text-gray-400 dark:text-gray-400">Ende s'ka mesazhe. Fillo bisedën!</p>
           <div
             v-for="message in current.messages"
             :key="message.id"
@@ -64,7 +64,7 @@ onUnmounted(() => {
             >
               {{ message.message }}
             </div>
-            <span class="mt-1 text-xs text-gray-400 dark:text-gray-500">{{ formatTime(message.created_at) }}</span>
+            <span class="mt-1 text-xs text-gray-400 dark:text-gray-400">{{ formatTime(message.created_at) }}</span>
           </div>
         </div>
 

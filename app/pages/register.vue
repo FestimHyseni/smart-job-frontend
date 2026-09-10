@@ -69,7 +69,7 @@ async function onSubmit() {
             <option value="candidate">Kandidat</option>
             <option value="employer">Employer</option>
           </select>
-          <p v-if="fieldErrors.role?.[0]" class="text-sm text-red-600">{{ fieldErrors.role[0] }}</p>
+          <p v-if="fieldErrors.role?.[0]" class="text-sm text-red-600 dark:text-red-400">{{ fieldErrors.role[0] }}</p>
         </div>
 
         <BaseInput
@@ -80,7 +80,7 @@ async function onSubmit() {
           :error="fieldErrors.phone?.[0]"
         />
 
-        <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+        <p v-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
 
         <BaseButton type="submit" :loading="loading">Krijo llogari</BaseButton>
       </form>

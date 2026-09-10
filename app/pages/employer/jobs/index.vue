@@ -71,7 +71,7 @@ onMounted(fetchMyJobs)
       </div>
 
       <div v-if="jobs.length" class="relative mb-4">
-        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">🔍</span>
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-400">🔍</span>
         <input
           v-model="search"
           type="text"
@@ -81,7 +81,7 @@ onMounted(fetchMyJobs)
       </div>
 
       <p v-if="loading" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
-      <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
+      <p v-else-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
       <p v-else-if="!jobs.length" class="text-sm text-gray-500 dark:text-gray-400">
         Ende s'ke postuar asnjë job. Sigurohu që ke krijuar
         <NuxtLink to="/employer/company" class="text-brand-600 hover:underline">kompaninë</NuxtLink> tënde më parë.
@@ -110,7 +110,7 @@ onMounted(fetchMyJobs)
             <button
               v-if="job.status === 'draft' || job.status === 'closed'"
               type="button"
-              class="font-medium text-green-600 hover:underline"
+              class="font-medium text-green-600 hover:underline dark:text-green-400"
               @click="togglePublish(job)"
             >
               Publiko
@@ -118,7 +118,7 @@ onMounted(fetchMyJobs)
             <button
               v-else-if="job.status === 'published'"
               type="button"
-              class="font-medium text-red-600 hover:underline"
+              class="font-medium text-red-600 hover:underline dark:text-red-400"
               @click="togglePublish(job)"
             >
               Mbyll shpalljen
@@ -132,7 +132,7 @@ onMounted(fetchMyJobs)
             </button>
             <button
               type="button"
-              class="ml-auto font-medium text-gray-400 hover:text-red-600 dark:text-gray-500"
+              class="ml-auto font-medium text-gray-400 hover:text-red-600 dark:text-gray-400"
               @click="onDelete(job.id)"
             >
               🗑 Fshi
@@ -154,7 +154,7 @@ onMounted(fetchMyJobs)
                   :title="`${formatDay(day.date)}: ${day.count} shikime`"
                 />
               </div>
-              <div class="mt-1 flex justify-between text-[10px] text-gray-400 dark:text-gray-500">
+              <div class="mt-1 flex justify-between text-[10px] text-gray-400 dark:text-gray-400">
                 <span>{{ formatDay(statsCache[job.id]!.daily[0]!.date) }}</span>
                 <span>{{ formatDay(statsCache[job.id]!.daily[statsCache[job.id]!.daily.length - 1]!.date) }}</span>
               </div>

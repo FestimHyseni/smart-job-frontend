@@ -91,7 +91,7 @@ async function onSubmit() {
         <div class="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4 dark:border-gray-800">
           <h2 class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">📋 Të dhënat e kompanisë</h2>
           <div class="flex items-center gap-3">
-            <span v-if="saved" class="text-sm font-medium text-green-600">✓ U ruajt</span>
+            <span v-if="saved" class="text-sm font-medium text-green-600 dark:text-green-400">✓ U ruajt</span>
             <BaseButton type="button" :full-width="false" class="px-5" @click="onEdit">✏️ Edito</BaseButton>
           </div>
         </div>
@@ -168,7 +168,7 @@ async function onSubmit() {
             </div>
             <BaseInput v-model="form.website" label="Website (opsionale)" placeholder="https://..." :error="fieldErrors.website?.[0]" />
 
-            <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+            <p v-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
           </div>
         </form>
       </div>

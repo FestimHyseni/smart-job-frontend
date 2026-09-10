@@ -24,6 +24,6 @@ defineEmits<{
       <option v-if="placeholder" value="">{{ placeholder }}</option>
       <option v-for="option in options" :key="option.value" :value="option.value">{{ option.label }}</option>
     </select>
-    <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+    <p v-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
   </div>
 </template>

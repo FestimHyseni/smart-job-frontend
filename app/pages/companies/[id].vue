@@ -32,7 +32,7 @@ onMounted(async () => {
       </NuxtLink>
 
       <p v-if="companyLoading" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
-      <p v-else-if="companyError" class="text-sm text-red-600">{{ companyError }}</p>
+      <p v-else-if="companyError" class="text-sm text-red-600 dark:text-red-400">{{ companyError }}</p>
 
       <template v-else-if="company">
         <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
@@ -65,7 +65,7 @@ onMounted(async () => {
           <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Job-et e hapura</h2>
 
           <p v-if="loading" class="text-sm text-gray-600 dark:text-gray-400">Duke ngarkuar...</p>
-          <p v-else-if="error" class="text-sm text-red-600">{{ error }}</p>
+          <p v-else-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
           <p v-else-if="!jobs.length" class="text-sm text-gray-500 dark:text-gray-400">Kjo kompani s'ka ende job-e të hapura.</p>
 
           <div v-else class="flex flex-col gap-4">

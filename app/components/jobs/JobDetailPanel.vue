@@ -157,7 +157,7 @@ async function onGuestApply() {
     </div>
 
     <div v-if="canApplyLoggedIn || showGuestForm" class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-      <p v-if="applySuccess" class="text-sm font-medium text-green-600">
+      <p v-if="applySuccess" class="text-sm font-medium text-green-600 dark:text-green-400">
         ✓ Aplikimi u dërgua me sukses!
         <span v-if="showGuestForm" class="block font-normal text-gray-600 dark:text-gray-400">
           Kompania do të të kontaktojë përmes email-it {{ guestEmail }}.
@@ -187,7 +187,7 @@ async function onGuestApply() {
           placeholder="Përshkruaj shkurt përvojën tënde relevante për këtë pozitë..."
         />
 
-        <p v-if="applyError" class="text-sm text-red-600">{{ applyError }}</p>
+        <p v-if="applyError" class="text-sm text-red-600 dark:text-red-400">{{ applyError }}</p>
 
         <BaseButton type="submit" :loading="applying" :disabled="!resumeFile">Dërgo aplikimin</BaseButton>
       </form>
@@ -209,7 +209,7 @@ async function onGuestApply() {
             class="text-sm"
             @change="onResumeChange"
           >
-          <p v-if="guestFieldErrors.resume?.[0]" class="text-sm text-red-600">{{ guestFieldErrors.resume[0] }}</p>
+          <p v-if="guestFieldErrors.resume?.[0]" class="text-sm text-red-600 dark:text-red-400">{{ guestFieldErrors.resume[0] }}</p>
         </div>
 
         <BaseTextarea v-model="coverLetter" label="Letër motivuese (opsionale)" placeholder="Pse je kandidati i përshtatshëm?" />
@@ -219,7 +219,7 @@ async function onGuestApply() {
           placeholder="Përshkruaj shkurt përvojën tënde relevante për këtë pozitë..."
         />
 
-        <p v-if="guestApplyError" class="text-sm text-red-600">{{ guestApplyError }}</p>
+        <p v-if="guestApplyError" class="text-sm text-red-600 dark:text-red-400">{{ guestApplyError }}</p>
 
         <BaseButton type="submit" :loading="guestApplying" :disabled="!resumeFile || !guestFirstName || !guestLastName || !guestEmail">
           Dërgo aplikimin

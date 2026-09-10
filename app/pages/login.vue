@@ -42,7 +42,7 @@ async function onSubmit() {
           :error="fieldErrors.password?.[0]"
         />
 
-        <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+        <p v-if="error" class="text-sm text-red-600 dark:text-red-400">{{ error }}</p>
 
         <BaseButton type="submit" :loading="loading">Kyçu</BaseButton>
       </form>
