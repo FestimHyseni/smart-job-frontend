@@ -53,16 +53,24 @@ onUnmounted(() => {
         <div class="flex flex-1 flex-col gap-3 overflow-y-auto rounded-xl border border-gray-100 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
           <p v-if="!current.messages.length" class="text-sm text-gray-400 dark:text-gray-400">Ende s'ka mesazhe. Fillo bisedën!</p>
           <div
-            v-for="message in current.messages"
+            v-for="(message, index) in current.messages"
             :key="message.id"
             class="flex flex-col"
             :class="message.sender_id === authStore.user?.id ? 'items-end' : 'items-start'"
           >
-            <div
-              class="max-w-xs rounded-lg px-3 py-2 text-sm"
-              :class="message.sender_id === authStore.user?.id ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100'"
-            >
-              {{ message.message }}
+            <div class="flex items-center gap-1.5" :class="message.sender_id === authStore.user?.id ? 'flex-row-reverse' : 'flex-row'">
+              <div
+                class="max-w-xs rounded-lg px-3 py-2 text-sm"
+                :class="message.sender_id === authStore.user?.id ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100'"
+              >
+                {{ message.message }}
+              </div>
+              <span
+                class="shrink-0 rounded-full bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+                :title="`Mesazhi nr. ${index + 1} në këtë bisedë`"
+              >
+                #{{ index + 1 }}
+              </span>
             </div>
             <span class="mt-1 text-xs text-gray-400 dark:text-gray-400">{{ formatTime(message.created_at) }}</span>
           </div>

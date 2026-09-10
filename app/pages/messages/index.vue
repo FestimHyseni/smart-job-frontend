@@ -46,10 +46,16 @@ onMounted(fetchMine)
             :to="`/messages/${conversation.id}`"
             class="flex items-center justify-between rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
           >
-            <div>
+            <div class="min-w-0">
               <p class="font-medium text-gray-900 dark:text-white">{{ otherParticipant(conversation)?.name ?? 'I panjohur' }}</p>
               <p class="truncate text-sm text-gray-500 dark:text-gray-400">{{ lastMessagePreview(conversation) }}</p>
             </div>
+            <span
+              class="ml-3 shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+              :title="`${conversation.messages.length} mesazhe në këtë bisedë`"
+            >
+              {{ conversation.messages.length }}
+            </span>
           </NuxtLink>
         </li>
       </ul>
