@@ -5,7 +5,7 @@ const route = useRoute()
 const conversationId = Number(route.params.id)
 
 const authStore = useAuthStore()
-const { current, loading, error, otherParticipant, fetchThread, send } = useMessaging()
+const { current, loading, error, otherParticipant, fetchThread, send, markThreadRead } = useMessaging()
 
 const draft = ref('')
 const sending = ref(false)
@@ -29,7 +29,11 @@ let poll: ReturnType<typeof setInterval> | undefined
 
 onMounted(async () => {
   await fetchThread(conversationId)
-  poll = setInterval(() => fetchThread(conversationId), 5000)
+  if (current.value) await markThreadRead(current.value)
+  poll = setInterval(async () => {
+    await fetchThread(conversationId)
+    if (current.value) await markThreadRead(current.value)
+  }, 5000)
 })
 
 onUnmounted(() => {

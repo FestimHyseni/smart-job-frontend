@@ -5,6 +5,7 @@ const { theme, toggle: toggleTheme } = useTheme()
 const route = useRoute()
 const { resolveUrl } = useBackendOrigin()
 const { items: notifications, unreadCount, fetchMine: fetchNotifications, markAsRead, markAllAsRead } = useNotifications()
+const { unreadCount: unreadMessageCount, fetchMine: fetchConversations } = useMessaging()
 
 const profileLink = computed(() => {
   switch (authStore.user?.role) {
@@ -54,7 +55,10 @@ function formatRelative(date: string) {
 watch(
   () => authStore.isAuthenticated,
   (isAuth) => {
-    if (isAuth) fetchNotifications()
+    if (isAuth) {
+      fetchNotifications()
+      fetchConversations()
+    }
   },
   { immediate: true },
 )
@@ -70,7 +74,10 @@ watch(
 onMounted(() => {
   document.addEventListener('click', onOutsideClick)
   pollInterval = setInterval(() => {
-    if (authStore.isAuthenticated) fetchNotifications()
+    if (authStore.isAuthenticated) {
+      fetchNotifications()
+      fetchConversations()
+    }
   }, 30000)
 })
 
@@ -242,8 +249,14 @@ const tabLinkClass = (path: string) =>
         <NuxtLink v-if="authStore.user?.role === 'employer'" to="/employer/jobs" class="border-b-2 px-3 py-2.5 text-sm font-medium transition" :class="tabLinkClass('/employer/jobs')">
           📋 Job-et e mia
         </NuxtLink>
-        <NuxtLink v-if="authStore.user?.role === 'candidate' || authStore.user?.role === 'employer'" to="/messages" class="border-b-2 px-3 py-2.5 text-sm font-medium transition" :class="tabLinkClass('/messages')">
+        <NuxtLink v-if="authStore.user?.role === 'candidate' || authStore.user?.role === 'employer'" to="/messages" class="flex items-center gap-1.5 border-b-2 px-3 py-2.5 text-sm font-medium transition" :class="tabLinkClass('/messages')">
           💬 Mesazhet
+          <span
+            v-if="unreadMessageCount > 0"
+            class="flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white"
+          >
+            {{ unreadMessageCount > 9 ? '9+' : unreadMessageCount }}
+          </span>
         </NuxtLink>
         <NuxtLink v-if="authStore.user?.role === 'admin'" to="/admin/users" class="border-b-2 px-3 py-2.5 text-sm font-medium transition" :class="tabLinkClass('/admin/users')">
           👥 Përdoruesit
@@ -262,7 +275,15 @@ const tabLinkClass = (path: string) =>
           <NuxtLink v-if="authStore.user?.role === 'candidate'" to="/saved-jobs" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/saved-jobs')">❤️ Të ruajtura</NuxtLink>
           <NuxtLink v-if="authStore.user?.role === 'employer'" to="/employer/company" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/employer/company')">🏢 Kompania ime</NuxtLink>
           <NuxtLink v-if="authStore.user?.role === 'employer'" to="/employer/jobs" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/employer/jobs')">📋 Job-et e mia</NuxtLink>
-          <NuxtLink v-if="authStore.user?.role === 'candidate' || authStore.user?.role === 'employer'" to="/messages" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/messages')">💬 Mesazhet</NuxtLink>
+          <NuxtLink v-if="authStore.user?.role === 'candidate' || authStore.user?.role === 'employer'" to="/messages" class="flex items-center gap-1.5 rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/messages')">
+            💬 Mesazhet
+            <span
+              v-if="unreadMessageCount > 0"
+              class="flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white"
+            >
+              {{ unreadMessageCount > 9 ? '9+' : unreadMessageCount }}
+            </span>
+          </NuxtLink>
           <NuxtLink v-if="authStore.user?.role === 'admin'" to="/admin/users" class="rounded-lg px-3 py-2 font-medium transition" :class="navLinkClass('/admin/users')">👥 Përdoruesit</NuxtLink>
 
           <div class="mt-2 flex items-center justify-between border-t border-gray-100 pt-3 dark:border-gray-800">

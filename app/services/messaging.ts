@@ -26,5 +26,12 @@ export function useMessagingService() {
     })
   }
 
-  return { listConversations, showConversation, startConversation, sendMessage }
+  function markMessageRead(messageId: number) {
+    return request<Message>(`/messages/${messageId}`, {
+      method: 'PUT',
+      body: { read_at: new Date().toISOString() },
+    })
+  }
+
+  return { listConversations, showConversation, startConversation, sendMessage, markMessageRead }
 }
