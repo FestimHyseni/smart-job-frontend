@@ -5,13 +5,16 @@ import { useCatalogService } from '~/services/catalog'
 
 definePageMeta({ middleware: 'auth' })
 
-const { loading, error, fieldErrors, fetchMyCompany, saveCompany } = useEmployerCompany()
+const { loading, error, fieldErrors, fetchMyCompany, saveCompany, uploadLogo } = useEmployerCompany()
 const catalogService = useCatalogService()
+const { resolveUrl } = useBackendOrigin()
 
 const locations = ref<Location[]>([])
 const existingCompany = ref<Company | null>(null)
 const saved = ref(false)
 const isEditing = ref(false)
+const logoUploading = ref(false)
+const logoInput = ref<HTMLInputElement | null>(null)
 
 const form = reactive<CompanyPayload>({
   name: '',
@@ -53,6 +56,19 @@ function onCancel() {
   isEditing.value = false
 }
 
+async function onLogoChange(event: Event) {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (!file || !existingCompany.value) return
+  logoUploading.value = true
+  try {
+    existingCompany.value = await uploadLogo(existingCompany.value.id, file)
+  } catch {
+    // error state is already handled by useEmployerCompany
+  } finally {
+    logoUploading.value = false
+  }
+}
+
 async function onSubmit() {
   saved.value = false
   try {
@@ -76,8 +92,27 @@ async function onSubmit() {
       <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="h-16 bg-gradient-to-r from-brand-600 to-brand-400" />
         <div class="flex items-center gap-4 px-6 pb-5">
-          <div class="-mt-8 flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border-4 border-white bg-brand-50 text-2xl shadow">
-            🏢
+          <div class="relative -mt-8 shrink-0">
+            <img
+              v-if="existingCompany?.logo_url"
+              :src="resolveUrl(existingCompany.logo_url) ?? undefined"
+              alt=""
+              class="h-16 w-16 rounded-xl border-4 border-white object-cover shadow"
+            >
+            <div v-else class="flex h-16 w-16 items-center justify-center rounded-xl border-4 border-white bg-brand-50 text-2xl shadow">
+              🏢
+            </div>
+            <button
+              v-if="existingCompany"
+              type="button"
+              class="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-brand-600 text-xs text-white shadow ring-2 ring-white hover:bg-brand-700 disabled:opacity-60"
+              :disabled="logoUploading"
+              title="Ndrysho logon"
+              @click="logoInput?.click()"
+            >
+              📷
+            </button>
+            <input ref="logoInput" type="file" accept="image/*" class="hidden" @change="onLogoChange">
           </div>
           <div class="pt-1">
             <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Kompania ime</h1>

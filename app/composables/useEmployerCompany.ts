@@ -55,5 +55,18 @@ export function useEmployerCompany() {
     }
   }
 
-  return { loading, error, fieldErrors, fetchMyCompany, saveCompany }
+  async function uploadLogo(companyId: number, file: File) {
+    loading.value = true
+    error.value = null
+    try {
+      return await employerService.uploadLogo(companyId, file)
+    } catch (err) {
+      handleError(err)
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return { loading, error, fieldErrors, fetchMyCompany, saveCompany, uploadLogo }
 }

@@ -30,5 +30,15 @@ export function useEmployerService() {
     })
   }
 
-  return { listCompanyUsers, createCompany, updateCompany, linkCompanyUser }
+  function uploadLogo(companyId: number, file: File) {
+    const formData = new FormData()
+    formData.append('logo', file)
+
+    return request<Company>(`/companies/${companyId}/logo`, {
+      method: 'POST',
+      body: formData,
+    })
+  }
+
+  return { listCompanyUsers, createCompany, updateCompany, linkCompanyUser, uploadLogo }
 }

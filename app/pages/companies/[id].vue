@@ -7,10 +7,32 @@ const companyId = Number(route.params.id)
 
 const catalogService = useCatalogService()
 const { jobs, loading, error, fetchJobs } = useJobs()
+const { resolveUrl } = useBackendOrigin()
+const authStore = useAuthStore()
+const companyFollow = useCompanyFollow()
 
 const company = ref<Company | null>(null)
 const companyLoading = ref(true)
 const companyError = ref<string | null>(null)
+const followBusy = ref(false)
+
+const isFollowing = computed(() => company.value?.is_followed ?? companyFollow.isFollowing(companyId))
+
+async function onToggleFollow() {
+  if (!authStore.isAuthenticated) {
+    await navigateTo('/login')
+    return
+  }
+  followBusy.value = true
+  try {
+    await companyFollow.toggle(companyId)
+    if (company.value) company.value.is_followed = companyFollow.isFollowing(companyId)
+  } catch {
+    // error state is already handled by useCompanyFollow
+  } finally {
+    followBusy.value = false
+  }
+}
 
 onMounted(async () => {
   try {
@@ -21,6 +43,7 @@ onMounted(async () => {
     companyLoading.value = false
   }
   await fetchJobs({ company_id: companyId })
+  if (authStore.isAuthenticated) await companyFollow.fetchMine()
 })
 </script>
 
@@ -38,15 +61,32 @@ onMounted(async () => {
         <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
           <div class="h-16 bg-gradient-to-r from-brand-600 to-brand-400" />
           <div class="flex items-center gap-4 px-6 pb-5">
-            <div class="-mt-8 flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border-4 border-white bg-brand-50 text-2xl shadow">
+            <img
+              v-if="company.logo_url"
+              :src="resolveUrl(company.logo_url) ?? undefined"
+              alt=""
+              class="-mt-8 h-16 w-16 shrink-0 rounded-xl border-4 border-white object-cover shadow"
+            >
+            <div v-else class="-mt-8 flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border-4 border-white bg-brand-50 text-2xl shadow">
               🏢
             </div>
-            <div class="pt-1">
+            <div class="flex-1 pt-1">
               <h1 class="text-xl font-semibold text-gray-900 dark:text-white">{{ company.name }}</h1>
               <p v-if="company.location" class="text-sm text-gray-500 dark:text-gray-400">
                 📍 {{ company.location.city }}, {{ company.location.country }}
               </p>
             </div>
+            <button
+              type="button"
+              class="shrink-0 rounded-lg border px-4 py-2 text-sm font-medium transition disabled:opacity-60"
+              :class="isFollowing
+                ? 'border-brand-200 bg-brand-50 text-brand-700 hover:bg-brand-100 dark:border-brand-500/30 dark:bg-brand-500/10 dark:text-brand-400'
+                : 'border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800'"
+              :disabled="followBusy"
+              @click="onToggleFollow"
+            >
+              {{ isFollowing ? '✓ Ndiqet' : '+ Ndiq kompaninë' }}
+            </button>
           </div>
         </div>
 

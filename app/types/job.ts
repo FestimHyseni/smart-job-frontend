@@ -19,11 +19,13 @@ export interface Company {
   name: string
   description: string
   logo: string | null
+  logo_url: string | null
   website: string | null
   location_id: number
   location: Location | null
   industry: string
   employees_count: number | null
+  is_followed: boolean
 }
 
 export interface Skill {
