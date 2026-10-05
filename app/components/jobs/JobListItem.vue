@@ -9,6 +9,8 @@ const props = defineProps<{
   matchScore?: number
 }>()
 
+const { resolveUrl } = useBackendOrigin()
+
 const emit = defineEmits<{
   select: [job: Job]
   toggleSave: [jobId: number]
@@ -38,8 +40,14 @@ const daysAgo = computed(() => {
     @click="emit('select', job)"
     @keydown.enter="emit('select', job)"
   >
-    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-sm font-semibold text-brand-700">
-      {{ job.company?.name?.[0]?.toUpperCase() || '?' }}
+    <div class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-brand-50 text-sm font-semibold text-brand-700">
+      <img
+        v-if="job.company?.logo_url"
+        :src="resolveUrl(job.company.logo_url) ?? undefined"
+        alt=""
+        class="h-full w-full object-cover"
+      >
+      <template v-else>{{ job.company?.name?.[0]?.toUpperCase() || '?' }}</template>
     </div>
     <div class="min-w-0 flex-1">
       <p class="truncate text-sm font-semibold" :class="active ? 'text-brand-700 dark:text-brand-400' : 'text-gray-900 dark:text-white'">{{ job.title }}</p>

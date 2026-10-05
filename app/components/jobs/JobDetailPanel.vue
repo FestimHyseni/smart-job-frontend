@@ -12,6 +12,8 @@ const emit = defineEmits<{
 }>()
 
 const authStore = useAuthStore()
+const { resolveUrl } = useBackendOrigin()
+
 const { loading: applying, error: applyError, hasAppliedTo, applyToJob } = useApply()
 const { loading: guestApplying, error: guestApplyError, fieldErrors: guestFieldErrors, applyAsGuest } = useGuestApply()
 
@@ -89,8 +91,14 @@ async function onGuestApply() {
     <!-- Header card -->
     <div class="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <div class="flex h-16 items-center justify-end bg-gradient-to-r from-brand-600 to-brand-400 px-4">
-        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 text-sm font-extrabold text-white shadow-sm backdrop-blur-sm">
-          SJ
+        <span class="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl bg-white/20 text-sm font-extrabold text-white shadow-sm backdrop-blur-sm">
+          <img
+            v-if="job.company?.logo_url"
+            :src="resolveUrl(job.company.logo_url) ?? undefined"
+            alt=""
+            class="h-full w-full object-cover"
+          >
+          <template v-else>SJ</template>
         </span>
       </div>
       <div class="flex flex-col gap-4 px-6 pb-6 sm:flex-row sm:items-start sm:justify-between">
