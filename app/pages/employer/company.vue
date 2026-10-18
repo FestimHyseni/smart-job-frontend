@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Company, Location } from '~/types/job'
+import type { Company, JobCategory, Location } from '~/types/job'
 import type { CompanyPayload } from '~/types/employer'
 import { useCatalogService } from '~/services/catalog'
 
@@ -10,6 +10,7 @@ const catalogService = useCatalogService()
 const { resolveUrl } = useBackendOrigin()
 
 const locations = ref<Location[]>([])
+const categories = ref<JobCategory[]>([])
 const existingCompany = ref<Company | null>(null)
 const saved = ref(false)
 const isEditing = ref(false)
@@ -34,8 +35,20 @@ function fillForm(company: Company) {
   form.employees_count = company.employees_count
 }
 
+const industryOptions = computed(() => {
+  const names = categories.value.map((c) => c.name)
+  // keep a previously typed industry selectable so old companies are not changed silently
+  if (form.industry && !names.includes(form.industry)) names.unshift(form.industry)
+  return names.map((name) => ({ value: name, label: name }))
+})
+
 onMounted(async () => {
-  locations.value = await catalogService.listLocations()
+  const [locationsResult, categoriesResult] = await Promise.all([
+    catalogService.listLocations(),
+    catalogService.listCategories(),
+  ])
+  locations.value = locationsResult
+  categories.value = categoriesResult
   const company = await fetchMyCompany()
   existingCompany.value = company
   if (company) {
@@ -43,6 +56,7 @@ onMounted(async () => {
   } else {
     isEditing.value = true
     if (locations.value.length) form.location_id = locations.value[0].id
+    if (categories.value.length) form.industry = categories.value[0].name
   }
 })
 
@@ -193,7 +207,7 @@ async function onSubmit() {
             />
 
             <div class="grid grid-cols-2 gap-3">
-              <BaseInput v-model="form.industry" label="Industria" placeholder="Software Development" :error="fieldErrors.industry?.[0]" />
+              <BaseSelect v-model="form.industry" label="Industria" :options="industryOptions" :error="fieldErrors.industry?.[0]" />
               <BaseInput
                 v-model="form.employees_count"
                 label="Numri i punonjësve (opsionale)"
